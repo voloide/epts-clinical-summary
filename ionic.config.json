@@ -1,0 +1,7 @@
+{
+  "name": "epts-clinical-summary",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}
