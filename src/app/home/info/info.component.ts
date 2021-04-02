@@ -1,57 +1,49 @@
-import { Component } from '@angular/core';
-import { AppService } from './app.service';
-import { Router } from '@angular/router';
+import { Component} from '@angular/core';
 import { MenuController } from '@ionic/angular';
 import { HTTP } from '@ionic-native/http/ngx';
 import { NavController  } from '@ionic/angular';
+import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: 'app.component.html',
-  styleUrls: ['app.component.scss'],
+  selector: 'page-home-backups',
+  templateUrl: 'info.component.html'
 })
-export class AppComponent {
-
-  public user;url;show;
-
-  constructor(public appService: AppService,
-    private router: Router,
+export class InfoComponent {
+  public user;color;
+  
+  constructor(
     private menu: MenuController,
     private http: HTTP,
-    private navCtrl: NavController) {
+    private navCtrl: NavController,
+    private router: Router
+   ) {
 
-    this.appService.invokeEvent.subscribe(value => {
-      if (value === 'someVal') {
-        this.callMyMethod();
-      }
-    });
+    
 
   }
 
-  callMyMethod() {
+  openMenu() {
+    this.menu.open('first');
+  }
+
+  ngOnInit() {
+    this.menu.enable(true, 'first');
+    this.color="primary";
+    window.localStorage.removeItem('search');
     this.user = JSON.parse(window.localStorage.getItem('user'));
-    this.url = window.localStorage.getItem('url');
-    this.show = true;
-  
   }
 
-  openDashboard(){
-    this.router.navigateByUrl("/home");
-    this.menu.close();
-  }
-
-  openClinicalSummary(){
+  openClinicalSummary() {
     this.router.navigateByUrl("/csparameter");
-    this.menu.close();
   }
 
   openReportUsage() {
     this.router.navigateByUrl("/reportusage");
-    this.menu.close();
   }
 
-  logout(){
-
+  
+  logout() {
+   
     this.http.delete(
       window.localStorage.getItem('url')+'/ws/rest/v1/session',             //URL
       {},         //Data 
@@ -68,8 +60,6 @@ export class AppComponent {
       this.menu.close();
       window.localStorage.clear();
      });
-
   }
-  
 
 }

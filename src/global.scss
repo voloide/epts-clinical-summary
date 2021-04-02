@@ -24,3 +24,27 @@
 @import "~@ionic/angular/css/text-alignment.css";
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
+
+
+.searchbar-input {
+    padding-left: 5px !important;
+    padding-right: 20px !important;
+  }
+
+  .avatar{
+    margin: auto !important;
+ }
+
+ .swiper-slide {
+  overflow-y: scroll !important;
+  display: block !important;
+}
+
+/* Without setting height the slides will take up the height of the slide's content */
+ion-slides {
+  height: 100%;
+}
+
+.ion-col-border {
+  border: 1px solid #aeb7ca;
+}

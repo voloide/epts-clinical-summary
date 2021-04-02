@@ -1,3 +1,42 @@
 <ion-app>
-  <ion-router-outlet></ion-router-outlet>
+    <ion-menu side="start" menuId="first" contentId="main-content" *ngIf="show">
+       
+           <div id="cabecalho-menu">
+               <p><br><br><ion-icon name="person" style="font-size:16px !important;"></ion-icon> {{user.user.person.display | titlecase}}
+               <br><ion-icon name="location-outline" style="font-size:16px !important;" *ngIf="url"></ion-icon><span style="color:greenyellow;font-size: 11px;">&nbsp;&nbsp;{{url}}</span></p>
+           </div>
+  
+           <ion-content>
+              <ion-item button (click)="openDashboard()">
+                <ion-icon name="home" slot="start" ></ion-icon>
+                <ion-label>Início</ion-label>
+              </ion-item>
+
+              <ion-item button (click)="openClinicalSummary()">
+                <ion-icon name="medical-outline" slot="start" ></ion-icon>
+                <ion-label>Sumário Clínico</ion-label>
+              </ion-item>
+
+              <ion-item button (click)="openReportUsage()">
+                <ion-icon name="analytics-outline" slot="start" ></ion-icon>
+                <ion-label>Relatório de Uso</ion-label>
+              </ion-item>
+
+              <ion-item button (click)="logout()">
+                <ion-icon name="log-out" slot="start" ></ion-icon>
+                <ion-label>Terminar Sessão</ion-label>
+              </ion-item>
+
+         </ion-content>
+  
+        <ion-footer>
+          <ion-footer>
+              <ion-toolbar>
+                <span color="secondary">sis.quelimane@fgh.org.mz - v1.1.0</span>
+              </ion-toolbar>
+            </ion-footer>
+         </ion-footer>
+  
+    </ion-menu>
+  <ion-router-outlet id="main-content"></ion-router-outlet>
 </ion-app>

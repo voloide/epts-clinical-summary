@@ -1,0 +1,59 @@
+<ion-header>
+  <ion-toolbar color="{{color}}">
+    <ion-buttons slot="start">
+      <ion-menu-button auto-hide="false"></ion-menu-button>
+    </ion-buttons>
+   
+    <ion-grid>
+      <ion-row >
+        <ion-col size="10">
+          <form [formGroup]="form" (ngSubmit)="searchPatients()" action=".">
+          <ion-searchbar search-icon="undefined" style="margin-left: -5px;"
+          debounce="50"
+          [(ngModel)]="search"
+          formControlName="search"
+          placeholder="Pesquisar por nome ou NID">
+      </ion-searchbar>
+  </form>       
+   </ion-col>
+   <ion-col size="1">
+
+    <ion-button color="success" style="margin-left: -12px;" (click)="searchPatients()">
+      <ion-icon slot="icon-only" name="search"  ></ion-icon>
+    </ion-button>
+
+   </ion-col>
+  
+   </ion-row>
+  </ion-grid>
+    
+  </ion-toolbar>
+</ion-header>
+
+<ion-content id="patient-list">
+
+  <ion-list *ngIf="patients" id="patients">
+    <ion-item *ngFor="let patient of patients" (click)="confirmReport(patient)">
+
+      <ion-avatar slot="start" style="background-color:transparent;margin: 0 auto;">
+        <ion-icon *ngIf="patient.person.gender=='M'" size="large" name="male-outline" color="primary"></ion-icon>
+        <ion-icon *ngIf="patient.person.gender=='F'" size="large" name="female-outline" color="danger"></ion-icon>
+      </ion-avatar>
+      
+      <ion-label>
+        <h2>{{getPatientName(patient.display)}}</h2>
+        <h3>{{getPatientID(patient.display)}}</h3>
+        <p><span *ngIf="patient.identifiers[0].location!=null">{{patient.identifiers[0].location.name}}</span></p>
+      </ion-label>
+
+      <ion-badge *ngIf="patient.person.dead==true" item-end color="danger">Obitou</ion-badge>&nbsp;
+      <ion-badge item-end color="light">{{patient.person.age}} <span *ngIf="patient.person.age<2">ano</span><span *ngIf="patient.person.age>1">anos</span></ion-badge>
+
+    </ion-item>
+
+    </ion-list>
+
+    <ion-infinite-scroll (ionInfinite)="getNextPatients($event)" *ngIf="moreData==true">
+      <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Carregando mais dados…"></ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+</ion-content>

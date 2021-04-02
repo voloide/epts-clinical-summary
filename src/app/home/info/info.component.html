@@ -1,0 +1,57 @@
+<ion-header>
+  <ion-toolbar color="{{color}}">
+    <ion-buttons slot="start">
+      <ion-menu-button auto-hide="false" (click)="openMenu()"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Início</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+    <ion-grid>
+    <ion-row>
+      <ion-col>
+        <div class="ion-text-center">
+          <ion-icon name="person"></ion-icon>
+          <h4 *ngIf="user">Bem vindo, <br>
+            {{user.user.person.display | titlecase}}</h4>
+          </div>
+      </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col size="6">
+          <ion-card (click)="openClinicalSummary()" color="danger">
+            <div class="ion-text-center">
+            <ion-icon size="large" style="margin-top: 10px;" name="medical-outline"></ion-icon>
+            <h5 style="margin-top: -3px;">Sumário<br>Clínico</h5>
+          </div>
+          </ion-card>
+        </ion-col>
+        <ion-col size="6">
+          <ion-card (click)="logout()" text-center color="danger">
+            <div class="ion-text-center">
+            <ion-icon size="large" style="margin-top: 10px;" name="log-out"></ion-icon>
+            <h5 style="margin-top: -3px;">Terminar<br>Sessão</h5>
+          </div>
+          </ion-card>
+        
+        </ion-col>
+      </ion-row>
+  
+      <ion-row>
+        <ion-col size="6">
+          
+          <ion-card (click)="openReportUsage()" color="default">
+            <div class="ion-text-center">
+            <ion-icon size="large" style="margin-top: 10px;" name="analytics-outline"></ion-icon>
+            <h5 style="margin-top: -3px;">Relatório<br>de Uso</h5>
+          </div>
+          </ion-card>
+        </ion-col>
+      </ion-row> 
+
+</ion-grid>
+  
+</ion-content>

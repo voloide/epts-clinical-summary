@@ -1,0 +1,65 @@
+<ion-header>
+  <ion-toolbar color="{{color}}">
+    <ion-title>EPTS Sumário Clínico</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content scrollY="false">
+  <br>
+
+    <form [formGroup]="form">
+
+      <ion-item >
+        <ion-label position="stacked">
+          URL do Servidor
+        </ion-label>
+        <ion-input [disabled]="!locked" [(ngModel)]="localUser.url" type="text" value="" formControlName="url" placeholder="Escreva a URL do Servidor"></ion-input>
+      </ion-item>
+
+
+      <ion-item *ngIf="locked&&activation" class="ion-margin-top">
+        <ion-label position="stacked">
+          Chave para {{activation.entry}}
+        </ion-label>
+        <ion-input [(ngModel)]="localUser.pin" type="text" value="" formControlName="pin" placeholder="Escreva a chave para o codigo"></ion-input>
+      </ion-item>
+
+      <ion-item *ngIf="!locked&&accepted" class="ion-margin-top">
+        <ion-label position="stacked">
+          Utilizador
+        </ion-label>
+        <ion-input [(ngModel)]="localUser.username" type="text" value="" formControlName="username" placeholder="Escreva o username"></ion-input>
+      </ion-item>
+
+      <ion-item *ngIf="!locked&&accepted" class="ion-margin-top">
+        <ion-label position="stacked">
+          Password
+        </ion-label>
+        <ion-input [(ngModel)]="localUser.password" type="{{type}}" value="" formControlName="password" placeholder="Escreva o password"></ion-input>
+        
+        <ion-icon *ngIf="!showPass" slot="end" name="eye-off-outline" (click)="showPassword()"></ion-icon>
+        <ion-icon *ngIf="showPass" slot="end" name="eye-outline" (click)="showPassword()"></ion-icon>
+        
+      </ion-item>
+
+      <div *ngIf="!locked&&accepted" class="ion-margin-top">
+        <ion-button color="primary" expand="block" (click)="logoutLogin()">ENTRAR</ion-button>
+      </div>
+
+      <div padding *ngIf="locked" class="ion-margin-top">
+        <ion-button color="success" expand="block" (click)="setURL()">GRAVAR URL</ion-button>
+        </div>
+
+      <ion-item *ngIf="!locked&&accepted">
+        <ion-label>Recordar credenciais</ion-label>
+        <ion-checkbox [(ngModel)]="storelocalUser" formControlName="storelocalUser"></ion-checkbox>
+      </ion-item>
+
+     
+
+    </form>
+
+    {{errorMessage}}
+
+
+</ion-content>
