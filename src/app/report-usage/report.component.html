@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar color="{{color}}">
     <ion-buttons slot="start">
-      <ion-menu-button auto-hide="false" (click)="openMenu()"></ion-menu-button>
+      <ion-menu-button auto-hide="false"></ion-menu-button>
     </ion-buttons>
     <ion-title>Relatório de Uso</ion-title>
   </ion-toolbar>
@@ -35,7 +35,6 @@
   </div>
 
   <br>
-  {{cs}}
 
   <div padding *ngIf="ClinicalSummaries.length>0&&!isDisabled">
 <h3>{{ClinicalSummaries.length}} registo(s) encontrado(s)</h3>

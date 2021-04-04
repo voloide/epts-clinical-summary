@@ -5,6 +5,7 @@ import { SpinnerDialog } from '@ionic-native/spinner-dialog/ngx';
 import { Dialogs } from '@ionic-native/dialogs/ngx';
 import { HTTP } from '@ionic-native/http/ngx';
 
+
 @Component({
   selector: 'cs-report',
   templateUrl: 'cs-report.component.html'
@@ -171,8 +172,6 @@ public ClinicalSummaries: any[]=[];
             
             //ARRAY CONCAT
             this.allVLsV2=this.allVLCopiasV2.concat(this.allVLCopiasV2FSR.concat(this.allVLCopiasV2FC));
-
-            console.log("allVLsV2 concat",this.allVLsV2)
 
             this.http.get(
               window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=e1d6247e-1d5f-11e0-b929-000c29ad1d07&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=12",             //URL
@@ -538,7 +537,7 @@ public ClinicalSummaries: any[]=[];
 		
 		this.spinnerDialog.hide();
            this.color="danger";
-           this.dialogs.alert("Não foi possivel carregar os dados. Verifique o estado da sua ligação com o servidor e se tem uma sessõ valida!","Erro ao carregar");
+           this.dialogs.alert("Não foi possivel carregar os dados. Verifique o estado da sua ligação com o servidor e se tem uma sessão valida!","Erro ao carregar");
             
   
         });    
@@ -547,14 +546,6 @@ public ClinicalSummaries: any[]=[];
 		},4000);   
 		
 		
-  }
-
-  getPatientName(name) {
-    return name.split("-", 2)[1];
-  }
-
-  getPatientID(name) {
-    return name.split("-", 2)[0];
   }
 
 }

@@ -10,7 +10,7 @@
 <ion-content>
 
 
-  <ion-slides pager="true" scrollbar="true">
+  <ion-slides pager="true">
 
     <ion-slide *ngIf="allCD4Abs&&allCD4Coverage&&allVLCopias&&allVLCopiasV2&&allVLCopiasFSR&&allVLCopiasV2FSR&&allVLCopiasFC&&allVLCopiasV2FC&&allVLsV2&&allVLs">
     
@@ -21,10 +21,10 @@
           <ion-icon *ngIf="patient.person.gender=='M'" size="large" name="male-outline" color="primary"></ion-icon>
           <ion-icon *ngIf="patient.person.gender=='F'" size="large" name="female-outline" color="danger"></ion-icon>
 <br>
-          <ion-badge slot="start" color="light">{{getPatientName(patient.display)}}<br>{{getPatientID(patient.display)}}<br>Idade: {{patient.person.age}}, {{patient.identifiers[0].location.name}}<span *ngIf="patient.person.dead==true" style="color: red;">, Obitou</span></ion-badge><br>
+          <ion-badge slot="start" color="light">{{patient.display | splitAndGet:"-":1}}<br>{{patient.display | splitAndGet:"-":0}}<br>Idade: {{patient.person.age}}, {{patient.identifiers[0].location.name}}<span *ngIf="patient.person.dead==true" style="color: red;">, Obitou</span></ion-badge><br>
           <b>RESULTADO DE CARGA VIRAL E CD4</b>
           <br>
-          <ion-button (click)="refreshSummary()" color="light" size="small" shape="round" style="margin-bottom: 5px;">
+          <ion-button (click)="refreshSummary()" color="success" size="small" shape="round" style="margin-bottom: 5px;">
             <ion-icon slot="icon-only" name="refresh"></ion-icon>
           </ion-button>
         </span>
@@ -102,10 +102,10 @@
           <ion-icon *ngIf="patient.person.gender=='M'" size="large" name="male-outline" color="primary"></ion-icon>
           <ion-icon *ngIf="patient.person.gender=='F'" size="large" name="female-outline" color="danger"></ion-icon>
 <br>
-          <ion-badge slot="start" color="light">{{getPatientName(patient.display)}}<br>{{getPatientID(patient.display)}}<br>Idade: {{patient.person.age}}, {{patient.identifiers[0].location.name}}<span *ngIf="patient.person.dead==true" style="color: red;">, Obitou</span></ion-badge><br>
+          <ion-badge slot="start" color="light">{{patient.display | splitAndGet:"-":1}}<br>{{patient.display | splitAndGet:"-":0}}<br>Idade: {{patient.person.age}}, {{patient.identifiers[0].location.name}}<span *ngIf="patient.person.dead==true" style="color: red;">, Obitou</span></ion-badge><br>
           <b>LEVANTAMENTO DE ARV</b>
           <br>
-          <ion-button (click)="refreshSummary()" color="light" size="small" shape="round" style="margin-bottom: 5px;">
+          <ion-button (click)="refreshSummary()" color="success" size="small" shape="round" style="margin-bottom: 5px;">
             <ion-icon slot="icon-only" name="refresh"></ion-icon>
           </ion-button>
         </span>
@@ -168,10 +168,10 @@
           <ion-icon *ngIf="patient.person.gender=='M'" size="large" name="male-outline" color="primary"></ion-icon>
           <ion-icon *ngIf="patient.person.gender=='F'" size="large" name="female-outline" color="danger"></ion-icon>
 <br>
-          <ion-badge slot="start" color="light">{{getPatientName(patient.display)}}<br>{{getPatientID(patient.display)}}<br>Idade: {{patient.person.age}}, {{patient.identifiers[0].location.name}}<span *ngIf="patient.person.dead==true" style="color: red;">, Obitou</span></ion-badge><br>
+          <ion-badge slot="start" color="light">{{patient.display | splitAndGet:"-":1}}<br>{{patient.display | splitAndGet:"-":0}}<br>Idade: {{patient.person.age}}, {{patient.identifiers[0].location.name}}<span *ngIf="patient.person.dead==true" style="color: red;">, Obitou</span></ion-badge><br>
           <b>LABORATÓRIO - OUTRO</b>
           <br>
-          <ion-button (click)="refreshSummary()" color="light" size="small" shape="round" style="margin-bottom: 5px;">
+          <ion-button (click)="refreshSummary()" color="success" size="small" shape="round" style="margin-bottom: 5px;">
             <ion-icon slot="icon-only" name="refresh"></ion-icon>
           </ion-button>
         </span>
@@ -300,10 +300,10 @@
           <ion-icon *ngIf="patient.person.gender=='M'" size="large" name="male-outline" color="primary"></ion-icon>
           <ion-icon *ngIf="patient.person.gender=='F'" size="large" name="female-outline" color="danger"></ion-icon>
 <br>
-          <ion-badge slot="start" color="light">{{getPatientName(patient.display)}}<br>{{getPatientID(patient.display)}}<br>Idade: {{patient.person.age}}, {{patient.identifiers[0].location.name}}<span *ngIf="patient.person.dead==true" style="color: red;">, Obitou</span></ion-badge><br>
+          <ion-badge slot="start" color="light">{{patient.display | splitAndGet:"-":1}}<br>{{patient.display | splitAndGet:"-":0}}<br>Idade: {{patient.person.age}}, {{patient.identifiers[0].location.name}}<span *ngIf="patient.person.dead==true" style="color: red;">, Obitou</span></ion-badge><br>
           <b>TPT</b>
           <br>
-          <ion-button (click)="refreshSummary()" color="light" size="small" shape="round" style="margin-bottom: 5px;">
+          <ion-button (click)="refreshSummary()" color="success" size="small" shape="round" style="margin-bottom: 5px;">
             <ion-icon slot="icon-only" name="refresh"></ion-icon>
           </ion-button>
         </span>

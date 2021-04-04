@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { MenuController } from '@ionic/angular';
 import { HTTP } from '@ionic-native/http/ngx';
 import { NavController  } from '@ionic/angular';
+import { InfoComponent} from './home/info/info.component'
 
 @Component({
   selector: 'app-root',
@@ -68,6 +69,8 @@ export class AppComponent {
       this.menu.close();
       window.localStorage.clear();
      });
+
+     InfoComponent.clearInterval();
 
   }
   

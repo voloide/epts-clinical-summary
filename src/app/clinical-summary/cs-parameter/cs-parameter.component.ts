@@ -103,7 +103,7 @@ export class CsParameterComponent {
       .catch(response => {
         refresher.target.complete();
         this.spinnerDialog.hide();
-        this.dialogs.alert("Não foi possivel carregar. Verifique o estado da sua ligação com o servidor e se tem uma sessõ valida!", "Erro ao pesquisar");
+        this.dialogs.alert("Não foi possivel carregar. Verifique o estado da sua ligação com o servidor e se tem uma sessão valida!", "Erro ao pesquisar");
         this.color = "danger";
       });
 
@@ -124,9 +124,12 @@ export class CsParameterComponent {
 
       if (this.search.includes("/")) {
 
+        var newURL= encodeURI(window.localStorage.getItem('url') + "/ws/rest/v1/patient?identifier=" + this.search.replace(/\s/g, "") + "&v=custom:(uuid,display,identifiers:(uuid,location:(name)),person:(gender,age,dead))");
+
+
         this.storage.set('search-criteria', this.search);
         this.http.get(
-          window.localStorage.getItem('url') + "/ws/rest/v1/patient?identifier=" + this.search.replace(/\s/g, "") + "&v=custom:(uuid,display,identifiers:(uuid,location:(name)),person:(gender,age,dead))",             //URL
+          newURL,             //URL
           {},         //Data 
           {
             'Content-Type': 'application/json',
@@ -147,15 +150,17 @@ export class CsParameterComponent {
           .catch(response => {
 
             this.spinnerDialog.hide();
-            this.dialogs.alert("Não foi possivel carregar. Verifique o estado da sua ligação com o servidor e se tem uma sessõ valida!", "Erro ao pesquisar");
+            this.dialogs.alert("Não foi possivel carregar. Verifique o estado da sua ligação com o servidor e se tem uma sessão valida!", "Erro ao pesquisar");
             this.color = "danger";
           });
       } else {
         this.patients = [];
         this.storage.remove('search-criteria');
 
+        var newURL= encodeURI(window.localStorage.getItem('url') + "/ws/rest/v1/patient?q=" + this.search + "&v=custom:(uuid,display,identifiers:(uuid,location:(name)),person:(gender,age,dead))&limit=50&startIndex=" + this.index);
+
         this.http.get(
-          window.localStorage.getItem('url') + "/ws/rest/v1/patient?q=" + this.search + "&v=custom:(uuid,display,identifiers:(uuid,location:(name)),person:(gender,age,dead))&limit=50&startIndex=" + this.index,             //URL
+          newURL,             //URL
           {},         //Data 
           {
             'Content-Type': 'application/json',
@@ -188,19 +193,13 @@ export class CsParameterComponent {
           .catch(response => {
 
             this.spinnerDialog.hide();
-            this.dialogs.alert("Não foi possivel carregar. Verifique o estado da sua ligação com o servidor e se tem uma sessõ valida!", "Erro ao pesquisar");
+            this.dialogs.alert("Não foi possivel carregar. Verifique o estado da sua ligação com o servidor e se tem uma sessão valida!", "Erro ao pesquisar");
             this.color = "danger";
           });
       }
     }
   }
 
-  getPatientName(name) {
-    return name.split("-", 2)[1];
-  }
-
-  getPatientID(name) {
-    return name.split("-", 2)[0];
-  }
+  
 
 }

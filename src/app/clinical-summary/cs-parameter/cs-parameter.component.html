@@ -41,8 +41,8 @@
       </ion-avatar>
       
       <ion-label>
-        <h2>{{getPatientName(patient.display)}}</h2>
-        <h3>{{getPatientID(patient.display)}}</h3>
+        <h2>{{patient.display | splitAndGet:"-":1}}</h2>
+        <h3>{{patient.display | splitAndGet:"-":0}}</h3>
         <p><span *ngIf="patient.identifiers[0].location!=null">{{patient.identifiers[0].location.name}}</span></p>
       </ion-label>
 

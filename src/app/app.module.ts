@@ -19,11 +19,11 @@ import { LoginModule } from './login/login.module';
 import { HomeModule } from './home/home.module';
 import { HTTP } from '@ionic-native/http/ngx';
 import { ClinicalSummaryModule } from './clinical-summary/cs.module';
-import { SplitAndGetPipe } from './pipes/split';
 import { ReportUsageModule } from './report-usage/report.module';
 
+
 @NgModule({
-  declarations: [AppComponent,SplitAndGetPipe],
+  declarations: [AppComponent],
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, IonicStorageModule.forRoot(),
     LoginModule,
