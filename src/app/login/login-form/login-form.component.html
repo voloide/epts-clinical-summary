@@ -4,7 +4,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content scrollY="false">
+<ion-content>
   <br>
 
     <form [formGroup]="form">
@@ -51,15 +51,22 @@
         </div>
 
       <ion-item *ngIf="!locked&&accepted">
-        <ion-label>Recordar credenciais</ion-label>
+        <ion-label>Recordar utilizador</ion-label>
         <ion-checkbox [(ngModel)]="storelocalUser" formControlName="storelocalUser"></ion-checkbox>
       </ion-item>
+
+      <ion-item *ngIf="!locked&&accepted">
+        <ion-label>Auto enviar dados de uso</ion-label>
+        <ion-checkbox [(ngModel)]="autoSync" formControlName="autoSync"></ion-checkbox>
+      </ion-item>
+
+      <div *ngIf="!locked&&accepted" class="ion-margin-top">
+        <ion-button color="success" [disabled]="!lastLoggedUsername" expand="block" (click)="uploadUsageReports()">ENVIAR DADOS DE USO</ion-button>
+      </div>
 
      
 
     </form>
-
-    {{errorMessage}}
 
 
 </ion-content>

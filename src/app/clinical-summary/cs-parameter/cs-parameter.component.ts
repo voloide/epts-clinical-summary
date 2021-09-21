@@ -71,8 +71,10 @@ export class CsParameterComponent {
     this.newPatients = [];
     this.index = this.index + 50;
 
+    var newURL= encodeURI(window.localStorage.getItem('url') + "/ws/rest/v1/patient?q=" + this.search + "&v=custom:(uuid,display,identifiers:(uuid,location:(name)),person:(gender,age,dead))&limit=50&startIndex=" + this.index);
+
     this.http.get(
-      window.localStorage.getItem('url') + "/ws/rest/v1/patient?q=" + this.search + "&v=custom:(uuid,display,identifiers:(uuid,location:(name)),person:(gender,age,dead))&limit=50&startIndex=" + this.index,             //URL
+      newURL,             //URL
       {},         //Data 
       {
         'Content-Type': 'application/json',
@@ -122,7 +124,7 @@ export class CsParameterComponent {
 
       this.spinnerDialog.show(null, "Carregando...", true);
 
-      if (this.search.includes("/")) {
+      if ((this.search.match(/\//g) || []).length==2&&this.search.replace(/\s/g, "").length>12) {
 
         var newURL= encodeURI(window.localStorage.getItem('url') + "/ws/rest/v1/patient?identifier=" + this.search.replace(/\s/g, "") + "&v=custom:(uuid,display,identifiers:(uuid,location:(name)),person:(gender,age,dead))");
 
@@ -145,6 +147,7 @@ export class CsParameterComponent {
             this.color = "primary";
             if (this.count < 1) {
               this.dialogs.alert("Nenhum paciente foi encontrado de acordo com o criterio de busca!", "Informação");
+              this.spinnerDialog.hide();
             }
           })
           .catch(response => {
@@ -172,8 +175,8 @@ export class CsParameterComponent {
             this.patients = JSON.parse(response.data);
             this.patients = this.patients.results;
             this.count = this.patients.length;
-
             this.spinnerDialog.hide();
+
             this.color = "primary";
             if (this.count == 50) {
               this.moreData = true;
@@ -184,6 +187,7 @@ export class CsParameterComponent {
             if (this.count < 1) {
 
               this.dialogs.alert("Nenhum paciente foi encontrado de acordo com o criterio de busca!", "Informação");
+              this.spinnerDialog.hide();
 
 
             }

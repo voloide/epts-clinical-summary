@@ -12,7 +12,7 @@
 
   <ion-slides pager="true">
 
-    <ion-slide *ngIf="allCD4Abs&&allCD4Coverage&&allVLCopias&&allVLCopiasV2&&allVLCopiasFSR&&allVLCopiasV2FSR&&allVLCopiasFC&&allVLCopiasV2FC&&allVLsV2&&allVLs">
+    <ion-slide>
     
       <ion-toolbar color="light" style="margin-top: 5px;margin-bottom: 5px;">
   
@@ -24,25 +24,27 @@
           <ion-badge slot="start" color="light">{{patient.display | splitAndGet:"-":1}}<br>{{patient.display | splitAndGet:"-":0}}<br>Idade: {{patient.person.age}}, {{patient.identifiers[0].location.name}}<span *ngIf="patient.person.dead==true" style="color: red;">, Obitou</span></ion-badge><br>
           <b>RESULTADO DE CARGA VIRAL E CD4</b>
           <br>
-          <ion-button (click)="refreshSummary()" color="success" size="small" shape="round" style="margin-bottom: 5px;">
+          <ion-button (click)="refreshSummary()" color="light" size="small" shape="round" style="margin-bottom: 5px;">
             <ion-icon slot="icon-only" name="refresh"></ion-icon>
           </ion-button>
         </span>
       </ion-toolbar>
 
-      <ion-grid style="font-size: 16px;">
+      <ion-grid *ngIf="allCD4Abs&&allCD4Coverage&&allVLCopias&&allVLCopiasV2&&allVLCopiasFSR&&allVLCopiasV2FSR&&allVLCopiasFC&&allVLCopiasV2FC&&allVLsV2&&allVLs" style="font-size: 16px;">
 
         <ion-row>
           <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Carga Viral<br>(Cópias/ml)</b></ion-col>
           <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 15px;"  col-6 text-center><b>Fonte</b></ion-col>
           </ion-row>
+
+    
         <ion-row *ngFor="let data of allVLs">
           <ion-col class="ion-col-border"  style="padding-top: 8px;" *ngIf="data.value.display"  col-6 text-center>{{data.value.display}}</ion-col>
           <ion-col class="ion-col-border"  style="padding-top: 18px;" *ngIf="data.value>0&&!data.value.display" col-6 text-center>{{data.value}}</ion-col>
           <ion-col class="ion-col-border"  style="padding-top: 8px;" *ngIf="data.value<=0&&!data.value.display" col-6 text-center>CARGA VIRAL INDETECTAVEL</ion-col>
           <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="color: gray; font-size: 13px;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
         </ion-row>
-
+ 
         <ion-row *ngIf="(allVLCopiasV2.length+allVLCopias.length)<1">
         <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no EPTS</span></ion-col>
         <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">LABORATORIO GERAL</span></ion-col>
@@ -62,6 +64,7 @@
           <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>CD4<br>Absoluto</b></ion-col>
           <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 15px;"  col-6 text-center><b>Fonte</b></ion-col>
           </ion-row>
+          
     <ion-row *ngFor="let data of allCD4Abs">
       <ion-col class="ion-col-border"  style="padding-top: 18px;"  col-6 text-center>{{data.value}}</ion-col>
          <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
@@ -73,12 +76,11 @@
   
       <br>
 
-
-
       <ion-row>
         <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>CD4<br>Percentual</b></ion-col>
         <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 15px;"  col-6 text-center><b>Fonte</b></ion-col>
         </ion-row>
+      
   <ion-row *ngFor="let data of allCD4Coverage">
     <ion-col class="ion-col-border"  style="padding-top: 18px;"  col-6 text-center>{{data.value}}</ion-col>
        <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
@@ -93,7 +95,7 @@
     </ion-slide>
 
 
-    <ion-slide *ngIf="ARTPickupNextDate&&ARTPickupRegime&&allVLs">
+    <ion-slide>
     
       <ion-toolbar color="light" style="margin-top: 5px;margin-bottom: 5px;">
   
@@ -105,18 +107,19 @@
           <ion-badge slot="start" color="light">{{patient.display | splitAndGet:"-":1}}<br>{{patient.display | splitAndGet:"-":0}}<br>Idade: {{patient.person.age}}, {{patient.identifiers[0].location.name}}<span *ngIf="patient.person.dead==true" style="color: red;">, Obitou</span></ion-badge><br>
           <b>LEVANTAMENTO DE ARV</b>
           <br>
-          <ion-button (click)="refreshSummary()" color="success" size="small" shape="round" style="margin-bottom: 5px;">
+          <ion-button (click)="refreshSummary()" color="light" size="small" shape="round" style="margin-bottom: 5px;">
             <ion-icon slot="icon-only" name="refresh"></ion-icon>
           </ion-button>
         </span>
       </ion-toolbar>
 
-      <ion-grid style="font-size: 16px;">
+      <ion-grid style="font-size: 16px;" *ngIf="ARTPickupNextDate&&ARTPickupRegime&&allVLs">
 
         <ion-row>
           <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Data do último levantamento de ARV</b></ion-col>
           <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 15px;"  col-6 text-center><b>Fonte</b></ion-col>
           </ion-row>
+
         <ion-row >
           <ion-col *ngIf="ARTPickupRegime[0]" style="padding-top: 18px;" class="ion-col-border" col-6 text-center>{{ARTPickupRegime[0].obsDatetime | date:'dd-MM-yyyy'}}</ion-col>
           <ion-col *ngIf="ARTPickupRegime[0]" class="ion-col-border" col-6 style="font-size: 14px;">{{ARTPickupRegime[0].obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{ARTPickupRegime[0].encounter.form.display}}<br>{{ARTPickupRegime[0].encounter['location.name']}}</span></ion-col>
@@ -130,12 +133,14 @@
           <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Regime TARV no último levantamento</b></ion-col>
         <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 15px;"  col-6 text-center><b>Fonte</b></ion-col>
           </ion-row>
+       
         <ion-row >
           <ion-col *ngIf="ARTPickupRegime[0]" style="padding-top: 18px;" class="ion-col-border" col-6 text-center>{{ARTPickupRegime[0].value.display}}</ion-col>
           <ion-col *ngIf="ARTPickupRegime[0]" class="ion-col-border" col-6 style="font-size: 14px;">{{ARTPickupRegime[0].obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{ARTPickupRegime[0].encounter.form.display}}<br>{{ARTPickupRegime[0].encounter['location.name']}}</span></ion-col>
           <ion-col *ngIf="!ARTPickupRegime[0]" class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no EPTS</span></ion-col>
           <ion-col *ngIf="!ARTPickupRegime[0]" class="ion-col-border" col-6><span style="font-size: 13px;">FILA</span></ion-col>
           </ion-row>
+      
 
         <br>
 
@@ -143,13 +148,14 @@
           <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Data mais recente do próximo levantamento</b></ion-col>
         <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 15px;"  col-6 text-center><b>Fonte</b></ion-col>
           </ion-row>
+     
         <ion-row >
           <ion-col *ngIf="ARTPickupNextDate[0]" style="padding-top: 18px;" class="ion-col-border" col-6 text-center>{{ARTPickupNextDate[0].value  | date:'dd-MM-yyyy'}}</ion-col>
           <ion-col *ngIf="ARTPickupNextDate[0]" class="ion-col-border" col-6 style="font-size: 14px;">{{ARTPickupNextDate[0].obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{ARTPickupNextDate[0].encounter.form.display}}<br>{{ARTPickupNextDate[0].encounter['location.name']}}</span></ion-col>
           <ion-col *ngIf="!ARTPickupNextDate[0]" class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no EPTS</span></ion-col>
         <ion-col *ngIf="!ARTPickupNextDate[0]" class="ion-col-border" col-6><span style="font-size: 13px;">FILA</span></ion-col>
           </ion-row>
-
+     
 
       </ion-grid>
 
@@ -159,7 +165,7 @@
   
 
 
-    <ion-slide *ngIf="allHGB&&allBaciloscopia&&allGenexpert&&allAST&&allALT&&allAMI&&allGLC&&allVLs">
+    <ion-slide>
     
       <ion-toolbar color="light" style="margin-top: 5px;margin-bottom: 5px;">
   
@@ -171,18 +177,19 @@
           <ion-badge slot="start" color="light">{{patient.display | splitAndGet:"-":1}}<br>{{patient.display | splitAndGet:"-":0}}<br>Idade: {{patient.person.age}}, {{patient.identifiers[0].location.name}}<span *ngIf="patient.person.dead==true" style="color: red;">, Obitou</span></ion-badge><br>
           <b>LABORATÓRIO - OUTRO</b>
           <br>
-          <ion-button (click)="refreshSummary()" color="success" size="small" shape="round" style="margin-bottom: 5px;">
+          <ion-button (click)="refreshSummary()" color="light" size="small" shape="round" style="margin-bottom: 5px;">
             <ion-icon slot="icon-only" name="refresh"></ion-icon>
           </ion-button>
         </span>
       </ion-toolbar>
 
-      <ion-grid style="font-size: 16px;">
+      <ion-grid style="font-size: 16px;" *ngIf="allHGB&&allBaciloscopia&&allGenexpert&&allAST&&allALT&&allAMI&&allGLC&&allVLs">
 
         <ion-row>
           <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>GeneXpert</b></ion-col>
           <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Fonte</b></ion-col>
          </ion-row>
+           
     <ion-row *ngFor="let data of allGenexpert">
       <ion-col class="ion-col-border"  style="padding-top: 18px;"  col-6 text-center>{{data.value.display}}</ion-col>
       <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
@@ -193,11 +200,13 @@
         </ion-row>
 
         <br>
-
+ 
         <ion-row>
           <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Baciloscopia</b></ion-col>
         <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Fonte</b></ion-col>
           </ion-row>
+
+        
     <ion-row *ngFor="let data of allBaciloscopia">
       <ion-col class="ion-col-border"  style="padding-top: 18px;"  col-6 text-center>{{data.value.display}}</ion-col>
       <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
@@ -207,6 +216,7 @@
       <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">LABORATORIO GERAL</span></ion-col>
         </ion-row>
 
+
         <br>
       
           
@@ -214,6 +224,7 @@
           <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Hemoglobina<br>(HGB ou HB)</b></ion-col>
           <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 15px;"  col-6 text-center><b>Fonte</b></ion-col>
           </ion-row>
+         
     <ion-row *ngFor="let data of allHGB">
       <ion-col class="ion-col-border"  style="padding-top: 18px;"  col-6 text-center>{{data.value}}</ion-col>
       <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
@@ -222,12 +233,14 @@
       <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no EPTS</span></ion-col>
       <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">LABORATORIO GERAL</span></ion-col>
         </ion-row>
+      
 
         <br>
         <ion-row>
           <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Aspartato<br>Aminotransferase</b></ion-col>
           <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 15px;"  col-6 text-center><b>Fonte</b></ion-col>
           </ion-row>
+       
     <ion-row *ngFor="let data of allAST">
       <ion-col class="ion-col-border"  style="padding-top: 18px;"  col-6 text-center>{{data.value}}</ion-col>
       <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
@@ -243,6 +256,7 @@
           <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Alanina<br>Aminotransferase</b></ion-col>
         <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 15px;"  col-6 text-center><b>Fonte</b></ion-col>
           </ion-row>
+       
     <ion-row *ngFor="let data of allALT">
       <ion-col class="ion-col-border"  style="padding-top: 18px;"  col-6 text-center>{{data.value}}</ion-col>
       <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
@@ -258,6 +272,7 @@
           <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Amilase<br>(AMI)</b></ion-col>
         <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 15px;"  col-6 text-center><b>Fonte</b></ion-col>
           </ion-row>
+       
     <ion-row *ngFor="let data of allAMI">
       <ion-col class="ion-col-border"  style="padding-top: 18px;"  col-6 text-center>{{data.value}}</ion-col>
       <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
@@ -267,13 +282,13 @@
       <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">LABORATORIO GERAL</span></ion-col>
         </ion-row>
 
-
         <br>
 
         <ion-row>
           <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Glucose<br>(GLC)</b></ion-col>
         <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 15px;"  col-6 text-center><b>Fonte</b></ion-col>
           </ion-row>
+      
     <ion-row *ngFor="let data of allGLC">
       <ion-col class="ion-col-border"  style="padding-top: 18px;"  col-6 text-center>{{data.value}}</ion-col>
       <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
@@ -291,7 +306,7 @@
     </ion-slide>
   
 
-    <ion-slide *ngIf="IPTStartFichaClinica&&IPTEndFichaClinica&&IPTStartFichaResumo&&IPTEndFichaResumo&&IPTStartFichaSeguimento&&IPTEndFichaSeguimento&&IPTEndFichaFILT&&allVLs&&allIPTStart&&allIPTEnd">
+    <ion-slide>
 
       <ion-toolbar color="light" style="margin-top: 5px;margin-bottom: 5px;">
   
@@ -303,20 +318,19 @@
           <ion-badge slot="start" color="light">{{patient.display | splitAndGet:"-":1}}<br>{{patient.display | splitAndGet:"-":0}}<br>Idade: {{patient.person.age}}, {{patient.identifiers[0].location.name}}<span *ngIf="patient.person.dead==true" style="color: red;">, Obitou</span></ion-badge><br>
           <b>TPT</b>
           <br>
-          <ion-button (click)="refreshSummary()" color="success" size="small" shape="round" style="margin-bottom: 5px;">
+          <ion-button (click)="refreshSummary()" color="light" size="small" shape="round" style="margin-bottom: 5px;">
             <ion-icon slot="icon-only" name="refresh"></ion-icon>
           </ion-button>
         </span>
       </ion-toolbar>
-      
-    
-      <ion-grid style="font-size: 16px;">
-      
+        
+      <ion-grid style="font-size: 16px;" *ngIf="IPTStartFichaClinica&&IPTEndFichaClinica&&IPTStartFichaResumo&&IPTEndFichaResumo&&IPTStartFichaSeguimento&&IPTEndFichaSeguimento&&IPTEndFichaFILT&&allVLs&&allIPTStart&&allIPTEnd">
           
         <ion-row>
           <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Data de início de <br>TPI</b></ion-col>
           <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 15px;"  col-6 text-center><b>Fonte</b></ion-col>
           </ion-row>
+        
     <ion-row *ngFor="let data of allIPTStart">
       <ion-col class="ion-col-border"  style="padding-top: 18px;"  col-6 text-center *ngIf="!data.value.display">{{data.value | date:'dd-MM-yyyy'}}</ion-col>
       <ion-col class="ion-col-border"  style="padding-top: 18px;"  col-6 text-center *ngIf="data.value.display">{{data.obsDatetime | date:'dd-MM-yyyy'}}</ion-col>
@@ -334,11 +348,13 @@
       <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no EPTS</span></ion-col>
       <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">FICHA DE SEGUIMENTO</span></ion-col>
         </ion-row>
+
     <br>
     <ion-row>
       <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Data do fim de <br>TPI</b></ion-col>
       <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 15px;"  col-6 text-center><b>Fonte</b></ion-col>
           </ion-row>
+        
           <ion-row *ngFor="let data of allIPTEnd">
             <ion-col class="ion-col-border"  style="padding-top: 18px;"  col-6 text-center *ngIf="!data.value.display">{{data.value | date:'dd-MM-yyyy'}}</ion-col>
       <ion-col class="ion-col-border"  style="padding-top: 18px;"  col-6 text-center *ngIf="data.value.display">{{data.obsDatetime | date:'dd-MM-yyyy'}}</ion-col>
@@ -362,6 +378,7 @@
       <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Data do último levantamento INH</b></ion-col>
       <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 15px;"  col-6 text-center><b>Fonte</b></ion-col>
           </ion-row>
+        
         <ion-row >
           <ion-col *ngIf="IPTEndFichaFILT[0]" style="padding-top: 18px;" class="ion-col-border" col-6 text-center>{{IPTEndFichaFILT[0].obsDatetime | date:'dd-MM-yyyy'}}</ion-col>
           <ion-col *ngIf="IPTEndFichaFILT[0]" class="ion-col-border" col-6 style="font-size: 14px;">{{IPTEndFichaFILT[0].obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{IPTEndFichaFILT[0].encounter.form.display}}<br>{{IPTEndFichaFILT[0].encounter['location.name']}}</span></ion-col>
@@ -374,6 +391,7 @@
           <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Tipo do último levantamento INH</b></ion-col>
           <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 15px;"  col-6 text-center><b>Fonte</b></ion-col>
              </ion-row>
+           
             <ion-row >
               <ion-col *ngIf="IPTEndFichaFILT[0]" style="padding-top: 18px;" class="ion-col-border" col-6 text-center>{{IPTEndFichaFILT[0].value.display}}</ion-col>
               <ion-col *ngIf="IPTEndFichaFILT[0]" class="ion-col-border" col-6 style="font-size: 14px;">{{IPTEndFichaFILT[0].obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{IPTEndFichaFILT[0].encounter.form.display}}<br>{{IPTEndFichaFILT[0].encounter['location.name']}}</span></ion-col>

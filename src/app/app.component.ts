@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { MenuController } from '@ionic/angular';
 import { HTTP } from '@ionic-native/http/ngx';
 import { NavController  } from '@ionic/angular';
-import { InfoComponent} from './home/info/info.component'
+import { InfoComponent} from './home/info/info.component';
 
 @Component({
   selector: 'app-root',
@@ -14,6 +14,7 @@ import { InfoComponent} from './home/info/info.component'
 export class AppComponent {
 
   public user;url;show;
+ 
 
   constructor(public appService: AppService,
     private router: Router,
@@ -33,6 +34,8 @@ export class AppComponent {
     this.user = JSON.parse(window.localStorage.getItem('user'));
     this.url = window.localStorage.getItem('url');
     this.show = true;
+
+    
   
   }
 
@@ -73,6 +76,7 @@ export class AppComponent {
      InfoComponent.clearInterval();
 
   }
-  
+
+ 
 
 }

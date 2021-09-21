@@ -8,6 +8,7 @@ import autoTable from 'jspdf-autotable';
 import { DatePipe } from '@angular/common';
 import { File } from '@ionic-native/file/ngx';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
+import { HTTP } from '@ionic-native/http/ngx';
 
 @Component({
   selector: 'page-report-usage',
@@ -25,16 +26,21 @@ export class ReportUsageComponent {
   public startDate; endDate;
 
   public ClinicalSummaries: any[] = [];
+  public ClinicalSummaries2: any[] = [];
+
+  public toLoad;loaded;errorOnLoop;
 
   constructor(
     private storage: Storage,
+    private http: HTTP,
     //private sqlite: SQLite
     private spinnerDialog: SpinnerDialog,
     private dialogs: Dialogs,
     public datePicker: DatePicker,
     public datepipe: DatePipe,
     private file: File,
-    private fileOpener: FileOpener
+    private fileOpener: FileOpener,
+
   ) {
 
 
@@ -45,6 +51,10 @@ export class ReportUsageComponent {
     this.color = "primary";
     this.isDisabled = false;
     this.user = JSON.parse(window.localStorage.getItem('user'));
+    
+
+    this.http.setDataSerializer( "utf8" );
+    
   }
 
   showDatePicker() {
@@ -103,7 +113,7 @@ export class ReportUsageComponent {
     this.spinnerDialog.show(null, "Carregando...", true);
     this.storage.get('epts-clinical-summaries').then((data) => {
       if (data) {
-        this.ClinicalSummaries = data;
+        this.ClinicalSummaries = data.filter(item=>item.username.toUpperCase()==this.user.user.username.toUpperCase());
       }
     });
     setTimeout(() => {
@@ -137,6 +147,110 @@ export class ReportUsageComponent {
     }, 3000);
 
   }
+
+  uploadUsageReports() {
+  this.color="primary";
+  this.loaded=1;
+
+  this.storage.get('epts-clinical-summaries').then(async (data) => {
+    if (data) {
+      this.ClinicalSummaries2 = data.filter(item=>item.username.toUpperCase()==this.user.user.username.toUpperCase() && item.status=="not_uploaded");
+      var allCS= data;
+      this.toLoad=this.ClinicalSummaries2.length;
+     
+      this.errorOnLoop="";
+
+      if (this.ClinicalSummaries2.length > 0) {
+
+        this.spinnerDialog.show(null, "Enviando "+this.toLoad+" relatórios...", true);
+
+        for(let cs of this.ClinicalSummaries2){
+    
+          let payload = {
+            eventDate: cs.dateOpened,
+            status:"COMPLETED",
+            completedDate:new Date(),
+            program:"zUzKes56b9I",
+            programStage:"t4XLfwKYcuO",
+            orgUnit:"HxSLEPpHkuK",
+            dataValues:[
+              {
+                 dataElement:"B1ifFNRXkzo",
+                 value:cs.report
+              },
+              {
+                dataElement:"D37WjvR8AIt",
+                value:cs.us
+              },
+              {
+                dataElement:"bRYKxt09HrK",
+                value:cs.username
+              },
+              {
+                dataElement:"iYompJgWa6M",
+                value:cs.patient_uuid
+              },
+              {
+                dataElement:"PEK0zg7jLdy",
+                value:cs.terms
+              }
+            ]
+          };
+    
+      await this.http.post("https://dhis2.fgh.org.mz/api/events",             //URL
+      JSON.stringify(payload),         //Data 
+      {
+        'Content-Type': 'application/json',
+        Authorization: 'Basic ' + btoa("clinical.summary:Local123@")
+      } // Headers
+      )
+      .then(response => {    
+       
+        this.loaded=this.loaded+1;
+
+        var clinicalsummaries=allCS.filter(item => item.dateOpened!=cs.dateOpened);
+        cs.status="uploaded";
+        clinicalsummaries.push(cs);
+
+        this.storage.set("epts-clinical-summaries",clinicalsummaries);
+    
+        if(this.loaded>this.toLoad){
+           this.spinnerDialog.hide();
+           this.dialogs.alert(this.toLoad +" relatório(s) de uso enviados(s) com sucesso para a nuvem!","Informação");
+         }
+    
+    
+      })
+      .catch(response => {
+        this.color="danger";
+        this.spinnerDialog.hide();
+        this.dialogs.alert("Não foi possivel envir os dados para a nuvem. Verifique o seu sinal de internet!","Erro ao enviar");
+        this.errorOnLoop="errorOnLoop";
+                
+      });
+    
+    if(this.errorOnLoop=="errorOnLoop"){
+      break;
+    }
+    
+        }
+    
+    }
+    else{
+      this.spinnerDialog.hide();
+      this.dialogs.alert("Sem relatórios por enviar!","Informação");
+    }
+
+
+    }
+  });
+
+ 
+
+
+
+  }
+
 
   printClinicalSummaries() {
     this.color = "primary";

@@ -3,6 +3,7 @@ import { MenuController } from '@ionic/angular';
 import { HTTP } from '@ionic-native/http/ngx';
 import { NavController  } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { Storage } from '@ionic/storage-angular';
 
 const MINUTES_UNITL_AUTO_LOGOUT = 15 // in mins
 const CHECK_INTERVAL = 60000 // in ms
@@ -17,14 +18,15 @@ export class InfoComponent {
   public user;color;interval;
   val: any;
   static interval: number;
-
-  
+  public ClinicalSummaries2: any[] = [];
+  public toLoad;loaded;errorOnLoop;
   
   constructor(
     private menu: MenuController,
     private http: HTTP,
     private navCtrl: NavController,
-    private router: Router
+    private router: Router,
+    private storage: Storage
    ) {
 
     if(window.localStorage.getItem('user')){
@@ -33,8 +35,6 @@ export class InfoComponent {
       this.initInterval();
       sessionStorage.setItem(STORE_KEY,Date.now().toString());
      }
-
-    
 
   }
 
@@ -47,6 +47,21 @@ export class InfoComponent {
     this.color="primary";
     window.localStorage.removeItem('search');
     this.user = JSON.parse(window.localStorage.getItem('user'));
+
+    this.http.setDataSerializer( "utf8" );
+    
+    this.storage.get('autoSync').then((data) => {
+
+      if(data==='Sim'){
+  
+        this.doSync();
+
+      }
+  
+      },
+      error => console.error(error)
+      
+      );
   }
 
   ngOnDestroy(){
@@ -149,6 +164,107 @@ public static clearInterval(){
   window.clearInterval(this.interval);
   //console.log("Interval cleared")
 }
+
+doSync(){
+  return new Promise((resolve, reject) => {
+
+    this.loaded=1;
+
+  this.storage.get('epts-clinical-summaries').then(async (data) => {
+    if (data) {
+      this.ClinicalSummaries2 = data.filter(item=>item.username.toUpperCase()==this.user.user.username.toUpperCase() && item.status=="not_uploaded");
+      var allCS= data;
+      this.toLoad=this.ClinicalSummaries2.length;
+     
+      this.errorOnLoop="";
+
+      if (this.ClinicalSummaries2.length > 0) {
+
+       // this.spinnerDialog.show(null, "Carregando "+this.toLoad+" relatórios...", true);
+
+        for(let cs of this.ClinicalSummaries2){
+    
+          let payload = {
+            eventDate: cs.dateOpened,
+            status:"COMPLETED",
+            completedDate:new Date(),
+            program:"zUzKes56b9I",
+            programStage:"t4XLfwKYcuO",
+            orgUnit:"HxSLEPpHkuK",
+            dataValues:[
+              {
+                 dataElement:"B1ifFNRXkzo",
+                 value:cs.report
+              },
+              {
+                dataElement:"D37WjvR8AIt",
+                value:cs.us
+              },
+              {
+                dataElement:"bRYKxt09HrK",
+                value:cs.username
+              },
+              {
+                dataElement:"iYompJgWa6M",
+                value:cs.patient_uuid
+              },
+              {
+                dataElement:"PEK0zg7jLdy",
+                value:cs.terms
+              }
+            ]
+          };
+    
+      await this.http.post("https://dhis2.fgh.org.mz/api/events",             //URL
+      JSON.stringify(payload),         //Data 
+      {
+        'Content-Type': 'application/json',
+        Authorization: 'Basic ' + btoa("clinical.summary:Local123@")
+      } // Headers
+      )
+      .then(response => {    
+       
+        this.loaded=this.loaded+1;
+
+        var clinicalsummaries=allCS.filter(item => item.dateOpened!=cs.dateOpened);
+        cs.status="uploaded";
+        clinicalsummaries.push(cs);
+
+        this.storage.set("epts-clinical-summaries",clinicalsummaries);
+    
+        if(this.loaded>this.toLoad){
+           //this.spinnerDialog.hide();
+           //console.log(this.toLoad +" relatório(s) de uso enviado(s) com sucesso para a nuvem!");
+         }
+    
+    
+      })
+      .catch(response => {
+        //console.log("Não foi possivel enviar os dados para a nuvem. Verifique o seu sinal de internet!");
+        this.errorOnLoop="errorOnLoop";
+                
+      });
+    
+    if(this.errorOnLoop=="errorOnLoop"){
+      break;
+    }
+    
+        }
+    
+    }
+    else{
+      //this.spinnerDialog.hide();
+      console.log("Sem relatórios por enviar!");
+    }
+
+
+    }
+  });
+
+});
+
+}
+
 
 
 }
