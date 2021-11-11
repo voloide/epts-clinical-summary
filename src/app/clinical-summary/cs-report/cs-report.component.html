@@ -13,6 +13,88 @@
   <ion-slides pager="true">
 
     <ion-slide>
+
+      <ion-toolbar color="light" style="margin-top: 5px;margin-bottom: 5px;">
+  
+        <span style="font-size: 17px;margin-top: 3px;">
+
+          <ion-icon *ngIf="patient.person.gender=='M'" size="large" name="male-outline" color="primary"></ion-icon>
+          <ion-icon *ngIf="patient.person.gender=='F'" size="large" name="female-outline" color="danger"></ion-icon>
+<br>
+          <ion-badge slot="start" color="light">{{patient.display | splitAndGet:"-":1}}<br>{{patient.display | splitAndGet:"-":0}}<br>Idade: {{patient.person.age}}, {{patient.identifiers[0].location.name}}<span *ngIf="patient.person.dead==true" style="color: red;">, Obitou</span></ion-badge><br>
+          <b>DADOS DEMOGRAFICOS</b>
+          <br>
+          <ion-button (click)="refreshSummary()" color="light" size="small" shape="round" style="margin-bottom: 5px;">
+            <ion-icon slot="icon-only" name="refresh"></ion-icon>
+          </ion-button>
+        </span>
+      </ion-toolbar>
+
+      
+
+
+
+
+
+
+
+
+      <ion-grid  style="font-size: 16px;">
+
+        <ion-row>
+          <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-12 text-center><b>Data de <br>nascimento</b></ion-col>
+          </ion-row>
+
+        <ion-row>
+          <ion-col class="ion-col-border"  style="padding-top: 8px;" *ngIf="patient.person.birthdate"  col-12 text-center>{{patient.person.birthdate | date:'dd-MM-yyyy'}}</ion-col>
+          <ion-col  class="ion-col-border"  *ngIf="!patient.person.birthdate" col-12 text-center><span style="color:red;font-size: 12px;">Sem dados no EPTS</span></ion-col>
+        </ion-row>
+        <br>
+
+        <ion-row>
+          <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-12 text-center><b>Endereços</b></ion-col>
+          </ion-row>
+          
+    <ion-row *ngFor="let data of patient.person.addresses">
+      <ion-col class="ion-col-border"  style="padding-top: 18px;"  col-12 text-center>{{data.address5}} - {{data.display}} <span *ngIf="data.preferred"> (Preferido)</span></ion-col>
+        </ion-row>
+    <ion-row *ngIf=" patient.person.addresses.length<1">
+      <ion-col  class="ion-col-border" col-12 text-center><span style="color:red;font-size: 12px;">Sem dados no EPTS</span></ion-col>
+        </ion-row>
+  
+      <br>
+      <ion-row>
+        <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-12 text-center><b>Contactos</b></ion-col>
+        </ion-row>
+        
+  <ion-row *ngFor="let data of patient.person.attributes">
+    <ion-col class="ion-col-border"  style="padding-top: 18px;"  col-12 text-center>{{data.display}}</ion-col>
+      </ion-row>
+  <ion-row *ngIf=" patient.person.attributes.length<1">
+    <ion-col  class="ion-col-border" col-12 text-center><span style="color:red;font-size: 12px;">Sem dados no EPTS</span></ion-col>
+      </ion-row>
+      <br>
+     </ion-grid>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+    
+    </ion-slide>
+    <ion-slide>
     
       <ion-toolbar color="light" style="margin-top: 5px;margin-bottom: 5px;">
   
@@ -113,7 +195,22 @@
         </span>
       </ion-toolbar>
 
-      <ion-grid style="font-size: 16px;" *ngIf="ARTPickupNextDate&&ARTPickupRegime&&allVLs">
+      <ion-grid style="font-size: 16px;" *ngIf="ARTPickupNextDate&&ARTPickupRegime&&allVLs&&ARTStartDate">
+
+
+        <ion-row>
+          <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Data de Inicio TARV</b></ion-col>
+          <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 7px;"  col-6 text-center><b>Fonte</b></ion-col>
+          </ion-row>
+
+        <ion-row >
+          <ion-col *ngIf="ARTPickupRegime[0]" style="padding-top: 18px;" class="ion-col-border" col-6 text-center>{{ARTStartDate[0].value | date:'dd-MM-yyyy'}}</ion-col>
+          <ion-col *ngIf="ARTPickupRegime[0]" class="ion-col-border" col-6 style="font-size: 14px;">{{ARTStartDate[0].obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{ARTStartDate[0].encounter.form.display}}<br>{{ARTStartDate[0].encounter['location.name']}}</span></ion-col>
+          <ion-col *ngIf="!ARTPickupRegime[0]" class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no EPTS</span></ion-col>
+          <ion-col *ngIf="!ARTPickupRegime[0]" class="ion-col-border" col-6><span style="font-size: 13px;">Ficha Resumo/Processo PARTE A</span></ion-col>
+          </ion-row>
+
+        <br>
 
         <ion-row>
           <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Data do último levantamento de ARV</b></ion-col>

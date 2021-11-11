@@ -71,7 +71,7 @@ export class CsParameterComponent {
     this.newPatients = [];
     this.index = this.index + 50;
 
-    var newURL= encodeURI(window.localStorage.getItem('url') + "/ws/rest/v1/patient?q=" + this.search + "&v=custom:(uuid,display,identifiers:(uuid,location:(name)),person:(gender,age,dead))&limit=50&startIndex=" + this.index);
+    var newURL= encodeURI(window.localStorage.getItem('url') + "/ws/rest/v1/patient?q=" + this.search + "&v=custom:(uuid,display,identifiers:(uuid,location:(name)),person:(gender,age,dead,birthdate,addresses:(display,preferred,address5),attributes:(display))&limit=50&startIndex=" + this.index);
 
     this.http.get(
       newURL,             //URL
@@ -126,7 +126,7 @@ export class CsParameterComponent {
 
       if ((this.search.match(/\//g) || []).length==2&&this.search.replace(/\s/g, "").length>12) {
 
-        var newURL= encodeURI(window.localStorage.getItem('url') + "/ws/rest/v1/patient?identifier=" + this.search.replace(/\s/g, "") + "&v=custom:(uuid,display,identifiers:(uuid,location:(name)),person:(gender,age,dead))");
+        var newURL= encodeURI(window.localStorage.getItem('url') + "/ws/rest/v1/patient?identifier=" + this.search.replace(/\s/g, "") + "&v=custom:(uuid,display,identifiers:(uuid,location:(name)),person:(gender,age,dead,birthdate,addresses:(display,preferred,address5),attributes:(display))");
 
 
         this.storage.set('search-criteria', this.search);
@@ -160,7 +160,7 @@ export class CsParameterComponent {
         this.patients = [];
         this.storage.remove('search-criteria');
 
-        var newURL= encodeURI(window.localStorage.getItem('url') + "/ws/rest/v1/patient?q=" + this.search + "&v=custom:(uuid,display,identifiers:(uuid,location:(name)),person:(gender,age,dead))&limit=50&startIndex=" + this.index);
+        var newURL= encodeURI(window.localStorage.getItem('url') + "/ws/rest/v1/patient?q=" + this.search + "&v=custom:(uuid,display,identifiers:(uuid,location:(name)),person:(gender,age,dead,birthdate,addresses:(display,preferred,address5),attributes:(display))&limit=50&startIndex=" + this.index);
 
         this.http.get(
           newURL,             //URL

@@ -26,6 +26,9 @@ public allVLCopiasFSR;allVLCopiasV2FSR;allVLCopiasFC;allVLCopiasV2FC;ARTPickupRe
 public allVLsV2;allVLs;allIPTStart;allIPTEnd;
 public ClinicalSummaries: any[]=[];
 
+//Data INicio Tarv
+public ARTStartDate;
+
   constructor(
     private http: HTTP,
     public navCtrl: NavController,
@@ -46,6 +49,7 @@ public ClinicalSummaries: any[]=[];
     this.allALT=null;
     this.allAMI=null;
     this.allGLC=null;
+    this.ARTStartDate=null;
     
 
     //new VArs
@@ -82,8 +86,7 @@ public ClinicalSummaries: any[]=[];
     
      if (confirm==1){
               
-             this.callMyMethod();
-              
+             this.callMyMethod();             
             }
 
   }
@@ -99,6 +102,7 @@ public ClinicalSummaries: any[]=[];
     this.allALT=null;
     this.allAMI=null;
     this.allGLC=null;
+    this.ARTStartDate=null;
 
     //new VArs
     this.IPTStartFichaClinica=null;this.IPTEndFichaClinica=null;this.IPTStartFichaResumo=null;this.IPTEndFichaResumo=null;this.IPTStartFichaSeguimento=null;this.IPTEndFichaSeguimento=null;this.IPTEndFichaFILT=null;
@@ -392,6 +396,20 @@ this.http.get(
       var data=JSON.parse(response.data);
       this.IPTEndFichaFILT=data.results.filter(item=>item.encounter.form.uuid=="4ce83895-5c0e-4170-b0cc-d3974b54131f");
   
+  //ART START Date
+  
+  this.http.get(
+    window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=e1d8f690-1d5f-11e0-b929-000c29ad1d07&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=1",             //URL
+    {},         //Data 
+    {
+      'Content-Type': 'application/json',
+      Authorization: 'Basic ' + btoa(window.localStorage.getItem('username') + ":" + window.localStorage.getItem('password'))
+    } // Headers
+  )
+    .then(response => {
+      
+      var data=JSON.parse(response.data);
+      this.ARTStartDate=data.results;
        var clinicalSummary:any={
           report:"Sumário Clínico",
           patient_uuid: this.patient.uuid,
@@ -420,6 +438,13 @@ this.http.get(
         
         this.spinnerDialog.hide();
 
+      })
+      .catch(response => {
+  
+      this.networkFailure();
+  
+      });
+      
     })
     .catch(response => {
 
