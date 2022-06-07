@@ -87,6 +87,9 @@ export class LoginFormComponent {
    this.navCtrl.navigateForward('/settings');
   }
 
+  ionViewWillEnter() {
+    this.ngOnInit();
+}
 
   async  ngOnInit() {
     this.locked=true;
@@ -101,12 +104,17 @@ export class LoginFormComponent {
     this.storage.get('key').then((data) => {
       if(data=="YES"){
         this.locked=false;
+      }else{
+        this.locked=true;
+        this.localUser.pin="";
       }
           });
 
   this.storage.get('accepted').then((data) => {
     if(data=="YES"){
       this.accepted=true;
+    }else{
+      this.accepted=false;
     }
         });
 

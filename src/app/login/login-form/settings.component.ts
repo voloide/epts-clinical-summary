@@ -216,13 +216,21 @@ uploadUsageReports() {
   var confirm = await this.dialogs.confirm('Deseja reconfigurar o aplicativo com apoio da equipa de Sistemas de Informação?', 'Confirmação', ['Sim', 'Não']);
 
     if (confirm == 1) {
+      this.spinnerDialog.show(null, "Eliminando dados...", true);
 
       window.localStorage.removeItem('url');
       window.localStorage.removeItem('username');
       window.localStorage.removeItem('password');
+      this.storage.remove('url');
+      window.localStorage.clear();
+      window.sessionStorage.clear();
       this.storage.clear();
+
+      setTimeout(() => {
       this.navCtrl.navigateRoot("/login");
-    }
+      this.spinnerDialog.hide();
+  }, 3000);
 }
 
+  }
 }
