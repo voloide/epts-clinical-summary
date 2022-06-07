@@ -83,10 +83,16 @@ export class LoginFormComponent {
   }
 
 
+  openSettings() {
+   this.navCtrl.navigateForward('/settings');
+  }
+
+
   async  ngOnInit() {
     this.locked=true;
     this.accepted=false;
     this.menu.enable(false, 'first');
+    this.http.setRequestTimeout(30);
     
     await this.storage.create();
 
@@ -317,7 +323,7 @@ if (confirm==1){
   }
 
   login() {
-
+    this.storage.set('lastLoggedUsername', this.localUser.username);
     this.http.get(
       this.localUser.url+'/ws/rest/v1/session',             //URL
       {},         //Data 
@@ -334,8 +340,6 @@ if (confirm==1){
         window.localStorage.setItem('user',JSON.stringify(this.user) );
          
           this.appService.callMethodOfSecondComponent();
-
-          this.storage.set('lastLoggedUsername', this.localUser.username);
 
           if (this.autoSync) {
             this.storage.set('autoSync', 'Sim');

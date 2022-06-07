@@ -1,11 +1,25 @@
 <ion-header>
+
+  
   <ion-toolbar color="{{color}}">
+
+    <ion-buttons slot="end" *ngIf="!locked&&accepted">
+      <ion-button color="secondary" (click)="openSettings()">
+        <ion-icon slot="icon-only" name="settings"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  
+
     <ion-title>EPTS Sumário Clínico</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <br>
+
+  <div style="text-align: center;">
+  <img src="../../../assets/imgs/app-logo.png" height="64" width="64"/>
+  </div>
 
     <form [formGroup]="form">
 
@@ -14,6 +28,9 @@
           URL do Servidor
         </ion-label>
         <ion-input [disabled]="!locked" [(ngModel)]="localUser.url" type="text" value="" formControlName="url" placeholder="Escreva a URL do Servidor"></ion-input>
+        <ion-icon name="globe-outline" slot="start"  size="small" class="ion-align-self-center"></ion-icon>
+    
+     
       </ion-item>
 
 
@@ -22,13 +39,15 @@
           Chave para {{activation.entry}}
         </ion-label>
         <ion-input [(ngModel)]="localUser.pin" type="text" value="" formControlName="pin" placeholder="Escreva a chave para o codigo"></ion-input>
+        <ion-icon name="lock-closed" slot="start"  size="small" class="ion-align-self-center"></ion-icon>
       </ion-item>
 
       <ion-item *ngIf="!locked&&accepted" class="ion-margin-top">
         <ion-label position="stacked">
           Utilizador
         </ion-label>
-        <ion-input [(ngModel)]="localUser.username" type="text" value="" formControlName="username" placeholder="Escreva o username"></ion-input>
+        <ion-input [(ngModel)]="localUser.username" type="text" value="" formControlName="username" placeholder="Escreva o username">        </ion-input>
+        <ion-icon name="person" slot="start"  size="small" class="ion-align-self-center"></ion-icon>
       </ion-item>
 
       <ion-item *ngIf="!locked&&accepted" class="ion-margin-top">
@@ -37,9 +56,9 @@
         </ion-label>
         <ion-input [(ngModel)]="localUser.password" type="{{type}}" value="" formControlName="password" placeholder="Escreva o password"></ion-input>
         
-        <ion-icon *ngIf="!showPass" slot="end" name="eye-off-outline" (click)="showPassword()"></ion-icon>
-        <ion-icon *ngIf="showPass" slot="end" name="eye-outline" (click)="showPassword()"></ion-icon>
-        
+        <ion-icon *ngIf="!showPass" slot="end" class="ion-align-self-center" name="eye-off-outline" (click)="showPassword()"></ion-icon>
+        <ion-icon *ngIf="showPass" slot="end" class="ion-align-self-center" name="eye-outline" (click)="showPassword()"></ion-icon>
+        <ion-icon name="lock-closed" slot="start"  size="small" class="ion-align-self-center"></ion-icon>
       </ion-item>
 
       <div *ngIf="!locked&&accepted" class="ion-margin-top">
@@ -50,18 +69,18 @@
         <ion-button color="success" expand="block" (click)="setURL()">GRAVAR URL</ion-button>
         </div>
 
-      <ion-item *ngIf="!locked&&accepted">
+      <ion-item *ngIf="!locked&&accepted" class="ion-hide">
         <ion-label>Recordar utilizador</ion-label>
         <ion-checkbox [(ngModel)]="storelocalUser" formControlName="storelocalUser"></ion-checkbox>
       </ion-item>
 
-      <ion-item *ngIf="!locked&&accepted">
+      <ion-item *ngIf="!locked&&accepted" class="ion-hide">
         <ion-label>Auto enviar dados de uso</ion-label>
         <ion-checkbox [(ngModel)]="autoSync" formControlName="autoSync"></ion-checkbox>
       </ion-item>
 
-      <div *ngIf="!locked&&accepted" class="ion-margin-top">
-        <ion-button color="success" [disabled]="!lastLoggedUsername" expand="block" (click)="uploadUsageReports()">ENVIAR DADOS DE USO</ion-button>
+      <div *ngIf="!locked&&accepted" class="ion-margin-top" class="ion-hide">
+        <ion-button color="success" [disabled]="!lastLoggedUsername" expand="block" (click)="uploadUsageReports()">PARTILHAR DADOS DE USO</ion-button>
       </div>
 
      
