@@ -14,6 +14,7 @@ import { SpinnerDialog } from '@ionic-native/spinner-dialog/ngx';
 import { Dialogs } from '@ionic-native/dialogs/ngx';
 import { AppService } from './app.service';
 
+
 //Modules
 import { LoginModule } from './login/login.module';
 import { HomeModule } from './home/home.module';

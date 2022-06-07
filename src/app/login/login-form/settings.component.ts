@@ -29,6 +29,7 @@ export class SettingsComponent {
     private spinnerDialog: SpinnerDialog,
     private dialogs: Dialogs,
     private http: HTTP,
+    private navCtrl: NavController,
   ) {
 
 
@@ -210,5 +211,18 @@ uploadUsageReports() {
 
 }
 
+
+  async wipeData(){
+  var confirm = await this.dialogs.confirm('Deseja reconfigurar o aplicativo com apoio da equipa de Sistemas de Informação?', 'Confirmação', ['Sim', 'Não']);
+
+    if (confirm == 1) {
+
+      window.localStorage.removeItem('url');
+      window.localStorage.removeItem('username');
+      window.localStorage.removeItem('password');
+      this.storage.clear();
+      this.navCtrl.navigateRoot("/login");
+    }
+}
 
 }

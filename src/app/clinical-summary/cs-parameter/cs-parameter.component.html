@@ -16,9 +16,9 @@
       </ion-searchbar>
   </form>       
    </ion-col>
-   <ion-col size="1">
+   <ion-col size="1" class="ion-align-self-center">
 
-    <ion-button color="success" style="margin-left: -12px;" (click)="searchPatients()">
+    <ion-button class="ion-align-self-center" color="success" style="margin-left: -12px;" (click)="searchPatients()">
       <ion-icon slot="icon-only" name="search"  ></ion-icon>
     </ion-button>
 
@@ -46,7 +46,7 @@
         <p><span *ngIf="patient.identifiers[0].location!=null">{{patient.identifiers[0].location.name}}</span></p>
       </ion-label>
 
-      <ion-badge *ngIf="patient.person.dead==true" item-end color="danger">Obitou</ion-badge>&nbsp;
+      <ion-badge *ngIf="patient.person.dead==true" item-end color="danger">Óbito</ion-badge>&nbsp;
       <ion-badge item-end color="light">{{patient.person.age}} <span *ngIf="patient.person.age<2">ano</span><span *ngIf="patient.person.age>1">anos</span></ion-badge>
 
     </ion-item>
