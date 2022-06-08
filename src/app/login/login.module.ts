@@ -8,6 +8,7 @@ import { LoginRoutingModule } from './login-routing.module';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';  
+import { SettingsComponent } from './login-form/settings.component';
 
 @NgModule({
   imports: [
@@ -17,15 +18,18 @@ import { CommonModule } from '@angular/common';
     
   ],
   declarations: [
-    LoginFormComponent
+    LoginFormComponent,
+    SettingsComponent
   ],
   exports: [
-    LoginFormComponent
+    LoginFormComponent,
+    SettingsComponent
   ],
   providers: [
   ],
   entryComponents: [
-    LoginFormComponent
+    LoginFormComponent,
+    SettingsComponent
   ]
 })
 export class LoginModule { }

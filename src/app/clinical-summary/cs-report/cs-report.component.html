@@ -10,6 +10,8 @@
 <ion-content>
   <ion-slides pager="true">
     <!-- Tela de dados demograficos -->
+  <ion-slides pager="true" style="--background: #f0f0f2;">
+
     <ion-slide>
       <ion-toolbar color="light" style="margin-top: 5px;margin-bottom: 5px;">
   
@@ -18,8 +20,8 @@
           <ion-icon *ngIf="patient.person.gender=='M'" size="large" name="male-outline" color="primary"></ion-icon>
           <ion-icon *ngIf="patient.person.gender=='F'" size="large" name="female-outline" color="danger"></ion-icon>
 <br>
-          <ion-badge slot="start" color="light">{{patient.display | splitAndGet:"-":1}}<br>{{patient.display | splitAndGet:"-":0}}<br>Idade: {{patient.person.age}}, {{patient.identifiers[0].location.name}}<span *ngIf="patient.person.dead==true" style="color: red;">, Obitou</span></ion-badge><br>
-          <b>DADOS DEMOGRAFICOS</b>
+          <ion-badge slot="start" color="light">{{patient.display | splitAndGet:"-":1}}<br>{{patient.display | splitAndGet:"-":0}}<br>Idade: {{patient.person.age}}, {{patient.identifiers[0].location.name}}<span *ngIf="patient.person.dead==true" style="color: red;">, Óbito</span></ion-badge><br>
+          <b>DADOS DEMOGRÁFICOS</b>
           <br>
           <ion-button (click)="refreshSummary()" color="light" size="small" shape="round" style="margin-bottom: 5px;">
             <ion-icon slot="icon-only" name="refresh"></ion-icon>
@@ -35,7 +37,7 @@
 
         <ion-row>
           <ion-col class="ion-col-border"  style="padding-top: 8px;" *ngIf="patient.person.birthdate"  col-12 text-center>{{patient.person.birthdate | date:'dd-MM-yyyy'}}</ion-col>
-          <ion-col  class="ion-col-border"  *ngIf="!patient.person.birthdate" col-12 text-center><span style="color:red;font-size: 12px;">Sem dados no EPTS</span></ion-col>
+          <ion-col  class="ion-col-border"  *ngIf="!patient.person.birthdate" col-12 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
         </ion-row>
         <br>
 
@@ -49,7 +51,7 @@
       </ion-col>
         </ion-row>
     <ion-row *ngIf=" patient.person.addresses.length<1">
-      <ion-col  class="ion-col-border" col-12 text-center><span style="color:red;font-size: 12px;">Sem dados no EPTS</span></ion-col>
+      <ion-col  class="ion-col-border" col-12 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
         </ion-row>
   
       <br>
@@ -61,7 +63,7 @@
     <ion-col *ngIf="data.display.includes('Telefone')" class="ion-col-border"  style="padding-top: 18px;"  col-12 text-center>{{data.display}}</ion-col>
       </ion-row>
   <ion-row *ngIf=" patient.person.attributes.length<1">
-    <ion-col  class="ion-col-border" col-12 text-center><span style="color:red;font-size: 12px;">Sem dados no EPTS</span></ion-col>
+    <ion-col  class="ion-col-border" col-12 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
       </ion-row>
       <br>
      </ion-grid>
@@ -76,7 +78,7 @@
           <ion-icon *ngIf="patient.person.gender=='M'" size="large" name="male-outline" color="primary"></ion-icon>
           <ion-icon *ngIf="patient.person.gender=='F'" size="large" name="female-outline" color="danger"></ion-icon>
 <br>
-          <ion-badge slot="start" color="light">{{patient.display | splitAndGet:"-":1}}<br>{{patient.display | splitAndGet:"-":0}}<br>Idade: {{patient.person.age}}, {{patient.identifiers[0].location.name}}<span *ngIf="patient.person.dead==true" style="color: red;">, Obitou</span></ion-badge><br>
+          <ion-badge slot="start" color="light">{{patient.display | splitAndGet:"-":1}}<br>{{patient.display | splitAndGet:"-":0}}<br>Idade: {{patient.person.age}}, {{patient.identifiers[0].location.name}}<span *ngIf="patient.person.dead==true" style="color: red;">, Óbito</span></ion-badge><br>
           <b>RESULTADO DE CARGA VIRAL E CD4</b>
           <br>
           <ion-button (click)="refreshSummary()" color="light" size="small" shape="round" style="margin-bottom: 5px;">
@@ -101,15 +103,15 @@
         </ion-row>
  
         <ion-row *ngIf="(allVLCopiasV2.length+allVLCopias.length)<1">
-        <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no EPTS</span></ion-col>
+        <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
         <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">LABORATORIO GERAL</span></ion-col>
          </ion-row>
         <ion-row *ngIf="(allVLCopiasV2FSR.length+allVLCopiasFSR.length)<1">
-          <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no EPTS</span></ion-col>
+          <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
           <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">FSR</span></ion-col>
           </ion-row>
           <ion-row *ngIf="(allVLCopiasV2FC.length+allVLCopiasFC.length)<1">
-            <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no EPTS</span></ion-col>
+            <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
             <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">FICHA CLINICA</span></ion-col>
             </ion-row>
 
@@ -125,7 +127,7 @@
          <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
          </ion-row>
     <ion-row *ngIf="allCD4Abs.length<1">
-      <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no EPTS</span></ion-col>
+      <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
       <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">LABORATORIO GERAL</span></ion-col>
         </ion-row>
   
@@ -141,7 +143,7 @@
        <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
        </ion-row>
   <ion-row *ngIf="allCD4Coverage.length<1">
-    <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no EPTS</span></ion-col>
+    <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
     <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">LABORATORIO GERAL</span></ion-col>
       </ion-row>
 
@@ -157,7 +159,7 @@
           <ion-icon *ngIf="patient.person.gender=='M'" size="large" name="male-outline" color="primary"></ion-icon>
           <ion-icon *ngIf="patient.person.gender=='F'" size="large" name="female-outline" color="danger"></ion-icon>
 <br>
-          <ion-badge slot="start" color="light">{{patient.display | splitAndGet:"-":1}}<br>{{patient.display | splitAndGet:"-":0}}<br>Idade: {{patient.person.age}}, {{patient.identifiers[0].location.name}}<span *ngIf="patient.person.dead==true" style="color: red;">, Obitou</span></ion-badge><br>
+          <ion-badge slot="start" color="light">{{patient.display | splitAndGet:"-":1}}<br>{{patient.display | splitAndGet:"-":0}}<br>Idade: {{patient.person.age}}, {{patient.identifiers[0].location.name}}<span *ngIf="patient.person.dead==true" style="color: red;">, Óbito</span></ion-badge><br>
           <b>LEVANTAMENTO DE ARV</b>
           <br>
           <ion-button (click)="refreshSummary()" color="light" size="small" shape="round" style="margin-bottom: 5px;">
@@ -170,14 +172,14 @@
 
 
         <ion-row>
-          <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Data de Inicio TARV</b></ion-col>
+          <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Data de Início TARV</b></ion-col>
           <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 7px;"  col-6 text-center><b>Fonte</b></ion-col>
           </ion-row>
 
         <ion-row >
           <ion-col *ngIf="ARTPickupRegime[0]" style="padding-top: 18px;" class="ion-col-border" col-6 text-center>{{ARTStartDate[0].value | date:'dd-MM-yyyy'}}</ion-col>
           <ion-col *ngIf="ARTPickupRegime[0]" class="ion-col-border" col-6 style="font-size: 14px;">{{ARTStartDate[0].obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{ARTStartDate[0].encounter.form.display}}<br>{{ARTStartDate[0].encounter['location.name']}}</span></ion-col>
-          <ion-col *ngIf="!ARTPickupRegime[0]" class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no EPTS</span></ion-col>
+          <ion-col *ngIf="!ARTPickupRegime[0]" class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
           <ion-col *ngIf="!ARTPickupRegime[0]" class="ion-col-border" col-6><span style="font-size: 13px;">Ficha Mestra / Processo Clínico</span></ion-col>
           </ion-row>
 
@@ -191,7 +193,7 @@
         <ion-row >
           <ion-col *ngIf="ARTPickupRegime[0]" style="padding-top: 18px;" class="ion-col-border" col-6 text-center>{{ARTPickupRegime[0].obsDatetime | date:'dd-MM-yyyy'}}</ion-col>
           <ion-col *ngIf="ARTPickupRegime[0]" class="ion-col-border" col-6 style="font-size: 14px;">{{ARTPickupRegime[0].obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{ARTPickupRegime[0].encounter.form.display}}<br>{{ARTPickupRegime[0].encounter['location.name']}}</span></ion-col>
-          <ion-col *ngIf="!ARTPickupRegime[0]" class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no EPTS</span></ion-col>
+          <ion-col *ngIf="!ARTPickupRegime[0]" class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
           <ion-col *ngIf="!ARTPickupRegime[0]" class="ion-col-border" col-6><span style="font-size: 13px;">FILA</span></ion-col>
           </ion-row>
 
@@ -205,7 +207,7 @@
         <ion-row >
           <ion-col *ngIf="ARTPickupRegime[0]" style="padding-top: 18px;" class="ion-col-border" col-6 text-center>{{ARTPickupRegime[0].value.display}}</ion-col>
           <ion-col *ngIf="ARTPickupRegime[0]" class="ion-col-border" col-6 style="font-size: 14px;">{{ARTPickupRegime[0].obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{ARTPickupRegime[0].encounter.form.display}}<br>{{ARTPickupRegime[0].encounter['location.name']}}</span></ion-col>
-          <ion-col *ngIf="!ARTPickupRegime[0]" class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no EPTS</span></ion-col>
+          <ion-col *ngIf="!ARTPickupRegime[0]" class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
           <ion-col *ngIf="!ARTPickupRegime[0]" class="ion-col-border" col-6><span style="font-size: 13px;">FILA</span></ion-col>
           </ion-row>
       
@@ -220,7 +222,7 @@
         <ion-row >
           <ion-col *ngIf="ARTPickupNextDate[0]" style="padding-top: 18px;" class="ion-col-border" col-6 text-center>{{ARTPickupNextDate[0].value  | date:'dd-MM-yyyy'}}</ion-col>
           <ion-col *ngIf="ARTPickupNextDate[0]" class="ion-col-border" col-6 style="font-size: 14px;">{{ARTPickupNextDate[0].obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{ARTPickupNextDate[0].encounter.form.display}}<br>{{ARTPickupNextDate[0].encounter['location.name']}}</span></ion-col>
-          <ion-col *ngIf="!ARTPickupNextDate[0]" class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no EPTS</span></ion-col>
+          <ion-col *ngIf="!ARTPickupNextDate[0]" class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
         <ion-col *ngIf="!ARTPickupNextDate[0]" class="ion-col-border" col-6><span style="font-size: 13px;">FILA</span></ion-col>
           </ion-row>
      
@@ -240,7 +242,7 @@
           <ion-icon *ngIf="patient.person.gender=='M'" size="large" name="male-outline" color="primary"></ion-icon>
           <ion-icon *ngIf="patient.person.gender=='F'" size="large" name="female-outline" color="danger"></ion-icon>
 <br>
-          <ion-badge slot="start" color="light">{{patient.display | splitAndGet:"-":1}}<br>{{patient.display | splitAndGet:"-":0}}<br>Idade: {{patient.person.age}}, {{patient.identifiers[0].location.name}}<span *ngIf="patient.person.dead==true" style="color: red;">, Obitou</span></ion-badge><br>
+          <ion-badge slot="start" color="light">{{patient.display | splitAndGet:"-":1}}<br>{{patient.display | splitAndGet:"-":0}}<br>Idade: {{patient.person.age}}, {{patient.identifiers[0].location.name}}<span *ngIf="patient.person.dead==true" style="color: red;">, Óbito</span></ion-badge><br>
           <b>LABORATÓRIO - OUTRO</b>
           <br>
           <ion-button (click)="refreshSummary()" color="light" size="small" shape="round" style="margin-bottom: 5px;">
@@ -261,7 +263,7 @@
       <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
          </ion-row>
     <ion-row *ngIf="allGenexpert.length<1">
-      <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no EPTS</span></ion-col>
+      <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
       <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">LABORATORIO GERAL</span></ion-col>
         </ion-row>
 
@@ -278,7 +280,7 @@
       <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
          </ion-row>
     <ion-row *ngIf="allBaciloscopia.length<1">
-      <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no EPTS</span></ion-col>
+      <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
       <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">LABORATORIO GERAL</span></ion-col>
         </ion-row>
 
@@ -296,7 +298,7 @@
       <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
          </ion-row>
     <ion-row *ngIf="allHGB.length<1">
-      <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no EPTS</span></ion-col>
+      <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
       <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">LABORATORIO GERAL</span></ion-col>
         </ion-row>
       
@@ -312,7 +314,7 @@
       <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
          </ion-row>
     <ion-row *ngIf="allAST.length<1">
-      <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no EPTS</span></ion-col>
+      <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
       <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">LABORATORIO GERAL</span></ion-col>
         </ion-row>
 
@@ -328,7 +330,7 @@
       <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
          </ion-row>
     <ion-row *ngIf="allALT.length<1">
-      <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no EPTS</span></ion-col>
+      <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
       <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">LABORATORIO GERAL</span></ion-col>
         </ion-row>
 
@@ -344,7 +346,7 @@
       <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
          </ion-row>
     <ion-row *ngIf="allAMI.length<1">
-      <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no EPTS</span></ion-col>
+      <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
       <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">LABORATORIO GERAL</span></ion-col>
         </ion-row>
 
@@ -360,7 +362,7 @@
       <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
     </ion-row>
     <ion-row *ngIf="allGLC.length<1">
-      <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no EPTS</span></ion-col>
+      <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
       <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">LABORATORIO GERAL</span></ion-col>
         </ion-row>
 
@@ -380,7 +382,7 @@
           <ion-icon *ngIf="patient.person.gender=='M'" size="large" name="male-outline" color="primary"></ion-icon>
           <ion-icon *ngIf="patient.person.gender=='F'" size="large" name="female-outline" color="danger"></ion-icon>
 <br>
-          <ion-badge slot="start" color="light">{{patient.display | splitAndGet:"-":1}}<br>{{patient.display | splitAndGet:"-":0}}<br>Idade: {{patient.person.age}}, {{patient.identifiers[0].location.name}}<span *ngIf="patient.person.dead==true" style="color: red;">, Obitou</span></ion-badge><br>
+          <ion-badge slot="start" color="light">{{patient.display | splitAndGet:"-":1}}<br>{{patient.display | splitAndGet:"-":0}}<br>Idade: {{patient.person.age}}, {{patient.identifiers[0].location.name}}<span *ngIf="patient.person.dead==true" style="color: red;">, Óbito</span></ion-badge><br>
           <b>TPT</b>
           <br>
           <ion-button (click)="refreshSummary()" color="light" size="small" shape="round" style="margin-bottom: 5px;">
@@ -402,15 +404,15 @@
       <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
     </ion-row>
     <ion-row *ngIf="IPTStartFichaResumo.length<1">
-      <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no EPTS</span></ion-col>
+      <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
       <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">FICHA RESUMO</span></ion-col>
         </ion-row>
     <ion-row *ngIf="IPTStartFichaClinica.length<1">
-      <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no EPTS</span></ion-col>
+      <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
       <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">FICHA CLINICA</span></ion-col>
         </ion-row>
     <ion-row *ngIf="IPTStartFichaSeguimento.length<1">
-      <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no EPTS</span></ion-col>
+      <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
       <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">FICHA DE SEGUIMENTO</span></ion-col>
         </ion-row>
 
@@ -426,15 +428,15 @@
             <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
           </ion-row>
     <ion-row *ngIf="IPTEndFichaResumo.length<1">
-      <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no EPTS</span></ion-col>
+      <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
       <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">FICHA RESUMO</span></ion-col>
         </ion-row>
     <ion-row *ngIf="IPTEndFichaClinica.length<1">
-      <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no EPTS</span></ion-col>
+      <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
       <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">FICHA CLINICA</span></ion-col>
         </ion-row>
     <ion-row *ngIf="IPTEndFichaSeguimento.length<1">
-      <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no EPTS</span></ion-col>
+      <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
       <ion-col  class="ion-col-border" col-6><span style="font-size: 13px;">FICHA DE SEGUIMENTO</span></ion-col>
         </ion-row>
 
@@ -447,7 +449,7 @@
         <ion-row >
           <ion-col *ngIf="IPTEndFichaFILT[0]" style="padding-top: 18px;" class="ion-col-border" col-6 text-center>{{IPTEndFichaFILT[0].obsDatetime | date:'dd-MM-yyyy'}}</ion-col>
           <ion-col *ngIf="IPTEndFichaFILT[0]" class="ion-col-border" col-6 style="font-size: 14px;">{{IPTEndFichaFILT[0].obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{IPTEndFichaFILT[0].encounter.form.display}}<br>{{IPTEndFichaFILT[0].encounter['location.name']}}</span></ion-col>
-          <ion-col *ngIf="!IPTEndFichaFILT[0]" class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no EPTS</span></ion-col>
+          <ion-col *ngIf="!IPTEndFichaFILT[0]" class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
           <ion-col *ngIf="!IPTEndFichaFILT[0]" class="ion-col-border" col-6><span style="font-size: 13px;">FILT</span></ion-col>
           </ion-row>
 
@@ -460,7 +462,7 @@
             <ion-row >
               <ion-col *ngIf="IPTEndFichaFILT[0]" style="padding-top: 18px;" class="ion-col-border" col-6 text-center>{{IPTEndFichaFILT[0].value.display}}</ion-col>
               <ion-col *ngIf="IPTEndFichaFILT[0]" class="ion-col-border" col-6 style="font-size: 14px;">{{IPTEndFichaFILT[0].obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{IPTEndFichaFILT[0].encounter.form.display}}<br>{{IPTEndFichaFILT[0].encounter['location.name']}}</span></ion-col>
-              <ion-col *ngIf="!IPTEndFichaFILT[0]" class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no EPTS</span></ion-col>
+              <ion-col *ngIf="!IPTEndFichaFILT[0]" class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
               <ion-col *ngIf="!IPTEndFichaFILT[0]" class="ion-col-border" col-6><span style="font-size: 13px;">FILT</span></ion-col>
               </ion-row>
 

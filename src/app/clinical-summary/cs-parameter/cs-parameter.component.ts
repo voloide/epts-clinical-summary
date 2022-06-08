@@ -126,7 +126,7 @@ export class CsParameterComponent {
 
       if ((this.search.match(/\//g) || []).length==2&&this.search.replace(/\s/g, "").length>12) {
 
-        var newURL= encodeURI(window.localStorage.getItem('url') + "/ws/rest/v1/patient?identifier=" + this.search.replace(/\s/g, "") + "&v=custom:(uuid,display,identifiers:(uuid,location:(name)),person:(gender,age,dead,birthdate,addresses:(display,preferred,address5),attributes:(display))");
+        var newURL= encodeURI(window.localStorage.getItem('url') + "/ws/rest/v1/patient?identifier=" + this.search.replace(/\s/g, "") + "&v=custom:(uuid,display,identifiers:(uuid,location:(name)),person:(gender,age,dead,birthdate,addresses:(display,preferred,address5),attributes:(display)))");
 
 
         this.storage.set('search-criteria', this.search);
@@ -160,7 +160,7 @@ export class CsParameterComponent {
         this.patients = [];
         this.storage.remove('search-criteria');
 
-        var newURL= encodeURI(window.localStorage.getItem('url') + "/ws/rest/v1/patient?q=" + this.search + "&v=custom:(uuid,display,identifiers:(uuid,location:(name)),person:(gender,age,dead,birthdate,addresses:(display,preferred,address5),attributes:(display))&limit=50&startIndex=" + this.index);
+        var newURL= encodeURI(window.localStorage.getItem('url') + "/ws/rest/v1/patient?q=" + this.search + "&v=custom:(uuid,display,identifiers:(uuid,location:(name)),person:(gender,age,dead,birthdate,addresses:(display,preferred,address5),attributes:(display)))&limit=50&startIndex=" + this.index);
 
         this.http.get(
           newURL,             //URL
@@ -171,6 +171,8 @@ export class CsParameterComponent {
           } // Headers
         )
           .then(response => {
+
+            console.log(response)
 
             this.patients = JSON.parse(response.data);
             this.patients = this.patients.results;
@@ -195,7 +197,7 @@ export class CsParameterComponent {
 
           })
           .catch(response => {
-
+console.log(response)
             this.spinnerDialog.hide();
             this.dialogs.alert("Não foi possivel carregar. Verifique o estado da sua ligação com o servidor e se tem uma sessão valida!", "Erro ao pesquisar");
             this.color = "danger";

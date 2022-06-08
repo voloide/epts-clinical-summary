@@ -83,10 +83,19 @@ export class LoginFormComponent {
   }
 
 
+  openSettings() {
+   this.navCtrl.navigateForward('/settings');
+  }
+
+  ionViewWillEnter() {
+    this.ngOnInit();
+}
+
   async  ngOnInit() {
     this.locked=true;
     this.accepted=false;
     this.menu.enable(false, 'first');
+    this.http.setRequestTimeout(30);
     
     await this.storage.create();
 
@@ -95,12 +104,17 @@ export class LoginFormComponent {
     this.storage.get('key').then((data) => {
       if(data=="YES"){
         this.locked=false;
+      }else{
+        this.locked=true;
+        this.localUser.pin="";
       }
           });
 
   this.storage.get('accepted').then((data) => {
     if(data=="YES"){
       this.accepted=true;
+    }else{
+      this.accepted=false;
     }
         });
 
@@ -317,7 +331,7 @@ if (confirm==1){
   }
 
   login() {
-
+    this.storage.set('lastLoggedUsername', this.localUser.username);
     this.http.get(
       this.localUser.url+'/ws/rest/v1/session',             //URL
       {},         //Data 
@@ -334,8 +348,6 @@ if (confirm==1){
         window.localStorage.setItem('user',JSON.stringify(this.user) );
          
           this.appService.callMethodOfSecondComponent();
-
-          this.storage.set('lastLoggedUsername', this.localUser.username);
 
           if (this.autoSync) {
             this.storage.set('autoSync', 'Sim');
