@@ -146,7 +146,7 @@ public ARTStartDate;
             var data=JSON.parse(response.data);
             this.allCD4Coverage=data.results.filter(item=>item.encounter.form.uuid=="8377e4ff-d0fe-44a5-81c3-74c9040fd5f8");
 
-
+//Carga Viral Qualitativa
             this.http.get(
               window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=e1da2704-1d5f-11e0-b929-000c29ad1d07&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=12",             //URL
               {},         //Data 
@@ -164,7 +164,7 @@ public ARTStartDate;
                 
                 //ARRAY CONCAT
                 this.allVLsV2=this.allVLCopiasV2.concat(this.allVLCopiasV2FSR.concat(this.allVLCopiasV2FC));
-    
+    //Viral load quatitativa
                 this.http.get(
                   window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=e1d6247e-1d5f-11e0-b929-000c29ad1d07&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=12",             //URL
                   {},         //Data 
