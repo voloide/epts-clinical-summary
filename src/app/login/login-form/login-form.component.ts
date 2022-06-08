@@ -90,7 +90,7 @@ export class LoginFormComponent {
     
     await this.storage.create();
 
-    this.localUser.url="https://";
+    this.localUser.url="http://";
 
     this.storage.get('key').then((data) => {
       if(data=="YES"){
