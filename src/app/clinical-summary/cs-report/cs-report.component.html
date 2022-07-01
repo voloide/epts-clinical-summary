@@ -8,12 +8,9 @@
 </ion-header>
 
 <ion-content>
-
-
-  <ion-slides pager="true" style="--background: #f0f0f2;">
-
+  <ion-slides pager="true">
+    <!-- Tela de dados demograficos -->
     <ion-slide>
-
       <ion-toolbar color="light" style="margin-top: 5px;margin-bottom: 5px;">
   
         <span style="font-size: 17px;margin-top: 3px;">
@@ -29,15 +26,6 @@
           </ion-button>
         </span>
       </ion-toolbar>
-
-      
-
-
-
-
-
-
-
 
       <ion-grid  style="font-size: 16px;">
 
@@ -77,27 +65,10 @@
       </ion-row>
       <br>
      </ion-grid>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      
-    
     </ion-slide>
+    <!-- Tela de Carga Viral e CD4 -->
     <ion-slide>
-    
+
       <ion-toolbar color="light" style="margin-top: 5px;margin-bottom: 5px;">
   
         <span style="font-size: 17px;margin-top: 3px;">
@@ -177,10 +148,8 @@
       <br>
      </ion-grid>
     </ion-slide>
-
-
+    <!-- Tela de Levantamentos de ARV -->
     <ion-slide>
-    
       <ion-toolbar color="light" style="margin-top: 5px;margin-bottom: 5px;">
   
         <span style="font-size: 17px;margin-top: 3px;">
@@ -261,9 +230,7 @@
       <br>
 
     </ion-slide>
-  
-
-
+    <!-- Tela de Laboratorio -->
     <ion-slide>
     
       <ion-toolbar color="light" style="margin-top: 5px;margin-bottom: 5px;">
@@ -403,8 +370,7 @@
       <br>
      
     </ion-slide>
-  
-
+    <!-- Tela de TPT-->
     <ion-slide>
 
       <ion-toolbar color="light" style="margin-top: 5px;margin-bottom: 5px;">
@@ -502,8 +468,46 @@
 <br>
 
     </ion-slide>
+    <!-- Tela de CCU screening -->
+    <ion-slide>
+
+      <ion-toolbar color="light" style="margin-top: 5px;margin-bottom: 5px;">
   
+        <span style="font-size: 17px;margin-top: 3px;">
+
+          <ion-icon *ngIf="patient.person.gender=='M'" size="large" name="male-outline" color="primary"></ion-icon>
+          <ion-icon *ngIf="patient.person.gender=='F'" size="large" name="female-outline" color="danger"></ion-icon>
+<br>
+          <ion-badge slot="start" color="light">{{patient.display | splitAndGet:"-":1}}<br>{{patient.display | splitAndGet:"-":0}}<br>Idade: {{patient.person.age}}, {{patient.identifiers[0].location.name}}<span *ngIf="patient.person.dead==true" style="color: red;">, Óbito</span></ion-badge><br>
+          <b>Rastreio CACUM</b>
+          <br>
+          <ion-button (click)="refreshSummary()" color="light" size="small" shape="round" style="margin-bottom: 5px;">
+            <ion-icon slot="icon-only" name="refresh"></ion-icon>
+          </ion-button>
+        </span>
+      </ion-toolbar>
+
+      <ion-grid *ngIf="rastreioCacum" style="font-size: 16px;">
+
+        <ion-row>
+          <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Data do último rastreio</b></ion-col>
+          <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 15px;"  col-6 text-center><b>Fonte</b></ion-col>
+          </ion-row>
+
+    
+        <ion-row *ngFor="let data of rastreioCacum">
+          <ion-col class="ion-col-border" col-6 style="font-size: 14px; padding-top: 18px;">{{data.encounterDatetime | date:'dd-MM-yyyy'}}</ion-col>
+          <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.encounterDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{data.form.display}}<br>{{data.location.display}}</span></ion-col>
+
+        </ion-row>
+
+  <ion-row *ngIf="rastreioCacum.length<1">
+    <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
+    <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">CCU: RASTREIO</span></ion-col>
+      </ion-row>
+
+      <br>
+     </ion-grid>
+    </ion-slide>
   </ion-slides>
-
-
 </ion-content>
