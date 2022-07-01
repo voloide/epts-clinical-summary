@@ -497,7 +497,7 @@
     
         <ion-row *ngFor="let data of rastreioCacum">
           <ion-col class="ion-col-border" col-6 style="font-size: 14px; padding-top: 18px;">{{data.encounterDatetime | date:'dd-MM-yyyy'}}</ion-col>
-          <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.encounterDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{data.form.display}}<br>{{data.location.display}}</span></ion-col>
+          <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.auditInfo.dateCreated | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{data.form.display}}<br>{{data.location.display}}</span></ion-col>
 
         </ion-row>
 
