@@ -1,6 +1,6 @@
 <ion-header>
 
-  
+
   <ion-toolbar color="{{color}}">
 
     <ion-buttons slot="end" *ngIf="!locked&&accepted">
@@ -8,9 +8,9 @@
         <ion-icon slot="icon-only" name="settings"></ion-icon>
       </ion-button>
     </ion-buttons>
-  
 
-    <ion-title>SESP Sumário Clínico</ion-title>
+
+    <ion-title>SESP Sumário Clínico V</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -29,8 +29,8 @@
         </ion-label>
         <ion-input style="font-size: 12px;" [disabled]="!locked" [(ngModel)]="localUser.url" type="text" value="" formControlName="url" placeholder="Escreva a URL do Servidor"></ion-input>
         <ion-icon name="globe-outline" slot="start"  size="small" class="ion-align-self-center"></ion-icon>
-    
-     
+
+
       </ion-item>
 
 
@@ -55,7 +55,7 @@
           Password
         </ion-label>
         <ion-input [(ngModel)]="localUser.password" type="{{type}}" value="" formControlName="password" placeholder="Escreva o password"></ion-input>
-        
+
         <ion-icon *ngIf="!showPass" slot="end" class="ion-align-self-center" name="eye-off-outline" (click)="showPassword()"></ion-icon>
         <ion-icon *ngIf="showPass" slot="end" class="ion-align-self-center" name="eye-outline" (click)="showPassword()"></ion-icon>
         <ion-icon name="lock-closed" slot="start"  size="small" class="ion-align-self-center"></ion-icon>
@@ -83,7 +83,7 @@
         <ion-button color="success" [disabled]="!lastLoggedUsername" expand="block" (click)="uploadUsageReports()">PARTILHAR DADOS DE USO</ion-button>
       </div>
 
-     
+
 
     </form>
 

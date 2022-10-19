@@ -21,7 +21,7 @@ public allCD4Abs;allCD4Coverage;allHGB;allVLCopias;allAST;allALT;allAMI;allGLC;
 
 //NewVars
 public IPTStartFichaClinica;IPTEndFichaClinica;IPTStartFichaResumo;IPTEndFichaResumo;IPTStartFichaSeguimento;IPTEndFichaSeguimento;IPTEndFichaFILT;allVLCopiasV2;
-public allGenexpert;allBaciloscopia;
+public allGenexpert;allBaciloscopia;rastreioCacum;
 public allVLCopiasFSR;allVLCopiasV2FSR;allVLCopiasFC;allVLCopiasV2FC;ARTPickupRegime;ARTPickupNextDate;ARTPickupMasterCard;
 public allVLsV2;allVLs;allIPTStart;allIPTEnd;
 public ClinicalSummaries: any[]=[];
@@ -58,6 +58,9 @@ public ARTStartDate;
     this.allVLCopiasFSR=null;this.allVLCopiasV2FSR=null;this.allVLCopiasFC=null;this.allVLCopiasV2FC=null;
     this.ARTPickupRegime=null;this.ARTPickupNextDate=null;this.ARTPickupMasterCard=null;
     this.allVLs=null;this.allVLsV2=null;this.allIPTStart=null;this.allIPTEnd=null;
+
+    //rastreioCacum
+    this.rastreioCacum=null;
 
     this.chart1=false;
     this.chart2=true;
@@ -208,6 +211,19 @@ public ARTStartDate;
         var data=JSON.parse(response.data);
         this.ARTPickupRegime=data.results.filter(item=>item.encounter.form.uuid=="49857ace-1a92-4980-8313-1067714df151");
 
+        // CACUM Screeening
+        this.http.get(
+          window.localStorage.getItem('url') + "/ws/rest/v1/encounter?patient="+this.patient.uuid+"&encounterType=e2791f26-1d5f-11e0-b929-000c29ad1d07&v=custom:(uuid,encounterDatetime,auditInfo,form:(display),location:(display))&limit=1",             //URL
+          {},         //Data 
+          {
+            'Content-Type': 'application/json',
+            Authorization: 'Basic ' + btoa(window.localStorage.getItem('username') + ":" + window.localStorage.getItem('password'))
+          } // Headers
+        )
+          .then(response => {
+            var data=JSON.parse(response.data);
+            this.rastreioCacum=data.results; 
+            console.log(this.rastreioCacum);   
 
         this.http.get(
           window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=e1e2efd8-1d5f-11e0-b929-000c29ad1d07&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=1",             //URL
@@ -509,6 +525,12 @@ this.http.get(
   
   
         })
+        .catch(response => {
+          this.networkFailure();
+        });    
+
+
+    })
         .catch(response => {
           this.networkFailure();
         });    
