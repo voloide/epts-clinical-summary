@@ -368,12 +368,11 @@ public ARTStartDate;
       .then(response => {
 
         var data=JSON.parse(response.data);
-        if (this.IPTStartFichaClinica.length > 0){
+       
         this.IPTStartFichaClinicaProfilaxia = data.results.filter(item=>item.encounter.form.uuid=="3c2d563a-5d37-4735-a125-d3943a3de30a");
-      }
+          this.IPTStartFichaResumoProfilaxia = data.results.filter(item=>item.encounter.form.uuid=="05496c70-845c-40b1-9d28-070f67b3f7da");
+        this.IPTStartFichaSeguimentoProfilaxia = data.results.filter(item=>item.encounter.form.uuid=="78d47629-5ac4-4e16-8972-2166eef30bfd");
 
-        if (this.IPTStartFichaResumo.length > 0){
-        this.IPTStartFichaResumoProfilaxia = data.results.filter(item=>item.encounter.form.uuid=="05496c70-845c-40b1-9d28-070f67b3f7da");
         // console.log(this.IPTStartFichaResumo);
         // console.log(this.IPTStartFichaResumoProfilaxia);
         
@@ -386,19 +385,31 @@ public ARTStartDate;
         //   });
         // });
         
-      }
-        if (this.IPTStartFichaSeguimento.length > 0) {
-        this.IPTStartFichaSeguimentoProfilaxia = data.results.filter(item=>item.encounter.form.uuid=="78d47629-5ac4-4e16-8972-2166eef30bfd");
-        }
+  
+  
+        
 
 
 
            this.allIPTStart=this.IPTStartFichaClinica.concat(this.IPTStartFichaResumo.concat(this.IPTStartFichaSeguimento));
-          //  this.allIPTStartProfilaxia=this.IPTStartFichaClinicaProfilaxia.concat(this.IPTStartFichaResumoProfilaxia.concat(this.IPTStartFichaSeguimentoProfilaxia));
-this.allIPTStart.push(0,this.allIPTStart[0].teste = {frank:"teste"});
+           this.allIPTStartProfilaxia=this.IPTStartFichaClinicaProfilaxia.concat(this.IPTStartFichaResumoProfilaxia.concat(this.IPTStartFichaSeguimentoProfilaxia));
+           this.allIPTEnd=this.IPTEndFichaClinica.concat(this.IPTEndFichaResumo.concat(this.IPTEndFichaSeguimento));
+
+           console.log(this.allIPTStartProfilaxia);
+          //  console.log(this.allIPTStart);
+          this.allIPTStart.forEach(element => {
+            this.allIPTStartProfilaxia.forEach(elementb => {
+              if (element.encounter.form.uuid == elementb.encounter.form.uuid ){
+              element.profilaxia = elementb.value.display
+              }
+            });
+            
+          });
+          
+
            console.log(this.allIPTStart);
           //  console.log(this.allIPTStartProfilaxia);
-   this.allIPTEnd=this.IPTEndFichaClinica.concat(this.IPTEndFichaResumo.concat(this.IPTEndFichaSeguimento));
+   
 
    this.allIPTStart = this.allIPTStart.sort(function (a, b) {
     var nameA = a.obsDatetime.toString().toUpperCase(); // ignore upper and lowercase
