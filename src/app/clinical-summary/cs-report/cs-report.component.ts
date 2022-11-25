@@ -6,6 +6,7 @@ import { Dialogs } from '@ionic-native/dialogs/ngx';
 import { HTTP } from '@ionic-native/http/ngx';
 
 
+
 @Component({
   selector: 'cs-report',
   templateUrl: 'cs-report.component.html'
@@ -23,8 +24,11 @@ public allCD4Abs;allCD4Coverage;allHGB;allVLCopias;allAST;allALT;allAMI;allGLC;
 public IPTStartFichaClinica;IPTEndFichaClinica;IPTStartFichaResumo;IPTEndFichaResumo;IPTStartFichaSeguimento;IPTEndFichaSeguimento;IPTEndFichaFILT;allVLCopiasV2;
 public allGenexpert;allBaciloscopia;rastreioCacum;
 public allVLCopiasFSR;allVLCopiasV2FSR;allVLCopiasFC;allVLCopiasV2FC;ARTPickupRegime;ARTPickupNextDate;ARTPickupMasterCard;
-public allVLsV2;allVLs;allIPTStart;allIPTEnd;
+public allVLsV2;allVLs;allIPTStart;allIPTStartProfilaxia;allIPTEnd;
 public ClinicalSummaries: any[]=[];
+
+// Vars for profilaxia estado
+public IPTStartFichaClinicaProfilaxia;IPTStartFichaResumoProfilaxia;IPTStartFichaSeguimentoProfilaxia;
 
 //Data INicio Tarv
 public ARTStartDate;
@@ -57,8 +61,10 @@ public ARTStartDate;
     this.allGenexpert=null;this.allBaciloscopia=null;
     this.allVLCopiasFSR=null;this.allVLCopiasV2FSR=null;this.allVLCopiasFC=null;this.allVLCopiasV2FC=null;
     this.ARTPickupRegime=null;this.ARTPickupNextDate=null;this.ARTPickupMasterCard=null;
-    this.allVLs=null;this.allVLsV2=null;this.allIPTStart=null;this.allIPTEnd=null;
+    this.allVLs=null;this.allVLsV2=null;this.allIPTStart=null;this.allIPTStartProfilaxia=null;this.allIPTEnd=null;
 
+    // Vars for profilaxia estado
+    this.IPTStartFichaClinicaProfilaxia=null;this.IPTStartFichaResumoProfilaxia=null;this.IPTStartFichaSeguimentoProfilaxia=null;
     //rastreioCacum
     this.rastreioCacum=null;
 
@@ -223,7 +229,7 @@ public ARTStartDate;
           .then(response => {
             var data=JSON.parse(response.data);
             this.rastreioCacum=data.results; 
-            console.log(this.rastreioCacum);   
+            
 
         this.http.get(
           window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=e1e2efd8-1d5f-11e0-b929-000c29ad1d07&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=1",             //URL
@@ -326,10 +332,10 @@ public ARTStartDate;
 
 
         	//TPT
-		//Ficha Clinica
+		//Data de Inicio TPT
 		
 		this.http.get(
-      window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=be4a76ca-662a-4c39-903b-71983f5f67c9&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=12",             //URL
+      window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=b6c4d473-2af5-4c4d-a9bb-ad3779fa5579&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=12",             //URL
       {},         //Data 
       {
         'Content-Type': 'application/json',
@@ -338,12 +344,21 @@ public ARTStartDate;
     )
       .then(response => {
         var data=JSON.parse(response.data);
-         this.IPTStartFichaClinica=data.results.filter(item=>item.value.uuid=="e1d9ef28-1d5f-11e0-b929-000c29ad1d07");
-         this.IPTEndFichaClinica=data.results.filter(item=>item.value.uuid=="e1d9facc-1d5f-11e0-b929-000c29ad1d07");
-     
-     //Ficha Resumo
+
+        // Datas de Inicio
+         this.IPTStartFichaClinica=data.results.filter(item=>item.encounter.form.uuid=="3c2d563a-5d37-4735-a125-d3943a3de30a" && item.value.uuid=="e1d9ef28-1d5f-11e0-b929-000c29ad1d07");
+         this.IPTStartFichaResumo=data.results.filter(item=>item.encounter.form.uuid=="05496c70-845c-40b1-9d28-070f67b3f7da"  && item.value.uuid=="e1d9ef28-1d5f-11e0-b929-000c29ad1d07");
+         this.IPTStartFichaSeguimento=data.results.filter(item=>item.encounter.form.uuid=="78d47629-5ac4-4e16-8972-2166eef30bfd" && item.value.uuid=="e1d9ef28-1d5f-11e0-b929-000c29ad1d07");
+  
+        //  Datas de fim
+        this.IPTEndFichaClinica=data.results.filter(item=>item.encounter.form.uuid=="3c2d563a-5d37-4735-a125-d3943a3de30a" && item.value.uuid=="e1d9facc-1d5f-11e0-b929-000c29ad1d07");
+        this.IPTEndFichaResumo=data.results.filter(item=>item.encounter.form.uuid=="05496c70-845c-40b1-9d28-070f67b3f7da"  && item.value.uuid=="e1d9facc-1d5f-11e0-b929-000c29ad1d07");
+        this.IPTEndFichaSeguimento=data.results.filter(item=>item.encounter.form.uuid=="78d47629-5ac4-4e16-8972-2166eef30bfd" && item.value.uuid=="e1d9facc-1d5f-11e0-b929-000c29ad1d07");
+ 
+        
+        //  TPT Profilaxia
      this.http.get(
-      window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=6fa92ac9-0a96-4372-9e10-dd9683c19135&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=12",             //URL
+      window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=9db4ce3b-4c1c-45dd-905f-c984a052f26e&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=12",             //URL
       {},         //Data 
       {
         'Content-Type': 'application/json',
@@ -351,27 +366,50 @@ public ARTStartDate;
       } // Headers
     )
       .then(response => {
+
         var data=JSON.parse(response.data);
-       this.IPTStartFichaResumo=data.results.filter(item=>item.encounter.form.uuid=="05496c70-845c-40b1-9d28-070f67b3f7da");
-        this.IPTStartFichaSeguimento=data.results.filter(item=>item.encounter.form.uuid=="78d47629-5ac4-4e16-8972-2166eef30bfd" || item.encounter.form.uuid=="ff79c06c-2403-4cf6-9d78-fc6fabcad3b7");
+       
+        this.IPTStartFichaClinicaProfilaxia = data.results.filter(item=>item.encounter.form.uuid=="3c2d563a-5d37-4735-a125-d3943a3de30a");
+          this.IPTStartFichaResumoProfilaxia = data.results.filter(item=>item.encounter.form.uuid=="05496c70-845c-40b1-9d28-070f67b3f7da");
+        this.IPTStartFichaSeguimentoProfilaxia = data.results.filter(item=>item.encounter.form.uuid=="78d47629-5ac4-4e16-8972-2166eef30bfd");
+
+        // console.log(this.IPTStartFichaResumo);
+        // console.log(this.IPTStartFichaResumoProfilaxia);
+        
+        // this.IPTStartFichaResumo = this.IPTStartFichaResumo.forEach(function (itema) {
+        //   this.IPTStartFichaResumoProfilaxia.forEach(function (itemb) {
+        //     // if (itema.form.uuid == itemb.form.uuid){
+            
+        //       // console.log(itema);
+        //     // }
+        //   });
+        // });
+        
+  
+  
+        
 
 
-this.http.get(
-      window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=9e555978-3a02-4da4-855e-7b1bfc807347&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=12",             //URL
-      {},         //Data 
-      {
-        'Content-Type': 'application/json',
-        Authorization: 'Basic ' + btoa(window.localStorage.getItem('username') + ":" + window.localStorage.getItem('password'))
-      } // Headers
-    )
-      .then(response => {
-        var data=JSON.parse(response.data);
-        this.IPTEndFichaResumo=data.results.filter(item=>item.encounter.form.uuid=="05496c70-845c-40b1-9d28-070f67b3f7da");
-        this.IPTEndFichaSeguimento=data.results.filter(item=>item.encounter.form.uuid=="78d47629-5ac4-4e16-8972-2166eef30bfd" || item.encounter.form.uuid=="ff79c06c-2403-4cf6-9d78-fc6fabcad3b7");
 
+           this.allIPTStart=this.IPTStartFichaClinica.concat(this.IPTStartFichaResumo.concat(this.IPTStartFichaSeguimento));
+           this.allIPTStartProfilaxia=this.IPTStartFichaClinicaProfilaxia.concat(this.IPTStartFichaResumoProfilaxia.concat(this.IPTStartFichaSeguimentoProfilaxia));
+           this.allIPTEnd=this.IPTEndFichaClinica.concat(this.IPTEndFichaResumo.concat(this.IPTEndFichaSeguimento));
 
-   this.allIPTStart=this.IPTStartFichaClinica.concat(this.IPTStartFichaResumo.concat(this.IPTStartFichaSeguimento));
-   this.allIPTEnd=this.IPTEndFichaClinica.concat(this.IPTEndFichaResumo.concat(this.IPTEndFichaSeguimento));
+           console.log(this.allIPTStartProfilaxia);
+          //  console.log(this.allIPTStart);
+          this.allIPTStart.forEach(element => {
+            this.allIPTStartProfilaxia.forEach(elementb => {
+              if (element.encounter.form.uuid == elementb.encounter.form.uuid ){
+              element.profilaxia = elementb.value.display
+              }
+            });
+            
+          });
+          
+
+           console.log(this.allIPTStart);
+          //  console.log(this.allIPTStartProfilaxia);
+   
 
    this.allIPTStart = this.allIPTStart.sort(function (a, b) {
     var nameA = a.obsDatetime.toString().toUpperCase(); // ignore upper and lowercase
@@ -383,7 +421,8 @@ this.http.get(
       return -1;
     }
     return 0;
-  });
+    });
+
 
   this.allIPTEnd = this.allIPTEnd.sort(function (a, b) {
     var nameA = a.obsDatetime.toString().toUpperCase(); // ignore upper and lowercase
@@ -456,17 +495,10 @@ this.http.get(
 
       })
       .catch(response => {
-  
-      this.networkFailure();
-  
-      });
-      
-    })
-    .catch(response => {
 
-    this.networkFailure();
+        this.networkFailure();   
 
-    });    
+      });           
   
 
       })
@@ -496,7 +528,7 @@ this.http.get(
         this.networkFailure();
       }); 
                       
-                            })
+             })
                             .catch(response => {
                               this.networkFailure();
                             });    
