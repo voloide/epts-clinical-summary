@@ -31,7 +31,7 @@ export class LoginFormComponent {
 
   public color;usern;passw;url;
 
-  localUser = { url:'',username: '', password: '',pin:'' };
+  localUser = { url:'',username: '', password: '',pin:'' ,roles:''};
 
   public activationList=myGlobals.activationList;
   public activation;
@@ -39,6 +39,13 @@ export class LoginFormComponent {
   public lastLoggedUsername;
   public toLoad;loaded;errorOnLoop;
 
+    // Variavel para Definicao das variaveis de pesquisa com base na role
+    public receptionistaUUID = "e2f0aff0-1d5f-11e0-b929-000c29ad1d07"
+    public conselheiroUUID = "e2f0ab90-1d5f-11e0-b929-000c29ad1d07"
+    public tecFarmaciaUUID = "e2f0b43c-1d5f-11e0-b929-000c29ad1d07"
+    public tecLabUUID = "e2f0b55e-1d5f-11e0-b929-000c29ad1d07"
+    public provedorSaudeUUID = "e2f0acbc-1d5f-11e0-b929-000c29ad1d07"
+    public roleViewLevel = null;
 
   constructor(
     private appService: AppService,
@@ -71,10 +78,10 @@ export class LoginFormComponent {
     });
 
   }
-  
+
   showPassword() {
     this.showPass = !this.showPass;
- 
+
     if(this.showPass){
       this.type = 'text';
     } else {
@@ -96,7 +103,7 @@ export class LoginFormComponent {
     this.accepted=false;
     this.menu.enable(false, 'first');
     this.http.setRequestTimeout(30);
-    
+
     await this.storage.create();
 
     this.localUser.url="http://";
@@ -125,22 +132,22 @@ export class LoginFormComponent {
 //this.locked=false;
 //this.accepted=true;
 
-       
-        setTimeout(async () => 
+
+        setTimeout(async () =>
         {
         if(!this.locked&&!this.accepted){
 
           var confirm=await this.dialogs.confirm('O utilizador deste aplicativo se compromete a fazer uso adequado dos conteúdos e das informações que o aplicativo oferece respeitando as políticas de sigilo e confidencialidade em vigor na organização;\n\na) O utilizador não deve se envolver em actividades que sejam ilegais ou contrárias à boa fé do compromisso sigilo e confidencialidade durante a utilização do aplicativo;\n\nb) O utilizador não deve difundir o conteúdo do aplicativo (ex.: informação mostrada sobre os pacientes, credenciais de acesso).', 'Política de Privacidade e Termos de Uso', ['Concordo', 'Não concordo']);
-    
+
      if (confirm==1){
-              
+
           this.storage.set('accepted','YES');
           this.accepted=true;
-              
+
             }
             else{
               this.spinnerDialog.show(null,"Fechando o aplicativo...",true);
-              setTimeout(async () => 
+              setTimeout(async () =>
         {
               this.spinnerDialog.hide();
               navigator['app'].exitApp();
@@ -150,21 +157,21 @@ export class LoginFormComponent {
 
         }
 
-        },500);  
-    
+        },500);
+
 /**/
 
     this.storage.get('storelocalUser').then((data) => {
-    
+
         if(data==='Sim'){
-    
+
           this.storage.get('username')
           .then(
             data => {
               this.localUser.username=data;
               this.usern=data;
             });
-    
+
             this.storage.get('url')
           .then(
             data => {
@@ -172,10 +179,10 @@ export class LoginFormComponent {
               this.localUser.url=data;
               this.url=data;}
             });
-    
+
             this.storelocalUser=true;
-  
-    
+
+
         }else{
           this.storelocalUser=false;
           this.storage.get('url')
@@ -186,27 +193,27 @@ export class LoginFormComponent {
               this.url=data;}
             });
         }
-    
+
       },
       error => console.error(error)
     );
 
     this.storage.get('autoSync').then((data) => {
-    
+
       if(data==='Sim'){
-  
+
           this.autoSync=true;
 
       }else{
         this.autoSync=false;
       }
-  
+
       },
-      error => console.error(error) 
+      error => console.error(error)
       );
 
       this.storage.get('lastLoggedUsername').then((data) => {
-    
+
             this.lastLoggedUsername=data;
 
             if(this.lastLoggedUsername==null||this.lastLoggedUsername==""){
@@ -215,15 +222,15 @@ this.autoSync=true;
             }
         },
         error => console.error(error)
-        
+
         );
 
     this.color = "";
     this.isDisabled = false;
 
     this.http.setDataSerializer( "utf8" );
-    
-    
+
+
   }
 
 
@@ -248,13 +255,13 @@ this.autoSync=true;
         window.localStorage.setItem('username',this.localUser.username );
         window.localStorage.setItem('password',this.localUser.password );
         this.spinnerDialog.show(null,"Iniciando a sessão...",true);
-        setTimeout(() => 
+        setTimeout(() =>
       {
 
         this.http.delete(
           this.localUser.url+'/ws/rest/v1/session',             //URL
-          {},         //Data 
-          { 'Content-Type': 'application/json', 
+          {},         //Data
+          { 'Content-Type': 'application/json',
           Authorization: 'Basic ' + btoa(this.localUser.username+":"+this.localUser.password) } // Headers
          )
          .then(response => {
@@ -284,7 +291,7 @@ this.autoSync=true;
         }
 
     this.spinnerDialog.show(null,"Gravando a URL...",true);
-    setTimeout(async () => 
+    setTimeout(async () =>
       {
 
         if(this.localUser.pin.toUpperCase().replace(/\s/g, "")==this.activation.value){
@@ -294,21 +301,21 @@ this.autoSync=true;
           this.locked=false;
           this.spinnerDialog.hide();
 
-        
+
 //Terms and conditions
 if(!this.locked&&!this.accepted){
 
   var confirm=await this.dialogs.confirm('O utilizador deste aplicativo se compromete a fazer uso adequado dos conteúdos e das informações que o aplicativo oferece respeitando as políticas de sigilo e confidencialidade em vigor na organização;\n\na) O utilizador não deve se envolver em actividades que sejam ilegais ou contrárias à boa fé do compromisso sigilo e confidencialidade durante a utilização do aplicativo;\n\nb) O utilizador não deve difundir o conteúdo do aplicativo (ex.: Informação mostrada sobre os pacientes nos relatórios, credenciais de acesso).', 'Política de Privacidade e Termos de Uso', ['Concordo', 'Não concordo']);
-    
+
 if (confirm==1){
-      
+
   this.storage.set('accepted','YES');
   this.accepted=true;
-      
+
     }
     else{
       this.spinnerDialog.show(null,"Fechando o aplicativo...",true);
-      setTimeout(async () => 
+      setTimeout(async () =>
 {
       this.spinnerDialog.hide();
       navigator['app'].exitApp();
@@ -330,48 +337,8 @@ if (confirm==1){
 
   }
 
-  login() {
-    this.storage.set('lastLoggedUsername', this.localUser.username);
-    this.http.get(
-      this.localUser.url+'/ws/rest/v1/session',             //URL
-      {},         //Data 
-      { 'Content-Type': 'application/json', 
-      Authorization: 'Basic ' + btoa(this.localUser.username+":"+this.localUser.password) } // Headers
-     )
-     .then(response => {
-
-      this.user = JSON.parse(response.data);
-
-      if (this.user) {
-        if (this.user.authenticated == true) {
-
-        window.localStorage.setItem('user',JSON.stringify(this.user) );
-         
-          this.appService.callMethodOfSecondComponent();
-
-          if (this.autoSync) {
-            this.storage.set('autoSync', 'Sim');
-          }else{
-            this.storage.remove('autoSync');
-          }
-
-          if (this.storelocalUser) {
-
-            this.storage.set('storelocalUser', 'Sim');
-            this.storage.set('url',this.localUser.url );
-            this.storage.set('username',this.localUser.username );
-          
-          } else {
-          this.storage.remove('username');
-          this.storage.remove('storelocalUser');
-            }
-
-          this.spinnerDialog.hide();
-          this.navCtrl.navigateRoot('/home');
-
-        } else {
-
-          this.loginAccess = "";
+  noAcess(){
+    this.loginAccess = "";
           this.loginFail = "hide";
           this.isDisabled = false;
 
@@ -396,6 +363,75 @@ if (confirm==1){
           this.storage.remove('storelocalUser');
 
             }
+  }
+
+  login() {
+    this.storage.set('lastLoggedUsername', this.localUser.username);
+    this.http.get(
+      this.localUser.url+'/ws/rest/v1/session',             //URL
+      {},         //Data
+      { 'Content-Type': 'application/json',
+      Authorization: 'Basic ' + btoa(this.localUser.username+":"+this.localUser.password) } // Headers
+     )
+     .then(response => {
+
+      this.user = JSON.parse(response.data);
+      if (this.user) {
+        if (this.user.authenticated == true) {
+
+           //Definicao do view Level baseado na role
+    this.user.user.roles.forEach(element => {
+      if (element.uuid == this.receptionistaUUID){
+        window.localStorage.setItem('roleViewLevel',"one" );
+        this.roleViewLevel = "one"
+      } else
+      if (element.uuid == this.conselheiroUUID){
+        window.localStorage.setItem('roleViewLevel',"two" );
+        this.roleViewLevel = "two"
+      } else
+      if (element.uuid == this.tecFarmaciaUUID){
+        window.localStorage.setItem('roleViewLevel',"three" );
+        this.roleViewLevel = "three"
+      } else
+      if (element.uuid == this.tecLabUUID){
+        window.localStorage.setItem('roleViewLevel',"four" );
+        this.roleViewLevel = "four"
+      } else
+      if (element.uuid == this.provedorSaudeUUID){
+        window.localStorage.setItem('roleViewLevel',"five" );
+        this.roleViewLevel = "five"
+      } else {
+        this.noAcess()
+      }
+    });
+      if (this.roleViewLevel !== null){
+        console.log(this.roleViewLevel)
+        window.localStorage.setItem('user',JSON.stringify(this.user) );
+
+          this.appService.callMethodOfSecondComponent();
+
+          if (this.autoSync) {
+            this.storage.set('autoSync', 'Sim');
+          }else{
+            this.storage.remove('autoSync');
+          }
+
+          if (this.storelocalUser) {
+
+            this.storage.set('storelocalUser', 'Sim');
+            this.storage.set('url',this.localUser.url );
+            this.storage.set('username',this.localUser.username );
+
+          } else {
+          this.storage.remove('username');
+          this.storage.remove('storelocalUser');
+            }
+
+          this.spinnerDialog.hide();
+          this.navCtrl.navigateRoot('/home');
+        }
+        } else {
+this.noAcess()
 
         }
       } else {
@@ -415,7 +451,7 @@ if (confirm==1){
           this.storage.set('storelocalUser', 'Sim');
           this.storage.set('url',this.localUser.url );
           this.storage.set('username',this.localUser.username )
-               
+
         } else {
            this.storage.remove('username');
            this.storage.remove('storelocalUser');
@@ -431,7 +467,7 @@ if (confirm==1){
 
      })
      .catch(response => {
-      
+
       this.spinnerDialog.hide();
       this.color = "danger";
       this.dialogs.alert("Não foi possivel iniciar a secção. Verifique o estado da sua ligação com o servidor!","Erro ao entrar");
@@ -450,7 +486,7 @@ if (confirm==1){
         this.storage.set('url',this.localUser.url );
         this.storage.set('username',this.localUser.username )
         //this.storage.set('password',this.localUser.password )
-        
+
       } else {
         this.storage.remove('username');
         this.storage.remove('storelocalUser');
@@ -465,7 +501,7 @@ if (confirm==1){
 
 uploadUsageReports() {
   this.color = "";
- 
+
   this.loaded=1;
 
   this.storage.get('epts-clinical-summaries').then(async (data) => {
@@ -473,7 +509,7 @@ uploadUsageReports() {
       this.ClinicalSummaries2 = data.filter(item=>item.username.toUpperCase()==this.lastLoggedUsername.toUpperCase() && item.status=="not_uploaded");
       var allCS= data;
       this.toLoad=this.ClinicalSummaries2.length;
-     
+
       this.errorOnLoop="";
 
       if (this.ClinicalSummaries2.length > 0) {
@@ -481,7 +517,7 @@ uploadUsageReports() {
         this.spinnerDialog.show(null, "Enviando "+this.toLoad+" relatórios...", true);
 
         for(let cs of this.ClinicalSummaries2){
-    
+
           let payload = {
             eventDate: cs.dateOpened,
             status:"COMPLETED",
@@ -504,7 +540,7 @@ uploadUsageReports() {
               },
               {
                 dataElement:"iYompJgWa6M",
-                value:cs.patient_uuid
+                value:""
               },
               {
                 dataElement:"PEK0zg7jLdy",
@@ -512,16 +548,16 @@ uploadUsageReports() {
               }
             ]
           };
-    
+
       await this.http.post("https://dhis2.fgh.org.mz/api/events",             //URL
-      JSON.stringify(payload),         //Data 
+      JSON.stringify(payload),         //Data
       {
         'Content-Type': 'application/json',
         Authorization: 'Basic ' + btoa("clinical.summary:Local123@")
       } // Headers
       )
-      .then(response => {    
-       
+      .then(response => {
+
         this.loaded=this.loaded+1;
 
         var clinicalsummaries=allCS.filter(item => item.dateOpened!=cs.dateOpened);
@@ -529,28 +565,28 @@ uploadUsageReports() {
         clinicalsummaries.push(cs);
 
         this.storage.set("epts-clinical-summaries",clinicalsummaries);
-    
+
         if(this.loaded>this.toLoad){
            this.spinnerDialog.hide();
            this.dialogs.alert(this.toLoad +" relatório(s) de uso enviado(s) com sucesso para a nuvem!","Informação");
          }
-    
-    
+
+
       })
       .catch(response => {
         this.color="danger";
         this.spinnerDialog.hide();
         this.dialogs.alert("Não foi possivel enviar os dados para a nuvem. Verifique o seu sinal de internet!","Erro ao enviar");
         this.errorOnLoop="errorOnLoop";
-                
+
       });
-    
+
     if(this.errorOnLoop=="errorOnLoop"){
       break;
     }
-    
+
         }
-    
+
     }
     else{
       this.spinnerDialog.hide();
@@ -561,7 +597,7 @@ uploadUsageReports() {
     }
   }).catch(error=>{this.dialogs.alert("Sem relatórios por enviar!","Informação");});
 
- 
+
 
 
 

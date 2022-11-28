@@ -33,6 +33,8 @@ public IPTStartFichaClinicaProfilaxia;IPTStartFichaResumoProfilaxia;IPTStartFich
 //Data INicio Tarv
 public ARTStartDate;
 
+public roleViewLevel;
+
   constructor(
     private http: HTTP,
     public navCtrl: NavController,
@@ -42,7 +44,7 @@ public ARTStartDate;
 
   }
 
- 
+
   ngOnInit() {
 
     this.allCD4Abs=null;
@@ -54,8 +56,8 @@ public ARTStartDate;
     this.allAMI=null;
     this.allGLC=null;
     this.ARTStartDate=null;
-    
 
+    this.roleViewLevel = window.localStorage.getItem('roleViewLevel')
     //new VArs
     this.IPTStartFichaClinica=null;this.IPTEndFichaClinica=null;this.IPTStartFichaResumo=null;this.IPTEndFichaResumo=null;this.IPTStartFichaSeguimento=null;this.IPTEndFichaSeguimento=null;this.IPTEndFichaFILT=null;
     this.allGenexpert=null;this.allBaciloscopia=null;
@@ -70,7 +72,7 @@ public ARTStartDate;
 
     this.chart1=false;
     this.chart2=true;
-  
+
     this.color="primary";
     this.user = JSON.parse(window.localStorage.getItem('user'));
     this.patient = JSON.parse(window.localStorage.getItem('patient'));
@@ -92,10 +94,10 @@ public ARTStartDate;
     gender='o';
     }
     var confirm=await this.dialogs.confirm('Deseja actualizar o sumário clínico d' + gender + ' paciente ' + this.patient.display + '?', 'Confirmação', ['Sim', 'Não']);
-    
+
      if (confirm==1){
-              
-             this.callMyMethod();             
+
+             this.callMyMethod();
             }
 
   }
@@ -132,7 +134,7 @@ public ARTStartDate;
 
     this.http.get(
       window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=e1e68f26-1d5f-11e0-b929-000c29ad1d07&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=12",             //URL
-      {},         //Data 
+      {},         //Data
       {
         'Content-Type': 'application/json',
         Authorization: 'Basic ' + btoa(window.localStorage.getItem('username') + ":" + window.localStorage.getItem('password'))
@@ -145,7 +147,7 @@ public ARTStartDate;
 
         this.http.get(
           window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=e1d48fba-1d5f-11e0-b929-000c29ad1d07&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=12",             //URL
-          {},         //Data 
+          {},         //Data
           {
             'Content-Type': 'application/json',
             Authorization: 'Basic ' + btoa(window.localStorage.getItem('username') + ":" + window.localStorage.getItem('password'))
@@ -158,7 +160,7 @@ public ARTStartDate;
 //Carga Viral Qualitativa
             this.http.get(
               window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=e1da2704-1d5f-11e0-b929-000c29ad1d07&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=12",             //URL
-              {},         //Data 
+              {},         //Data
               {
                 'Content-Type': 'application/json',
                 Authorization: 'Basic ' + btoa(window.localStorage.getItem('username') + ":" + window.localStorage.getItem('password'))
@@ -169,14 +171,14 @@ public ARTStartDate;
                 this.allVLCopiasV2=data.results.filter(item=>item.encounter.form.uuid=="8377e4ff-d0fe-44a5-81c3-74c9040fd5f8");
                 this.allVLCopiasV2FSR=data.results.filter(item=>item.encounter.form.uuid=="5b7cecc3-4ba3-4710-85ae-fc0c13e83e27");
                 this.allVLCopiasV2FC=data.results.filter(item=>item.encounter.form.uuid=="3c2d563a-5d37-4735-a125-d3943a3de30a");
-                
-                
+
+
                 //ARRAY CONCAT
                 this.allVLsV2=this.allVLCopiasV2.concat(this.allVLCopiasV2FSR.concat(this.allVLCopiasV2FC));
     //Viral load quatitativa
                 this.http.get(
                   window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=e1d6247e-1d5f-11e0-b929-000c29ad1d07&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=12",             //URL
-                  {},         //Data 
+                  {},         //Data
                   {
                     'Content-Type': 'application/json',
                     Authorization: 'Basic ' + btoa(window.localStorage.getItem('username') + ":" + window.localStorage.getItem('password'))
@@ -187,10 +189,10 @@ public ARTStartDate;
                     this.allVLCopias=data.results.filter(item=>item.encounter.form.uuid=="8377e4ff-d0fe-44a5-81c3-74c9040fd5f8");
                     this.allVLCopiasFSR=data.results.filter(item=>item.encounter.form.uuid=="5b7cecc3-4ba3-4710-85ae-fc0c13e83e27");
                     this.allVLCopiasFC=data.results.filter(item=>item.encounter.form.uuid=="3c2d563a-5d37-4735-a125-d3943a3de30a");
-    
+
                //ARRAY CONCAT
                this.allVLs=this.allVLCopias.concat(this.allVLCopiasFSR.concat(this.allVLCopiasFC.concat(this.allVLsV2)));
-    
+
                     this.allVLs = this.allVLs.sort(function (a, b) {
                       var nameA = a.obsDatetime.toString().toUpperCase(); // ignore upper and lowercase
                       var nameB = b.obsDatetime.toString().toUpperCase(); // ignore upper and lowercase
@@ -202,12 +204,12 @@ public ARTStartDate;
                       }
                       return 0;
                     });
-    
-    
-                     //ART Pickup     
+
+
+                     //ART Pickup
     this.http.get(
       window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=e1d83e4e-1d5f-11e0-b929-000c29ad1d07&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=1",             //URL
-      {},         //Data 
+      {},         //Data
       {
         'Content-Type': 'application/json',
         Authorization: 'Basic ' + btoa(window.localStorage.getItem('username') + ":" + window.localStorage.getItem('password'))
@@ -220,7 +222,7 @@ public ARTStartDate;
         // CACUM Screeening
         this.http.get(
           window.localStorage.getItem('url') + "/ws/rest/v1/encounter?patient="+this.patient.uuid+"&encounterType=e2791f26-1d5f-11e0-b929-000c29ad1d07&v=custom:(uuid,encounterDatetime,auditInfo,form:(display),location:(display))&limit=1",             //URL
-          {},         //Data 
+          {},         //Data
           {
             'Content-Type': 'application/json',
             Authorization: 'Basic ' + btoa(window.localStorage.getItem('username') + ":" + window.localStorage.getItem('password'))
@@ -228,12 +230,12 @@ public ARTStartDate;
         )
           .then(response => {
             var data=JSON.parse(response.data);
-            this.rastreioCacum=data.results; 
-            
+            this.rastreioCacum=data.results;
+
 
         this.http.get(
           window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=e1e2efd8-1d5f-11e0-b929-000c29ad1d07&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=1",             //URL
-          {},         //Data 
+          {},         //Data
           {
             'Content-Type': 'application/json',
             Authorization: 'Basic ' + btoa(window.localStorage.getItem('username') + ":" + window.localStorage.getItem('password'))
@@ -246,7 +248,7 @@ public ARTStartDate;
             //Laboratorio - outro
        this.http.get(
         window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=e1cdbe88-1d5f-11e0-b929-000c29ad1d07&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=12",             //URL
-        {},         //Data 
+        {},         //Data
         {
           'Content-Type': 'application/json',
           Authorization: 'Basic ' + btoa(window.localStorage.getItem('username') + ":" + window.localStorage.getItem('password'))
@@ -258,7 +260,7 @@ public ARTStartDate;
 
           this.http.get(
             window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=b08eb89b-c609-4d15-ab81-53ad7c745332&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=12",             //URL
-            {},         //Data 
+            {},         //Data
             {
               'Content-Type': 'application/json',
               Authorization: 'Basic ' + btoa(window.localStorage.getItem('username') + ":" + window.localStorage.getItem('password'))
@@ -270,7 +272,7 @@ public ARTStartDate;
 
               this.http.get(
                 window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=e1d1564c-1d5f-11e0-b929-000c29ad1d07&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=12",             //URL
-                {},         //Data 
+                {},         //Data
                 {
                   'Content-Type': 'application/json',
                   Authorization: 'Basic ' + btoa(window.localStorage.getItem('username') + ":" + window.localStorage.getItem('password'))
@@ -279,11 +281,11 @@ public ARTStartDate;
                 .then(response => {
                   var data=JSON.parse(response.data);
                   this.allBaciloscopia=data.results.filter(item=>item.encounter.form.uuid=="8377e4ff-d0fe-44a5-81c3-74c9040fd5f8");
-          
+
 
                   this.http.get(
                     window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=e1d43a74-1d5f-11e0-b929-000c29ad1d07&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=12",             //URL
-                    {},         //Data 
+                    {},         //Data
                     {
                       'Content-Type': 'application/json',
                       Authorization: 'Basic ' + btoa(window.localStorage.getItem('username') + ":" + window.localStorage.getItem('password'))
@@ -295,7 +297,7 @@ public ARTStartDate;
 
                       this.http.get(
                         window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=e1d43c36-1d5f-11e0-b929-000c29ad1d07&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=12",             //URL
-                        {},         //Data 
+                        {},         //Data
                         {
                           'Content-Type': 'application/json',
                           Authorization: 'Basic ' + btoa(window.localStorage.getItem('username') + ":" + window.localStorage.getItem('password'))
@@ -304,10 +306,10 @@ public ARTStartDate;
                         .then(response => {
                           var data=JSON.parse(response.data);
                            this.allALT=data.results.filter(item=>item.encounter.form.uuid=="8377e4ff-d0fe-44a5-81c3-74c9040fd5f8");
-                  
+
                            this.http.get(
                             window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=e1da20e2-1d5f-11e0-b929-000c29ad1d07&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=12",             //URL
-                            {},         //Data 
+                            {},         //Data
                             {
                               'Content-Type': 'application/json',
                               Authorization: 'Basic ' + btoa(window.localStorage.getItem('username') + ":" + window.localStorage.getItem('password'))
@@ -316,11 +318,11 @@ public ARTStartDate;
                             .then(response => {
                               var data=JSON.parse(response.data);
                               this.allAMI=data.results.filter(item=>item.encounter.form.uuid=="8377e4ff-d0fe-44a5-81c3-74c9040fd5f8");
-                      
-                              
+
+
 		this.http.get(
       window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=e1d64968-1d5f-11e0-b929-000c29ad1d07&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=12",             //URL
-      {},         //Data 
+      {},         //Data
       {
         'Content-Type': 'application/json',
         Authorization: 'Basic ' + btoa(window.localStorage.getItem('username') + ":" + window.localStorage.getItem('password'))
@@ -333,10 +335,10 @@ public ARTStartDate;
 
         	//TPT
 		//Data de Inicio TPT
-		
+
 		this.http.get(
       window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=b6c4d473-2af5-4c4d-a9bb-ad3779fa5579&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=12",             //URL
-      {},         //Data 
+      {},         //Data
       {
         'Content-Type': 'application/json',
         Authorization: 'Basic ' + btoa(window.localStorage.getItem('username') + ":" + window.localStorage.getItem('password'))
@@ -349,17 +351,17 @@ public ARTStartDate;
          this.IPTStartFichaClinica=data.results.filter(item=>item.encounter.form.uuid=="3c2d563a-5d37-4735-a125-d3943a3de30a" && item.value.uuid=="e1d9ef28-1d5f-11e0-b929-000c29ad1d07");
          this.IPTStartFichaResumo=data.results.filter(item=>item.encounter.form.uuid=="05496c70-845c-40b1-9d28-070f67b3f7da"  && item.value.uuid=="e1d9ef28-1d5f-11e0-b929-000c29ad1d07");
          this.IPTStartFichaSeguimento=data.results.filter(item=>item.encounter.form.uuid=="78d47629-5ac4-4e16-8972-2166eef30bfd" && item.value.uuid=="e1d9ef28-1d5f-11e0-b929-000c29ad1d07");
-  
+
         //  Datas de fim
         this.IPTEndFichaClinica=data.results.filter(item=>item.encounter.form.uuid=="3c2d563a-5d37-4735-a125-d3943a3de30a" && item.value.uuid=="e1d9facc-1d5f-11e0-b929-000c29ad1d07");
         this.IPTEndFichaResumo=data.results.filter(item=>item.encounter.form.uuid=="05496c70-845c-40b1-9d28-070f67b3f7da"  && item.value.uuid=="e1d9facc-1d5f-11e0-b929-000c29ad1d07");
         this.IPTEndFichaSeguimento=data.results.filter(item=>item.encounter.form.uuid=="78d47629-5ac4-4e16-8972-2166eef30bfd" && item.value.uuid=="e1d9facc-1d5f-11e0-b929-000c29ad1d07");
- 
-        
+
+
         //  TPT Profilaxia
      this.http.get(
       window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=9db4ce3b-4c1c-45dd-905f-c984a052f26e&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=12",             //URL
-      {},         //Data 
+      {},         //Data
       {
         'Content-Type': 'application/json',
         Authorization: 'Basic ' + btoa(window.localStorage.getItem('username') + ":" + window.localStorage.getItem('password'))
@@ -368,26 +370,26 @@ public ARTStartDate;
       .then(response => {
 
         var data=JSON.parse(response.data);
-       
+
         this.IPTStartFichaClinicaProfilaxia = data.results.filter(item=>item.encounter.form.uuid=="3c2d563a-5d37-4735-a125-d3943a3de30a");
           this.IPTStartFichaResumoProfilaxia = data.results.filter(item=>item.encounter.form.uuid=="05496c70-845c-40b1-9d28-070f67b3f7da");
         this.IPTStartFichaSeguimentoProfilaxia = data.results.filter(item=>item.encounter.form.uuid=="78d47629-5ac4-4e16-8972-2166eef30bfd");
 
         // console.log(this.IPTStartFichaResumo);
         // console.log(this.IPTStartFichaResumoProfilaxia);
-        
+
         // this.IPTStartFichaResumo = this.IPTStartFichaResumo.forEach(function (itema) {
         //   this.IPTStartFichaResumoProfilaxia.forEach(function (itemb) {
         //     // if (itema.form.uuid == itemb.form.uuid){
-            
+
         //       // console.log(itema);
         //     // }
         //   });
         // });
-        
-  
-  
-        
+
+
+
+
 
 
 
@@ -403,13 +405,13 @@ public ARTStartDate;
               element.profilaxia = elementb.value.display
               }
             });
-            
+
           });
-          
+
 
            console.log(this.allIPTStart);
           //  console.log(this.allIPTStartProfilaxia);
-   
+
 
    this.allIPTStart = this.allIPTStart.sort(function (a, b) {
     var nameA = a.obsDatetime.toString().toUpperCase(); // ignore upper and lowercase
@@ -438,10 +440,10 @@ public ARTStartDate;
 
 
   //FILT
-  
+
   this.http.get(
     window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=d5c15047-58f3-4eb2-9f98-af82e3531cb5&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=1",             //URL
-    {},         //Data 
+    {},         //Data
     {
       'Content-Type': 'application/json',
       Authorization: 'Basic ' + btoa(window.localStorage.getItem('username') + ":" + window.localStorage.getItem('password'))
@@ -450,19 +452,19 @@ public ARTStartDate;
     .then(response => {
       var data=JSON.parse(response.data);
       this.IPTEndFichaFILT=data.results.filter(item=>item.encounter.form.uuid=="4ce83895-5c0e-4170-b0cc-d3974b54131f");
-  
+
   //ART START Date
-  
+
   this.http.get(
     window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=e1d8f690-1d5f-11e0-b929-000c29ad1d07&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=1",             //URL
-    {},         //Data 
+    {},         //Data
     {
       'Content-Type': 'application/json',
       Authorization: 'Basic ' + btoa(window.localStorage.getItem('username') + ":" + window.localStorage.getItem('password'))
     } // Headers
   )
     .then(response => {
-      
+
       var data=JSON.parse(response.data);
       this.ARTStartDate=data.results;
        var clinicalSummary:any={
@@ -480,118 +482,118 @@ public ARTStartDate;
           clinicalSummary.terms="";
         }
 
-       
+
         if(!this.ClinicalSummaries){
           this.ClinicalSummaries=clinicalSummary;
         }else{
-          
+
           this.ClinicalSummaries=this.ClinicalSummaries.filter(item => new Date(item.dateOpened)>=new Date(new Date().setMonth(new Date().getMonth()-4)));
           this.ClinicalSummaries.push(clinicalSummary);
         }
 
         this.storage.set("epts-clinical-summaries",this.ClinicalSummaries);
-        
+
         this.spinnerDialog.hide();
 
       })
       .catch(response => {
 
-        this.networkFailure();   
+        this.networkFailure();
 
-      });           
-  
+      });
+
 
       })
       .catch(response => {
 
-        this.networkFailure();   
+        this.networkFailure();
 
-      });    
+      });
 
 
       })
       .catch(response => {
         this.networkFailure();
-      });    
+      });
 
 
       })
       .catch(response => {
 
-        this.networkFailure();  
+        this.networkFailure();
 
-      });    
+      });
 
 
       })
       .catch(response => {
         this.networkFailure();
-      }); 
-                      
+      });
+
              })
                             .catch(response => {
                               this.networkFailure();
-                            });    
-                  
+                            });
+
                         })
                         .catch(response => {
                           this.networkFailure();
-                        });    
-              
-              
+                        });
+
+
                     })
                     .catch(response => {
                       this.networkFailure();
-                    });   
-          
+                    });
+
                 })
                 .catch(response => {
                   this.networkFailure();
-                });    
-      
-      
+                });
+
+
             })
             .catch(response => {
               this.networkFailure();
-            });    
-  
-  
+            });
+
+
         })
         .catch(response => {
           this.networkFailure();
-        });    
+        });
 
 
     })
         .catch(response => {
           this.networkFailure();
-        });    
-    
-    
+        });
+
+
           })
           .catch(response => {
             this.networkFailure();
-          });    
+          });
 
 
       })
       .catch(response => {
         this.networkFailure();
-      });    
-            
-            
+      });
+
+
                   })
                   .catch(response => {
                     this.networkFailure();
                   });
-        
-        
+
+
               })
               .catch(response => {
                 this.networkFailure();
               });
-    
-    
+
+
           })
           .catch(response => {
             this.networkFailure();
@@ -606,14 +608,14 @@ public ARTStartDate;
         this.networkFailure();
       });
 
-		
+
   }
 
   networkFailure(){
     this.spinnerDialog.hide();
     this.color="danger";
     this.dialogs.alert("Não foi possivel carregar todos dados. Verifique o estado da sua ligação com o servidor e se tem uma sessão valida!","Erro ao carregar");
-    
+
   }
 
 }

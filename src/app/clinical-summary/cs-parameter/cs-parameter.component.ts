@@ -27,7 +27,7 @@ export class CsParameterComponent {
 
       this.form = formBuilder.group({
         search: []
-  
+
       });
 
   }
@@ -75,7 +75,7 @@ export class CsParameterComponent {
 
     this.http.get(
       newURL,             //URL
-      {},         //Data 
+      {},         //Data
       {
         'Content-Type': 'application/json',
         Authorization: 'Basic ' + btoa(window.localStorage.getItem('username') + ":" + window.localStorage.getItem('password'))
@@ -132,7 +132,7 @@ export class CsParameterComponent {
         this.storage.set('search-criteria', this.search);
         this.http.get(
           newURL,             //URL
-          {},         //Data 
+          {},         //Data
           {
             'Content-Type': 'application/json',
             Authorization: 'Basic ' + btoa(window.localStorage.getItem('username') + ":" + window.localStorage.getItem('password'))
@@ -164,7 +164,7 @@ export class CsParameterComponent {
 
         this.http.get(
           newURL,             //URL
-          {},         //Data 
+          {},         //Data
           {
             'Content-Type': 'application/json',
             Authorization: 'Basic ' + btoa(window.localStorage.getItem('username') + ":" + window.localStorage.getItem('password'))
@@ -206,6 +206,6 @@ console.log(response)
     }
   }
 
-  
+
 
 }

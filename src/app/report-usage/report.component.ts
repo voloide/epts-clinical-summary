@@ -51,10 +51,10 @@ export class ReportUsageComponent {
     this.color = "primary";
     this.isDisabled = false;
     this.user = JSON.parse(window.localStorage.getItem('user'));
-    
+
 
     this.http.setDataSerializer( "utf8" );
-    
+
   }
 
   showDatePicker() {
@@ -157,7 +157,7 @@ export class ReportUsageComponent {
       this.ClinicalSummaries2 = data.filter(item=>item.username.toUpperCase()==this.user.user.username.toUpperCase() && item.status=="not_uploaded");
       var allCS= data;
       this.toLoad=this.ClinicalSummaries2.length;
-     
+
       this.errorOnLoop="";
 
       if (this.ClinicalSummaries2.length > 0) {
@@ -165,7 +165,7 @@ export class ReportUsageComponent {
         this.spinnerDialog.show(null, "Enviando "+this.toLoad+" relatórios...", true);
 
         for(let cs of this.ClinicalSummaries2){
-    
+
           let payload = {
             eventDate: cs.dateOpened,
             status:"COMPLETED",
@@ -188,7 +188,7 @@ export class ReportUsageComponent {
               },
               {
                 dataElement:"iYompJgWa6M",
-                value:cs.patient_uuid
+                value:""
               },
               {
                 dataElement:"PEK0zg7jLdy",
@@ -196,16 +196,16 @@ export class ReportUsageComponent {
               }
             ]
           };
-    
+
       await this.http.post("https://dhis2.fgh.org.mz/api/events",             //URL
-      JSON.stringify(payload),         //Data 
+      JSON.stringify(payload),         //Data
       {
         'Content-Type': 'application/json',
         Authorization: 'Basic ' + btoa("clinical.summary:Local123@")
       } // Headers
       )
-      .then(response => {    
-       
+      .then(response => {
+
         this.loaded=this.loaded+1;
 
         var clinicalsummaries=allCS.filter(item => item.dateOpened!=cs.dateOpened);
@@ -213,28 +213,28 @@ export class ReportUsageComponent {
         clinicalsummaries.push(cs);
 
         this.storage.set("epts-clinical-summaries",clinicalsummaries);
-    
+
         if(this.loaded>this.toLoad){
            this.spinnerDialog.hide();
            this.dialogs.alert(this.toLoad +" relatório(s) de uso enviados(s) com sucesso para a nuvem!","Informação");
          }
-    
-    
+
+
       })
       .catch(response => {
         this.color="danger";
         this.spinnerDialog.hide();
         this.dialogs.alert("Não foi possivel envir os dados para a nuvem. Verifique o seu sinal de internet!","Erro ao enviar");
         this.errorOnLoop="errorOnLoop";
-                
+
       });
-    
+
     if(this.errorOnLoop=="errorOnLoop"){
       break;
     }
-    
+
         }
-    
+
     }
     else{
       this.spinnerDialog.hide();
@@ -245,7 +245,7 @@ export class ReportUsageComponent {
     }
   });
 
- 
+
 
 
 
