@@ -94,9 +94,9 @@
 
 
         <ion-row *ngFor="let data of allVLs">
-          <ion-col class="ion-col-border"  style="padding-top: 8px;" *ngIf="data.value.display"  col-6 text-center>{{data.value.display}}</ion-col>
+          <ion-col class="ion-col-border"  style="padding-top: 8px;" *ngIf="data.value.display"  col-6 text-center>{{data.value.display}} {{data.comment}}</ion-col>
           <ion-col class="ion-col-border"  style="padding-top: 18px;" *ngIf="data.value>0&&!data.value.display" col-6 text-center>{{data.value}}</ion-col>
-          <ion-col class="ion-col-border"  style="padding-top: 8px;" *ngIf="data.value<=0&&!data.value.display" col-6 text-center>CARGA VIRAL INDETECTAVEL</ion-col>
+          <ion-col class="ion-col-border"  style="padding-top: 8px;" *ngIf="data.value<=0&&!data.value.display" col-6 text-center>INDETECTAVEL</ion-col>
           <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="color: gray; font-size: 13px;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
         </ion-row>
 
@@ -432,7 +432,6 @@
             <ion-col class="ion-col-border"  style="padding-top: 18px;"  col-3 text-center *ngIf="data.value.display">{{data.obsDatetime | date:'dd-MM-yyyy'}}</ion-col>
       <ion-col class="ion-col-border"  style="padding-top: 18px;"  col-3 text-center *ngIf="data.profilaxia">{{data.profilaxia}}</ion-col>
       <ion-col class="ion-col-border"  style="color:red;padding-top:  12px; font-size: 12px;"  col-6 text-center *ngIf="!data.profilaxia">Sem dados no SESP</ion-col>
-      <ion-col class="ion-col-border"  style="padding-top: 18px;"  col-6 text-center *ngIf="data.value.display">{{data.obsDatetime | date:'dd-MM-yyyy'}}</ion-col>
             <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
           </ion-row>
     <ion-row *ngIf="IPTEndFichaResumo.length<1">

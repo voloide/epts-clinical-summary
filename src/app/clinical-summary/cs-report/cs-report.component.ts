@@ -4,6 +4,7 @@ import { Storage } from '@ionic/storage-angular';
 import { SpinnerDialog } from '@ionic-native/spinner-dialog/ngx';
 import { Dialogs } from '@ionic-native/dialogs/ngx';
 import { HTTP } from '@ionic-native/http/ngx';
+import { isArray } from 'util';
 
 
 
@@ -159,7 +160,7 @@ public roleViewLevel;
 
 //Carga Viral Qualitativa
             this.http.get(
-              window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=e1da2704-1d5f-11e0-b929-000c29ad1d07&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=12",             //URL
+              window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=e1da2704-1d5f-11e0-b929-000c29ad1d07&v=custom:(obsDatetime,value,comment,encounter:(uuid,location.name,form:(uuid,display)))&limit=12",             //URL
               {},         //Data
               {
                 'Content-Type': 'application/json',
@@ -177,7 +178,7 @@ public roleViewLevel;
                 this.allVLsV2=this.allVLCopiasV2.concat(this.allVLCopiasV2FSR.concat(this.allVLCopiasV2FC));
     //Viral load quatitativa
                 this.http.get(
-                  window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=e1d6247e-1d5f-11e0-b929-000c29ad1d07&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=12",             //URL
+                  window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=e1d6247e-1d5f-11e0-b929-000c29ad1d07&v=custom:(obsDatetime,value,comment,encounter:(uuid,location.name,form:(uuid,display)))&limit=12",             //URL
                   {},         //Data
                   {
                     'Content-Type': 'application/json',
@@ -192,6 +193,7 @@ public roleViewLevel;
 
                //ARRAY CONCAT
                this.allVLs=this.allVLCopias.concat(this.allVLCopiasFSR.concat(this.allVLCopiasFC.concat(this.allVLsV2)));
+                    console.log(this.allVLs)
 
                     this.allVLs = this.allVLs.sort(function (a, b) {
                       var nameA = a.obsDatetime.toString().toUpperCase(); // ignore upper and lowercase
@@ -205,6 +207,21 @@ public roleViewLevel;
                       return 0;
                     });
 
+                    //Harmonizacao de Nomes CV
+                    this.allVLs.forEach((element,i) => {
+                      console.log(typeof element.value)
+                      if (typeof element.value == "object"){
+                       if (element.value.name.uuid == "0afbb0c7-d58d-4737-8fb1-5f32761b97df"){
+                        this.allVLs[i].value.display = "<"
+                        console.log("entrou")
+                      } else
+                      if (element.value.name.uuid == "e24d576a-1d5f-11e0-b929-000c29ad1d07"){
+                        this.allVLs[i].value.display = "NIVEL DE DETECCAO BAIXO"
+                        console.log("entrou2")
+                      }
+                    }
+                    });
+console.log(this.allVLs)
 
                      //ART Pickup
     this.http.get(
@@ -397,7 +414,7 @@ public roleViewLevel;
            this.allIPTStartProfilaxia=this.IPTStartFichaClinicaProfilaxia.concat(this.IPTStartFichaResumoProfilaxia.concat(this.IPTStartFichaSeguimentoProfilaxia));
            this.allIPTEnd=this.IPTEndFichaClinica.concat(this.IPTEndFichaResumo.concat(this.IPTEndFichaSeguimento));
 
-           console.log(this.allIPTStartProfilaxia);
+           //console.log(this.allIPTStartProfilaxia);
           //  console.log(this.allIPTStart);
           this.allIPTStart.forEach(element => {
             this.allIPTStartProfilaxia.forEach(elementb => {
@@ -409,7 +426,7 @@ public roleViewLevel;
           });
 
 
-           console.log(this.allIPTStart);
+           //console.log(this.allIPTStart);
           //  console.log(this.allIPTStartProfilaxia);
 
 
