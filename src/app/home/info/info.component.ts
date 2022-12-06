@@ -47,7 +47,7 @@ export class InfoComponent {
     this.color="primary";
     window.localStorage.removeItem('search');
     this.user = JSON.parse(window.localStorage.getItem('user'));
-
+    console.log(this.user)
     this.http.setDataSerializer( "utf8" );
 
     this.storage.get('autoSync').then((data) => {
