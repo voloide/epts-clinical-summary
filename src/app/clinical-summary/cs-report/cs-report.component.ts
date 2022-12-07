@@ -25,12 +25,12 @@ public allCD4Abs;allCD4Coverage;allHGB;allVLCopias;allAST;allALT;allAMI;allGLC;
 public IPTStartFichaClinica;IPTEndFichaClinica;IPTStartFichaResumo;IPTEndFichaResumo;IPTStartFichaSeguimento;IPTEndFichaSeguimento;IPTEndFichaFILT;allVLCopiasV2;
 public allGenexpert;allBaciloscopia;rastreioCacum;
 public allVLCopiasFSR;allVLCopiasV2FSR;allVLCopiasFC;allVLCopiasV2FC;ARTPickupRegime;ARTPickupNextDate;ARTPickupMasterCard;
-public allVLsV2;allVLs;allIPTStart;allIPTStartProfilaxia;allIPTEnd;
+public allVLsV3;allVLsV2;allVLs;allIPTStart;allIPTStartProfilaxia;allIPTEnd;allIPTEndProfilaxia;
 public ClinicalSummaries: any[]=[];
 
 // Vars for profilaxia estado
 public IPTStartFichaClinicaProfilaxia;IPTStartFichaResumoProfilaxia;IPTStartFichaSeguimentoProfilaxia;
-
+public IPTEndFichaClinicaProfilaxia;IPTEndFichaResumoProfilaxia;IPTEndFichaSeguimentoProfilaxia;
 //Data INicio Tarv
 public ARTStartDate;
 
@@ -64,10 +64,12 @@ public roleViewLevel;
     this.allGenexpert=null;this.allBaciloscopia=null;
     this.allVLCopiasFSR=null;this.allVLCopiasV2FSR=null;this.allVLCopiasFC=null;this.allVLCopiasV2FC=null;
     this.ARTPickupRegime=null;this.ARTPickupNextDate=null;this.ARTPickupMasterCard=null;
-    this.allVLs=null;this.allVLsV2=null;this.allIPTStart=null;this.allIPTStartProfilaxia=null;this.allIPTEnd=null;
+    this.allVLs=null;this.allVLsV2=null;this.allIPTStart=null;this.allIPTStartProfilaxia=null;this.allIPTEnd=null;this.allIPTEndProfilaxia=null;
+
 
     // Vars for profilaxia estado
     this.IPTStartFichaClinicaProfilaxia=null;this.IPTStartFichaResumoProfilaxia=null;this.IPTStartFichaSeguimentoProfilaxia=null;
+    this.IPTEndFichaClinicaProfilaxia=null;this.IPTEndFichaResumoProfilaxia=null;this.IPTEndFichaSeguimentoProfilaxia=null;
     //rastreioCacum
     this.rastreioCacum=null;
 
@@ -121,7 +123,7 @@ public roleViewLevel;
     this.allGenexpert=null;this.allBaciloscopia=null;
     this.allVLCopiasFSR=null;this.allVLCopiasV2FSR=null;this.allVLCopiasFC=null;this.allVLCopiasV2FC=null;
     this.ARTPickupRegime=null;this.ARTPickupNextDate=null;this.ARTPickupMasterCard=null;
-    this.allVLs=null;this.allVLsV2=null;this.allIPTStart=null;this.allIPTEnd=null;
+    this.allVLs=null;this.allVLsV3=null;this.allVLsV2=null;this.allIPTStart=null;this.allIPTEnd=null;
 
     this.spinnerDialog.show(null,"Carregando...",true);
 
@@ -192,8 +194,45 @@ public roleViewLevel;
                     this.allVLCopiasFC=data.results.filter(item=>item.encounter.form.uuid=="3c2d563a-5d37-4735-a125-d3943a3de30a");
 
                //ARRAY CONCAT
-               this.allVLs=this.allVLCopias.concat(this.allVLCopiasFSR.concat(this.allVLCopiasFC.concat(this.allVLsV2)));
-                    console.log(this.allVLs)
+              // console.log(this.allVLsV2)
+
+
+                    //Harmonizacao de Nomes CV
+                    this.allVLsV2.forEach((element,i) => {
+                      // console.log(typeof element.value)
+                      if (typeof element.value == "object"){
+                       if (element.value.name.uuid == "0afbb0c7-d58d-4737-8fb1-5f32761b97df"){
+                        element.value.display = "<"
+                        // console.log("entrou")
+                      } else
+                      if (element.value.name.uuid == "e24d576a-1d5f-11e0-b929-000c29ad1d07"){
+                        element.value.display = "NIVEL DE DETECCAO BAIXO"
+                        // console.log("entrou2")
+                      } else
+                      if (element.value.name.uuid == "65292e1c-87ec-4159-b051-25a9ef84d541"){
+                        element.value.display = "INDETECTAVEL"
+                      }
+                    }
+                    });
+
+
+                    this.allVLsV3=this.allVLCopias.concat(this.allVLCopiasFSR.concat(this.allVLCopiasFC));
+                    console.log(this.allVLsV3)
+                    this.allVLsV3.forEach(element => {
+                this.allVLsV2.forEach((elementb,i) => {
+                  if (element.obsDatetime == elementb.obsDatetime && element.encounter.form.uuid == elementb.encounter.form.uuid){
+                    element.value = {
+                      value:element.value,
+                      display:element.value +" | "+elementb.value.display
+                    }
+                    this.allVLsV2.splice(i, 1);
+
+                  }
+                });
+               });
+
+               this.allVLs=this.allVLsV3.concat(this.allVLsV2);
+                    //console.log(this.allVLs)
 
                     this.allVLs = this.allVLs.sort(function (a, b) {
                       var nameA = a.obsDatetime.toString().toUpperCase(); // ignore upper and lowercase
@@ -207,20 +246,7 @@ public roleViewLevel;
                       return 0;
                     });
 
-                    //Harmonizacao de Nomes CV
-                    this.allVLs.forEach((element,i) => {
-                      console.log(typeof element.value)
-                      if (typeof element.value == "object"){
-                       if (element.value.name.uuid == "0afbb0c7-d58d-4737-8fb1-5f32761b97df"){
-                        this.allVLs[i].value.display = "<"
-                        console.log("entrou")
-                      } else
-                      if (element.value.name.uuid == "e24d576a-1d5f-11e0-b929-000c29ad1d07"){
-                        this.allVLs[i].value.display = "NIVEL DE DETECCAO BAIXO"
-                        console.log("entrou2")
-                      }
-                    }
-                    });
+
 console.log(this.allVLs)
 
                      //ART Pickup
@@ -388,6 +414,7 @@ console.log(this.allVLs)
 
         var data=JSON.parse(response.data);
 
+
         this.IPTStartFichaClinicaProfilaxia = data.results.filter(item=>item.encounter.form.uuid=="3c2d563a-5d37-4735-a125-d3943a3de30a");
           this.IPTStartFichaResumoProfilaxia = data.results.filter(item=>item.encounter.form.uuid=="05496c70-845c-40b1-9d28-070f67b3f7da");
         this.IPTStartFichaSeguimentoProfilaxia = data.results.filter(item=>item.encounter.form.uuid=="78d47629-5ac4-4e16-8972-2166eef30bfd");
@@ -413,13 +440,23 @@ console.log(this.allVLs)
            this.allIPTStart=this.IPTStartFichaClinica.concat(this.IPTStartFichaResumo.concat(this.IPTStartFichaSeguimento));
            this.allIPTStartProfilaxia=this.IPTStartFichaClinicaProfilaxia.concat(this.IPTStartFichaResumoProfilaxia.concat(this.IPTStartFichaSeguimentoProfilaxia));
            this.allIPTEnd=this.IPTEndFichaClinica.concat(this.IPTEndFichaResumo.concat(this.IPTEndFichaSeguimento));
-
+          this.allIPTStartProfilaxia
            //console.log(this.allIPTStartProfilaxia);
           //  console.log(this.allIPTStart);
+
           this.allIPTStart.forEach(element => {
             this.allIPTStartProfilaxia.forEach(elementb => {
-              if (element.encounter.form.uuid == elementb.encounter.form.uuid ){
+              if (element.encounter.form.uuid == elementb.encounter.form.uuid && element.obsDatetime == elementb.obsDatetime ){
               element.profilaxia = elementb.value.display
+              }
+            });
+
+          });
+
+          this.allIPTEnd.forEach(element => {
+            this.allIPTStartProfilaxia.forEach(elementb => {
+              if (element.encounter.form.uuid == elementb.encounter.form.uuid && element.obsDatetime == elementb.obsDatetime ){
+                element.profilaxia = elementb.value.display
               }
             });
 
