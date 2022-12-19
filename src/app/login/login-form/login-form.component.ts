@@ -40,8 +40,8 @@ export class LoginFormComponent {
   public toLoad;loaded;errorOnLoop;
 
     // Variavel para Definicao das variaveis de pesquisa com base na role
-    public receptionistaUUID = "e2f0aff0-1d5f-11e0-b929-000c29ad1d07"
-    public conselheiroUUID = "e2f0ab90-1d5f-11e0-b929-000c29ad1d07"
+    public receptionistaUUID = "bd53e025-4bea-441d-ab63-c5f65657bf71"
+    public conselheiroUUID = "481db7f3-601e-4dd9-be59-3f24bc080134"
     public tecFarmaciaUUID = "e2f0b43c-1d5f-11e0-b929-000c29ad1d07"
     public tecLabUUID = "e2f0b55e-1d5f-11e0-b929-000c29ad1d07"
     public provedorSaudeUUID = "e2f0acbc-1d5f-11e0-b929-000c29ad1d07"

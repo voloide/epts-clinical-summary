@@ -217,7 +217,7 @@ public roleViewLevel;
 
 
                     this.allVLsV3=this.allVLCopias.concat(this.allVLCopiasFSR.concat(this.allVLCopiasFC));
-                    console.log(this.allVLsV3)
+                    //console.log(this.allVLsV3)
                     this.allVLsV3.forEach(element => {
                 this.allVLsV2.forEach((elementb,i) => {
                   if (element.obsDatetime == elementb.obsDatetime && element.encounter.form.uuid == elementb.encounter.form.uuid){
@@ -245,9 +245,6 @@ public roleViewLevel;
                       }
                       return 0;
                     });
-
-
-console.log(this.allVLs)
 
                      //ART Pickup
     this.http.get(
@@ -440,13 +437,13 @@ console.log(this.allVLs)
            this.allIPTStart=this.IPTStartFichaClinica.concat(this.IPTStartFichaResumo.concat(this.IPTStartFichaSeguimento));
            this.allIPTStartProfilaxia=this.IPTStartFichaClinicaProfilaxia.concat(this.IPTStartFichaResumoProfilaxia.concat(this.IPTStartFichaSeguimentoProfilaxia));
            this.allIPTEnd=this.IPTEndFichaClinica.concat(this.IPTEndFichaResumo.concat(this.IPTEndFichaSeguimento));
-          this.allIPTStartProfilaxia
-           //console.log(this.allIPTStartProfilaxia);
-          //  console.log(this.allIPTStart);
+
+           console.log(this.allIPTStartProfilaxia);
+           console.log(this.allIPTStart);
 
           this.allIPTStart.forEach(element => {
             this.allIPTStartProfilaxia.forEach(elementb => {
-              if (element.encounter.form.uuid == elementb.encounter.form.uuid && element.obsDatetime == elementb.obsDatetime ){
+              if (element.encounter.form.uuid == elementb.encounter.form.uuid && element.encounter.uuid == elementb.encounter.uuid ){
               element.profilaxia = elementb.value.display
               }
             });
@@ -455,7 +452,7 @@ console.log(this.allVLs)
 
           this.allIPTEnd.forEach(element => {
             this.allIPTStartProfilaxia.forEach(elementb => {
-              if (element.encounter.form.uuid == elementb.encounter.form.uuid && element.obsDatetime == elementb.obsDatetime ){
+              if (element.encounter.form.uuid == elementb.encounter.form.uuid && element.encounter.uuid == elementb.encounter.uuid ){
                 element.profilaxia = elementb.value.display
               }
             });
