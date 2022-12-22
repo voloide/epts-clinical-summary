@@ -14,13 +14,13 @@ const STORE_KEY =  'lastAction';
   templateUrl: 'info.component.html'
 })
 export class InfoComponent {
-  
+
   public user;color;interval;
   val: any;
   static interval: number;
   public ClinicalSummaries2: any[] = [];
   public toLoad;loaded;errorOnLoop;
-  
+
   constructor(
     private menu: MenuController,
     private http: HTTP,
@@ -47,20 +47,20 @@ export class InfoComponent {
     this.color="primary";
     window.localStorage.removeItem('search');
     this.user = JSON.parse(window.localStorage.getItem('user'));
-
+    console.log(this.user)
     this.http.setDataSerializer( "utf8" );
-    
+
     this.storage.get('autoSync').then((data) => {
 
       if(data==='Sim'){
-  
+
         this.doSync();
 
       }
-  
+
       },
       error => console.error(error)
-      
+
       );
   }
 
@@ -76,13 +76,13 @@ export class InfoComponent {
     this.router.navigateByUrl("/reportusage");
   }
 
-  
+
   logout() {
-   
+
     this.http.delete(
       window.localStorage.getItem('url')+'/ws/rest/v1/session',             //URL
-      {},         //Data 
-      { 'Content-Type': 'application/json', 
+      {},         //Data
+      { 'Content-Type': 'application/json',
       Authorization: 'Basic ' + btoa(window.localStorage.getItem('username')+":"+window.localStorage.getItem('password')) } // Headers
      )
      .then(response => {
@@ -175,7 +175,7 @@ doSync(){
       this.ClinicalSummaries2 = data.filter(item=>item.username.toUpperCase()==this.user.user.username.toUpperCase() && item.status=="not_uploaded");
       var allCS= data;
       this.toLoad=this.ClinicalSummaries2.length;
-     
+
       this.errorOnLoop="";
 
       if (this.ClinicalSummaries2.length > 0) {
@@ -183,7 +183,7 @@ doSync(){
        // this.spinnerDialog.show(null, "Carregando "+this.toLoad+" relatórios...", true);
 
         for(let cs of this.ClinicalSummaries2){
-    
+
           let payload = {
             eventDate: cs.dateOpened,
             status:"COMPLETED",
@@ -206,7 +206,7 @@ doSync(){
               },
               {
                 dataElement:"iYompJgWa6M",
-                value:cs.patient_uuid
+                value:""
               },
               {
                 dataElement:"PEK0zg7jLdy",
@@ -214,16 +214,16 @@ doSync(){
               }
             ]
           };
-    
+
       await this.http.post("https://dhis2.fgh.org.mz/api/events",             //URL
-      JSON.stringify(payload),         //Data 
+      JSON.stringify(payload),         //Data
       {
         'Content-Type': 'application/json',
         Authorization: 'Basic ' + btoa("clinical.summary:Local123@")
       } // Headers
       )
-      .then(response => {    
-       
+      .then(response => {
+
         this.loaded=this.loaded+1;
 
         var clinicalsummaries=allCS.filter(item => item.dateOpened!=cs.dateOpened);
@@ -231,26 +231,26 @@ doSync(){
         clinicalsummaries.push(cs);
 
         this.storage.set("epts-clinical-summaries",clinicalsummaries);
-    
+
         if(this.loaded>this.toLoad){
            //this.spinnerDialog.hide();
            //console.log(this.toLoad +" relatório(s) de uso enviado(s) com sucesso para a nuvem!");
          }
-    
-    
+
+
       })
       .catch(response => {
         //console.log("Não foi possivel enviar os dados para a nuvem. Verifique o seu sinal de internet!");
         this.errorOnLoop="errorOnLoop";
-                
+
       });
-    
+
     if(this.errorOnLoop=="errorOnLoop"){
       break;
     }
-    
+
         }
-    
+
     }
     else{
       //this.spinnerDialog.hide();

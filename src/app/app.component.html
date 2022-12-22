@@ -1,11 +1,11 @@
 <ion-app>
     <ion-menu side="start" menuId="first" contentId="main-content" *ngIf="show">
-       
+
            <div id="cabecalho-menu">
-               <p><br><br><ion-icon name="person" style="font-size:16px !important;"></ion-icon> {{user.user.person.display | titlecase}}
+               <p><br><br><ion-icon name="person" style="font-size:16px !important;"></ion-icon> {{user.user.display | titlecase}}
                <br><ion-icon name="location-outline" style="font-size:16px !important;" *ngIf="url"></ion-icon><span style="color:greenyellow;font-size: 11px;">&nbsp;&nbsp;{{url}}</span></p>
            </div>
-  
+
            <ion-content>
               <ion-item button (click)="openDashboard()">
                 <ion-icon name="home" slot="start" ></ion-icon>
@@ -28,15 +28,15 @@
               </ion-item>
 
          </ion-content>
-  
+
         <ion-footer>
           <ion-footer>
               <ion-toolbar>
-                <span color="secondary">sis.quelimane@fgh.org.mz - v1.2.1</span>
+                <span color="secondary">sis.quelimane@fgh.org.mz - v1.5.1</span>
               </ion-toolbar>
             </ion-footer>
          </ion-footer>
-  
+
     </ion-menu>
   <ion-router-outlet id="main-content"></ion-router-outlet>
 </ion-app>
