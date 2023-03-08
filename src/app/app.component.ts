@@ -5,6 +5,7 @@ import { MenuController } from '@ionic/angular';
 import { HTTP } from '@ionic-native/http/ngx';
 import { NavController  } from '@ionic/angular';
 import { InfoComponent} from './home/info/info.component';
+import { Storage } from '@ionic/storage-angular';
 
 @Component({
   selector: 'app-root',
@@ -13,13 +14,14 @@ import { InfoComponent} from './home/info/info.component';
 })
 export class AppComponent {
 
-  public user;url;show;
- 
+  public user;url;show;appVersion;
+
 
   constructor(public appService: AppService,
     private router: Router,
     private menu: MenuController,
     private http: HTTP,
+    private storage: Storage,
     private navCtrl: NavController) {
 
     this.appService.invokeEvent.subscribe(value => {
@@ -30,13 +32,21 @@ export class AppComponent {
 
   }
 
-  callMyMethod() {
+  async callMyMethod() {
+    await this.storage.create();
+
+    this.storage.get('appVersion').then(data => {
+      if(data!=null){
+        this.appVersion=data;
+      }
+    });
+
     this.user = JSON.parse(window.localStorage.getItem('user'));
     this.url = window.localStorage.getItem('url');
     this.show = true;
 
-    
-  
+
+
   }
 
   openDashboard(){
@@ -58,8 +68,8 @@ export class AppComponent {
 
     this.http.delete(
       window.localStorage.getItem('url')+'/ws/rest/v1/session',             //URL
-      {},         //Data 
-      { 'Content-Type': 'application/json', 
+      {},         //Data
+      { 'Content-Type': 'application/json',
       Authorization: 'Basic ' + btoa(window.localStorage.getItem('username')+":"+window.localStorage.getItem('password')) } // Headers
      )
      .then(response => {
@@ -77,6 +87,6 @@ export class AppComponent {
 
   }
 
- 
+
 
 }
