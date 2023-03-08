@@ -196,7 +196,7 @@ export class ReportUsageComponent {
               },
               {
                 dataElement:"N3ZdmJS2k14",
-                value:"1.5.2"
+                value:"v1.5.2"
               }
             ]
           };
@@ -248,10 +248,6 @@ export class ReportUsageComponent {
 
     }
   });
-
-
-
-
 
   }
 

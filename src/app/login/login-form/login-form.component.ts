@@ -251,6 +251,7 @@ this.autoSync=true;
         }
 
 
+        window.localStorage.setItem('appVersion',"v1.5.2" );
         window.localStorage.setItem('url',this.localUser.url );
         window.localStorage.setItem('username',this.localUser.username );
         window.localStorage.setItem('password',this.localUser.password );
@@ -377,11 +378,11 @@ if (confirm==1){
 
       this.user = JSON.parse(response.data);
       if (this.user) {
-        if (this.user.authenticated == true) {
+        if (this.user.authenticated === true) {
 
            //Definicao do view Level baseado na role
-    this.user.user.roles.forEach(element => {
-      if (element.uuid == this.receptionistaUUID){
+      this.user.user.roles.forEach(element => {
+      if (element.uuid === this.receptionistaUUID){
         window.localStorage.setItem('roleViewLevel',"one" );
         this.roleViewLevel = "one"
       } else
@@ -389,19 +390,17 @@ if (confirm==1){
         window.localStorage.setItem('roleViewLevel',"two" );
         this.roleViewLevel = "two"
       } else
-      if (element.uuid == this.tecFarmaciaUUID){
+      if (element.uuid === this.tecFarmaciaUUID){
         window.localStorage.setItem('roleViewLevel',"three" );
         this.roleViewLevel = "three"
       } else
-      if (element.uuid == this.tecLabUUID){
+      if (element.uuid === this.tecLabUUID){
         window.localStorage.setItem('roleViewLevel',"four" );
         this.roleViewLevel = "four"
       } else
-      if (element.uuid == this.provedorSaudeUUID){
+      if (element.uuid === this.provedorSaudeUUID){
         window.localStorage.setItem('roleViewLevel',"five" );
         this.roleViewLevel = "five"
-      } else {
-        this.noAcess()
       }
     });
       if (this.roleViewLevel !== null){
@@ -431,7 +430,7 @@ if (confirm==1){
           this.navCtrl.navigateRoot('/home');
         }
         } else {
-this.noAcess()
+          this.noAcess()
 
         }
       } else {
@@ -470,6 +469,7 @@ this.noAcess()
 
       this.spinnerDialog.hide();
       this.color = "danger";
+      this.dialogs.alert(response,"Erro ao entrar");
       this.dialogs.alert("Não foi possivel iniciar a secção. Verifique o estado da sua ligação com o servidor!","Erro ao entrar");
       this.isDisabled = false;
 
