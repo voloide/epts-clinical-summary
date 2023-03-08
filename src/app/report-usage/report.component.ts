@@ -193,6 +193,10 @@ export class ReportUsageComponent {
               {
                 dataElement:"PEK0zg7jLdy",
                 value:cs.terms
+              },
+              {
+                dataElement:"N3ZdmJS2k14",
+                value:"1.5.2"
               }
             ]
           };
