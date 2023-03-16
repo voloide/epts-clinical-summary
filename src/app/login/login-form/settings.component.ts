@@ -156,7 +156,7 @@ uploadUsageReports() {
               },
               {
                 dataElement:"N3ZdmJS2k14",
-                value:"v1.5.2"
+                value:"v1.6.0"
               }
             ]
           };
