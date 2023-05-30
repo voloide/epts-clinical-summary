@@ -146,7 +146,7 @@ public roleViewLevel;
       .then(response => {
         var data=JSON.parse(response.data);
         this.allCD4Abs=data.results.filter(item=>item.encounter.form.uuid=="8377e4ff-d0fe-44a5-81c3-74c9040fd5f8");
-
+        this.allCD4Abs.push(data.results.filter(item=>item.encounter.form.uuid=="5b7cecc3-4ba3-4710-85ae-fc0c13e83e27"));
 
         this.http.get(
           window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=e1d48fba-1d5f-11e0-b929-000c29ad1d07&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=12",             //URL
@@ -159,6 +159,7 @@ public roleViewLevel;
           .then(response => {
             var data=JSON.parse(response.data);
             this.allCD4Coverage=data.results.filter(item=>item.encounter.form.uuid=="8377e4ff-d0fe-44a5-81c3-74c9040fd5f8");
+            this.allCD4Coverage.push(data.results.filter(item=>item.encounter.form.uuid=="5b7cecc3-4ba3-4710-85ae-fc0c13e83e27"));
 
 //Carga Viral Qualitativa
             this.http.get(
