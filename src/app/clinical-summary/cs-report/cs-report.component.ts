@@ -18,7 +18,7 @@ export class CsReportComponent  {
   public searchParams;chart1;chart2;chart3;cabinet;door;timeOfDay;
 
 //Vars
-public allCD4Abs;allCD4Coverage;allHGB;allVLCopias;allAST;allALT;allAMI;allGLC;
+public allCD4Abs;allCD4Coverage;allHGB;allVLCopias;allAST;allALT;allAMI;allGLC;allCD4AbsFSR;allCD4CoverageFSR;allCD4AbsFLG;allCD4CoverageFLG;
 
 
 //NewVars
@@ -136,7 +136,7 @@ public roleViewLevel;
     //Start With Carga Viral e CD4
 
     this.http.get(
-      window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=e1e68f26-1d5f-11e0-b929-000c29ad1d07&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=12",             //URL
+      window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=e1dd5ab4-1d5f-11e0-b929-000c29ad1d07&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=12",             //URL
       {},         //Data
       {
         'Content-Type': 'application/json',
@@ -145,8 +145,9 @@ public roleViewLevel;
     )
       .then(response => {
         var data=JSON.parse(response.data);
-        this.allCD4Abs=data.results.filter(item=>item.encounter.form.uuid=="8377e4ff-d0fe-44a5-81c3-74c9040fd5f8");
-
+        this.allCD4AbsFLG=data.results.filter(item=>item.encounter.form.uuid=="8377e4ff-d0fe-44a5-81c3-74c9040fd5f8");
+        this.allCD4AbsFSR=data.results.filter(item=>item.encounter.form.uuid=="5b7cecc3-4ba3-4710-85ae-fc0c13e83e27");
+        this.allCD4Abs=this.allCD4AbsFLG.concat(this.allCD4AbsFSR);
 
         this.http.get(
           window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=e1d48fba-1d5f-11e0-b929-000c29ad1d07&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=12",             //URL
@@ -158,7 +159,9 @@ public roleViewLevel;
         )
           .then(response => {
             var data=JSON.parse(response.data);
-            this.allCD4Coverage=data.results.filter(item=>item.encounter.form.uuid=="8377e4ff-d0fe-44a5-81c3-74c9040fd5f8");
+            this.allCD4CoverageFLG=data.results.filter(item=>item.encounter.form.uuid=="8377e4ff-d0fe-44a5-81c3-74c9040fd5f8");
+            this.allCD4CoverageFSR=data.results.filter(item=>item.encounter.form.uuid=="5b7cecc3-4ba3-4710-85ae-fc0c13e83e27");
+            this.allCD4Coverage=this.allCD4CoverageFLG.concat(this.allCD4CoverageFSR);
 
 //Carga Viral Qualitativa
             this.http.get(

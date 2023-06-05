@@ -95,7 +95,7 @@
 
         <ion-row *ngFor="let data of allVLs">
           <ion-col class="ion-col-border"  style="padding-top: 8px;" *ngIf="data.value.display"  col-6 text-center>{{data.value.display}} {{data.comment}}</ion-col>
-          <ion-col class="ion-col-border"  style="padding-top: 18px;" *ngIf="data.value && !data.value.display" col-6 text-center>{{data.value}}</ion-col>
+          <ion-col class="ion-col-border"  style="padding-top: 18px;" *ngIf="!data.value.display" col-6 text-center>{{data.value}}</ion-col>
           <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="color: gray; font-size: 13px;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
         </ion-row>
 
@@ -105,7 +105,7 @@
          </ion-row>
         <ion-row *ngIf="(allVLCopiasV2FSR.length+allVLCopiasFSR.length)<1">
           <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
-          <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">FSR</span></ion-col>
+          <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">FORMULARIO ELECTRONICO DE LABORATORIO</span></ion-col>
           </ion-row>
           <ion-row *ngIf="(allVLCopiasV2FC.length+allVLCopiasFC.length)<1">
             <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
