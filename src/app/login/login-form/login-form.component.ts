@@ -30,8 +30,9 @@ export class LoginFormComponent {
   public accepted: boolean=false;
 
   public color;usern;passw;url;
+  public selectedPartiner;
 
-  localUser = { url:'',username: '', password: '',pin:'' ,roles:''};
+  localUser = { url:'',username: '', password: '',pin:'' ,roles:'', selectedPartiner:''};
 
   public activationList=myGlobals.activationList;
   public activation;
@@ -46,6 +47,24 @@ export class LoginFormComponent {
     public tecLabUUID = "e2f0b55e-1d5f-11e0-b929-000c29ad1d07"
     public provedorSaudeUUID = "e2f0acbc-1d5f-11e0-b929-000c29ad1d07"
     public roleViewLevel = null;
+
+    partiners = [
+      {id: 1,
+      uuid: '398f0ffeb8fe11edafa10242ac120002',
+      name: 'MISAU',
+      description: 'Ministerio da Saúde - Moçambique'
+      },
+      {id: 2,
+        uuid: '398f1378b8fe11edafa10242ac120002',
+        name: 'FGH',
+        description: 'Friends in Global Health'
+      },
+      {id: 3,
+        uuid: '398f14f4b8fe11edafa10242ac120002',
+        name: 'ICAP',
+        description: 'ICAP'
+      },
+    ]; 
 
   constructor(
     private appService: AppService,
@@ -72,11 +91,25 @@ export class LoginFormComponent {
       pin: ['', [
         Validators.required
       ]],
+      selectedPartiner: ['', [
+        Validators.required
+      ]],
  storelocalUser: [],
  autoSync: []
 
     });
 
+  }
+
+
+  compareWith(o1, o2) {
+    return o1 && o2 ? o1.id === o2.id : o1 === o2;
+  }
+
+  handleChange(ev) {
+    this.selectedPartiner = ev.target.value;
+    window.localStorage.setItem('partiner',this.selectedPartiner);
+   
   }
 
   showPassword() {
@@ -88,7 +121,6 @@ export class LoginFormComponent {
       this.type = 'password';
     }
   }
-
 
   openSettings() {
    this.navCtrl.navigateForward('/settings');
@@ -138,7 +170,7 @@ export class LoginFormComponent {
         if(!this.locked&&!this.accepted){
 
           var confirm=await this.dialogs.confirm('O utilizador deste aplicativo se compromete a fazer uso adequado dos conteúdos e das informações que o aplicativo oferece respeitando as políticas de sigilo e confidencialidade em vigor na organização;\n\na) Ao acessar este sistema, você está prestes a visualizar informações altamente confidenciais de utentes. É sua responsabilidade protegê-las adequadamente e usá-las somente para os fins autorizados. A privacidade dos utentes é essencial para nossa missão. \n\nb) O utilizador não deve se envolver em actividades que sejam ilegais ou contrárias à boa fé do compromisso sigilo e confidencialidade durante a utilização do aplicativo;\n\nc) O utilizador não deve difundir o conteúdo do aplicativo (ex.: informação mostrada sobre os pacientes, credenciais de acesso).', 'Política de Privacidade e Termos de Uso', ['Concordo', 'Não concordo']);
-
+        
      if (confirm==1){
 
           this.storage.set('accepted','YES');
@@ -163,8 +195,7 @@ export class LoginFormComponent {
 
     this.storage.get('storelocalUser').then((data) => {
 
-        if(data==='Sim'){
-
+        if(data==='Sim'){    
           this.storage.get('username')
           .then(
             data => {
@@ -232,7 +263,6 @@ this.autoSync=true;
 
 
   }
-
 
   logoutLogin(){
         this.color = "";
