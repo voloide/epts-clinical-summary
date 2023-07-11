@@ -49,16 +49,16 @@
         <ion-icon name="lock-closed" slot="start"  size="small" class="ion-align-self-center"></ion-icon>
       </ion-item>
 
-      <ion-item *ngIf="!locked&&accepted">
+      <ion-item *ngIf="locked&&activation" >
         <ion-select position="stacked"
-          aria-label="Partiner"
+          aria-label="Parceiro"
           [compareWith]="compareWith"
-          placeholder="Select partiner"
+          placeholder="Selecione o Parceiro"
           (ionChange)="handleChange($event)"
         >
           <ion-select-option *ngFor="let partiner of partiners" [value]="partiner">{{ partiner.name }}</ion-select-option>
         </ion-select>
-        <ion-icon name="laptop" slot="start"  size="small" class="ion-align-self-center"></ion-icon>
+        <ion-icon name="corporate_fare" slot="start"  size="small" class="ion-align-self-center"></ion-icon>
       </ion-item>
 
       <ion-item *ngIf="!locked&&accepted">

@@ -172,7 +172,7 @@ export class ReportUsageComponent {
             completedDate:new Date(),
             program:"zUzKes56b9I",
             programStage:"t4XLfwKYcuO",
-            orgUnit:"HxSLEPpHkuK",
+            orgUnit:cs.orgUnit,
             dataValues:[
               {
                  dataElement:"B1ifFNRXkzo",
@@ -196,16 +196,25 @@ export class ReportUsageComponent {
               },
               {
                 dataElement:"N3ZdmJS2k14",
-                value:"v1.6.0"
+                value:"v1.8.0"
+              },
+              {
+                dataElement:"TlRYVhyidTx",
+                value:cs.location
+              },
+              {
+                dataElement:"B8ynUVKINff",
+                value:cs.location_uuid
               }
             ]
           };
 
-      await this.http.post("https://dhis2.fgh.org.mz/api/events",             //URL
+          console.log(payload);
+      await this.http.post("http://10.10.12.96:8099/dhis/api/events",             //URL
       JSON.stringify(payload),         //Data
       {
         'Content-Type': 'application/json',
-        Authorization: 'Basic ' + btoa("clinical.summary:Local123@")
+        Authorization: 'Basic ' + btoa("admin:district")
       } // Headers
       )
       .then(response => {
@@ -228,7 +237,7 @@ export class ReportUsageComponent {
       .catch(response => {
         this.color="danger";
         this.spinnerDialog.hide();
-        this.dialogs.alert("Não foi possivel envir os dados para a nuvem. Verifique o seu sinal de internet!","Erro ao enviar");
+        this.dialogs.alert("Não foi possivel enviar os dados para a nuvem. Verifique o seu sinal de internet!","Erro ao enviar");
         this.errorOnLoop="errorOnLoop";
 
       });

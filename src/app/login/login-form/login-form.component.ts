@@ -554,7 +554,7 @@ uploadUsageReports() {
             completedDate:new Date(),
             program:"zUzKes56b9I",
             programStage:"t4XLfwKYcuO",
-            orgUnit:"HxSLEPpHkuK",
+            orgUnit:cs.orgUnit,
             dataValues:[
               {
                  dataElement:"B1ifFNRXkzo",
@@ -575,15 +575,28 @@ uploadUsageReports() {
               {
                 dataElement:"PEK0zg7jLdy",
                 value:cs.terms
+              },
+              {
+                dataElement:"N3ZdmJS2k14",
+                value:"v1.8.0"
+              },
+              {
+                dataElement:"TlRYVhyidTx",
+                value:cs.location
+              },
+              {
+                dataElement:"B8ynUVKINff",
+                value:cs.location_uuid
               }
             ]
           };
 
-      await this.http.post("https://dhis2.fgh.org.mz/api/events",             //URL
+          console.log(payload);
+      await this.http.post("http://10.10.12.96:8099/dhis/api/events",             //URL
       JSON.stringify(payload),         //Data
       {
         'Content-Type': 'application/json',
-        Authorization: 'Basic ' + btoa("clinical.summary:Local123@")
+        Authorization: 'Basic ' + btoa("admin:district")
       } // Headers
       )
       .then(response => {
