@@ -216,11 +216,11 @@ export class ReportUsageComponent {
 
           let payload = {
             migrationStatus:"PENDING",
-            json: report
+            json: JSON.stringify(report)
           }
 
       console.log(payload);
-      await this.http.post("http://10.10.12.97:8081/openmrs/ws/rest/v1/clinicalsummary",             //URL
+      await this.http.post("http://10.0.2.2:8081/openmrs/ws/rest/v1/clinicalsummary",             //URL
       JSON.stringify(payload),         //Data
       {
         'Content-Type': 'application/json',
