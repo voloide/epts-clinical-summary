@@ -49,21 +49,41 @@ export class LoginFormComponent {
     public roleViewLevel = null;
 
     partiners = [
-      {id: 1,
-      uuid: '398f0ffeb8fe11edafa10242ac120002',
-      name: 'MISAU',
-      description: 'Ministerio da Saúde - Moçambique'
-      },
       {id: 2,
-        uuid: '398f1378b8fe11edafa10242ac120002',
+        dataElement: 'FxLCZVLqB9w',
         name: 'FGH',
         description: 'Friends in Global Health'
       },
       {id: 3,
-        uuid: '398f14f4b8fe11edafa10242ac120002',
+        dataElement: 'qZoZUS1sCHe',
         name: 'ICAP',
         description: 'ICAP'
       },
+      {id: 4,
+        dataElement: 'mdkw6StfCAb',
+        name: 'ARIEL',
+        description: 'ARIEL'
+      },
+      {id: 5,
+        dataElement: 'UOr99ZPFds7',
+        name: 'CCS',
+        description: 'CCS'
+      },
+      {id: 6,
+        dataElement: 'ykW4YbFZVEN',
+        name: 'ECHO',
+        description: 'ECHO'
+      },
+      {id: 7,
+        dataElement: 'Z7fi2jfwPZ5',
+        name: 'EGPAF',
+        description: 'EGPAF'
+      },
+      {id: 8,
+        dataElement: 'vtM2Be0xJ6Z',
+        name: 'JHPIEGO',
+        description: 'JHPIEGO'
+      }
     ]; 
 
   constructor(
@@ -108,7 +128,9 @@ export class LoginFormComponent {
 
   handleChange(ev) {
     this.selectedPartiner = ev.target.value;
-    window.localStorage.setItem('partiner',this.selectedPartiner);
+    console.log(JSON.stringify(this.selectedPartiner));
+
+    window.localStorage.setItem('currpartner',JSON.stringify(this.selectedPartiner));
    
   }
 
@@ -533,6 +555,9 @@ uploadUsageReports() {
   this.color = "";
 
   this.loaded=1;
+
+  var currpartner = this.storage.get('currpartner');
+  console.log(currpartner);
 
   this.storage.get('epts-clinical-summaries').then(async (data) => {
     if (data) {
