@@ -20,6 +20,8 @@ export class ReportUsageComponent {
 
   isDisabled: boolean;
 
+  currpartner: any;
+
   public color;
 
   //current cars
@@ -51,6 +53,7 @@ export class ReportUsageComponent {
     this.color = "primary";
     this.isDisabled = false;
     this.user = JSON.parse(window.localStorage.getItem('user'));
+    this.currpartner = JSON.parse(window.localStorage.getItem('currpartner'));
 
 
     this.http.setDataSerializer( "utf8" );
@@ -152,6 +155,8 @@ export class ReportUsageComponent {
   this.color="primary";
   this.loaded=1;
 
+  console.log(this.currpartner);
+
   this.storage.get('epts-clinical-summaries').then(async (data) => {
     if (data) {
       this.ClinicalSummaries2 = data.filter(item=>item.username.toUpperCase()==this.user.user.username.toUpperCase() && item.status=="not_uploaded");
@@ -166,13 +171,13 @@ export class ReportUsageComponent {
 
         for(let cs of this.ClinicalSummaries2){
 
-          let payload = {
+          let report = {
             eventDate: cs.dateOpened,
             status:"COMPLETED",
             completedDate:new Date(),
             program:"zUzKes56b9I",
             programStage:"t4XLfwKYcuO",
-            orgUnit:cs.orgUnit,
+            orgUnit:this.currpartner.dataElement,
             dataValues:[
               {
                  dataElement:"B1ifFNRXkzo",
@@ -209,15 +214,21 @@ export class ReportUsageComponent {
             ]
           };
 
-          console.log(payload);
-      await this.http.post("http://10.10.12.96:8099/dhis/api/events",             //URL
+          let payload = {
+            migrationStatus:"PENDING",
+            json: report
+          }
+
+      console.log(payload);
+      await this.http.post("http://10.10.12.97:8081/openmrs/ws/rest/v1/clinicalsummary",             //URL
       JSON.stringify(payload),         //Data
       {
         'Content-Type': 'application/json',
-        Authorization: 'Basic ' + btoa("admin:district")
+        Authorization: 'Basic ' + btoa("Gildo.matos:Clinic123")
       } // Headers
       )
       .then(response => {
+        console.log(response);
 
         this.loaded=this.loaded+1;
 
@@ -235,6 +246,7 @@ export class ReportUsageComponent {
 
       })
       .catch(response => {
+        console.log(response);
         this.color="danger";
         this.spinnerDialog.hide();
         this.dialogs.alert("Não foi possivel enviar os dados para a nuvem. Verifique o seu sinal de internet!","Erro ao enviar");
