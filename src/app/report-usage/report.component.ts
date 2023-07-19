@@ -17,6 +17,8 @@ import { HTTP } from '@ionic-native/http/ngx';
 export class ReportUsageComponent {
 
   user: any;
+  password: any;
+  baseUrl: any;
 
   isDisabled: boolean;
 
@@ -53,6 +55,8 @@ export class ReportUsageComponent {
     this.color = "primary";
     this.isDisabled = false;
     this.user = JSON.parse(window.localStorage.getItem('user'));
+    this.password = window.localStorage.getItem('password');
+    this.baseUrl = window.localStorage.getItem('url');
     this.currpartner = JSON.parse(window.localStorage.getItem('currpartner'));
 
 
@@ -220,11 +224,11 @@ export class ReportUsageComponent {
           }
 
       console.log(payload);
-      await this.http.post("http://10.0.2.2:8081/openmrs/ws/rest/v1/clinicalsummary",             //URL
+      await this.http.post(this.baseUrl +"/ws/rest/v1/clinicalsummary",             //URL
       JSON.stringify(payload),         //Data
       {
         'Content-Type': 'application/json',
-        Authorization: 'Basic ' + btoa("Gildo.matos:Clinic123")
+        Authorization: 'Basic ' + btoa(this.user+":"+this.password)
       } // Headers
       )
       .then(response => {

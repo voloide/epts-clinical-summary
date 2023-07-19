@@ -130,7 +130,14 @@ export class LoginFormComponent {
     this.selectedPartiner = ev.target.value;
     console.log(JSON.stringify(this.selectedPartiner));
 
-    window.localStorage.setItem('currpartner',JSON.stringify(this.selectedPartiner));
+    console.log('handleChange');
+
+    this.storage.set('currpartner',this.selectedPartiner);
+    //window.localStorage.setItem('currpartner',JSON.stringify(this.selectedPartiner));
+
+
+    console.log(JSON.stringify(this.selectedPartiner));
+    console.log(this.selectedPartiner);
    
   }
 
@@ -217,7 +224,15 @@ export class LoginFormComponent {
 
     this.storage.get('storelocalUser').then((data) => {
 
-        if(data==='Sim'){    
+        if(data==='Sim'){   
+          this.storage.get('currpartner')
+          .then(
+            data => {
+              if(data!=null){
+              this.localUser.selectedPartiner=data;
+              this.selectedPartiner=data;}
+            });
+
           this.storage.get('username')
           .then(
             data => {
@@ -232,6 +247,8 @@ export class LoginFormComponent {
               this.localUser.url=data;
               this.url=data;}
             });
+
+           
 
             this.storelocalUser=true;
 
@@ -302,8 +319,13 @@ this.autoSync=true;
 
         }
 
+        console.log(JSON.stringify(this.selectedPartiner));
+    console.log(this.selectedPartiner);
 
-        window.localStorage.setItem('appVersion',"v1.6.0" );
+
+        window.localStorage.setItem('appVersion',"v1.8.0" );
+
+        window.localStorage.setItem('currpartner',JSON.stringify(this.selectedPartiner));
         window.localStorage.setItem('url',this.localUser.url );
         window.localStorage.setItem('username',this.localUser.username );
         window.localStorage.setItem('password',this.localUser.password );
