@@ -264,7 +264,7 @@ public roleViewLevel;
 
         // CACUM Screeening
         this.http.get(
-          window.localStorage.getItem('url') + "/ws/rest/v1/encounter?patient="+this.patient.uuid+"&encounterType=e2791f26-1d5f-11e0-b929-000c29ad1d07&v=custom:(uuid,encounterDatetime,auditInfo,form:(display),location:(display))&limit=1",             //URL
+          window.localStorage.getItem('url') + "/ws/rest/v1/encounter?patient="+this.patient.uuid+"&encounterType=e2791f26-1d5f-11e0-b929-000c29ad1d07&v=custom:(uuid,encounterDatetime,auditInfo,form:(display),location:(display))&limit=1&order=desc",             //URL
           {},         //Data
           {
             'Content-Type': 'application/json',
@@ -274,7 +274,7 @@ public roleViewLevel;
           .then(response => {
             var data=JSON.parse(response.data);
             this.rastreioCacum=data.results;
-
+            
 
         this.http.get(
           window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=e1e2efd8-1d5f-11e0-b929-000c29ad1d07&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=1",             //URL
