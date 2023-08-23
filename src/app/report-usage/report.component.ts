@@ -176,56 +176,27 @@ export class ReportUsageComponent {
         for(let cs of this.ClinicalSummaries2){
 
           let report = {
-            eventDate: cs.dateOpened,
-            status:"COMPLETED",
-            completedDate:new Date(),
-            program:"zUzKes56b9I",
-            programStage:"t4XLfwKYcuO",
-            orgUnit:this.currpartner.dataElement,
-            dataValues:[
-              {
-                 dataElement:"B1ifFNRXkzo",
-                 value:cs.report
-              },
-              {
-                dataElement:"D37WjvR8AIt",
-                value:cs.us
-              },
-              {
-                dataElement:"bRYKxt09HrK",
-                value:cs.username
-              },
-              {
-                dataElement:"iYompJgWa6M",
-                value:""
-              },
-              {
-                dataElement:"PEK0zg7jLdy",
-                value:cs.terms
-              },
-              {
-                dataElement:"N3ZdmJS2k14",
-                value:"v1.8.0"
-              },
-              {
-                dataElement:"TlRYVhyidTx",
-                value:cs.location
-              },
-              {
-                dataElement:"B8ynUVKINff",
-                value:cs.location_uuid
-              }
-            ]
+                
+               reporte:cs.report
+              ,
+                unidadeSanitaria:cs.us
+              ,
+                userName:cs.username
+              ,
+                terms:cs.terms
+              ,
+                applicationVersion:"v1.8.0"
+              ,
+                location:cs.location
+              ,
+                locationUuid:cs.location_uuid
+              
           };
 
-          let payload = {
-            migrationStatus:"PENDING",
-            json: JSON.stringify(report)
-          }
-
-      console.log(payload);
+          console.log("Positivo");
+      console.log(report);
       await this.http.post(this.baseUrl +"/ws/rest/v1/clinicalsummary",             //URL
-      JSON.stringify(payload),         //Data
+      JSON.stringify(report),         //Data
       {
         'Content-Type': 'application/json',
         Authorization: 'Basic ' + btoa(this.user+":"+this.password)
@@ -250,6 +221,7 @@ export class ReportUsageComponent {
 
       })
       .catch(response => {
+        console.log("Negativo");
         console.log(response);
         this.color="danger";
         this.spinnerDialog.hide();
