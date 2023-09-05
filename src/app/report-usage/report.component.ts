@@ -192,8 +192,6 @@ export class ReportUsageComponent {
                 locationUuid:cs.location_uuid
               
           };
-
-          console.log("Positivo");
       console.log(report);
       await this.http.post(this.baseUrl +"/ws/rest/v1/clinicalsummary",             //URL
       JSON.stringify(report),         //Data
