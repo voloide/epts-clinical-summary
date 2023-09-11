@@ -21,6 +21,9 @@ export class InfoComponent {
   public ClinicalSummaries2: any[] = [];
   public toLoad;loaded;errorOnLoop;
 
+  password: any;
+  baseUrl: any;
+
   constructor(
     private menu: MenuController,
     private http: HTTP,
@@ -47,6 +50,8 @@ export class InfoComponent {
     this.color="primary";
     window.localStorage.removeItem('search');
     this.user = JSON.parse(window.localStorage.getItem('user'));
+    this.password = window.localStorage.getItem('password');
+    this.baseUrl = window.localStorage.getItem('url');
     console.log(this.user)
     this.http.setDataSerializer( "utf8" );
 
@@ -170,69 +175,40 @@ doSync(){
 
     this.loaded=1;
 
-  this.storage.get('epts-clinical-summaries').then(async (data) => {
-    if (data) {
-      this.ClinicalSummaries2 = data.filter(item=>item.username.toUpperCase()==this.user.user.username.toUpperCase() && item.status=="not_uploaded");
-      var allCS= data;
-      this.toLoad=this.ClinicalSummaries2.length;
-
-      this.errorOnLoop="";
-
-      if (this.ClinicalSummaries2.length > 0) {
-
-       // this.spinnerDialog.show(null, "Carregando "+this.toLoad+" relatórios...", true);
-
-        for(let cs of this.ClinicalSummaries2){
-
-          let payload = {
-            eventDate: cs.dateOpened,
-            status:"COMPLETED",
-            completedDate:new Date(),
-            program:"zUzKes56b9I",
-            programStage:"t4XLfwKYcuO",
-            orgUnit:cs.orgUnit,
-            dataValues:[
-              {
-                 dataElement:"B1ifFNRXkzo",
-                 value:cs.report
-              },
-              {
-                dataElement:"D37WjvR8AIt",
-                value:cs.us
-              },
-              {
-                dataElement:"bRYKxt09HrK",
-                value:cs.username
-              },
-              {
-                dataElement:"iYompJgWa6M",
-                value:""
-              },
-              {
-                dataElement:"PEK0zg7jLdy",
-                value:cs.terms
-              },
-              {
-                dataElement:"N3ZdmJS2k14",
-                value:"v1.8.0"
-              },
-              {
-                dataElement:"TlRYVhyidTx",
-                value:cs.location
-              },
-              {
-                dataElement:"B8ynUVKINff",
-                value:cs.location_uuid
-              }
-            ]
-          };
-
-      await this.http.post("http://10.10.12.96:8099/dhis/api/events",             //URL
-      JSON.stringify(payload),         //Data
-      {
-        'Content-Type': 'application/json',
-        Authorization: 'Basic ' + btoa("admin:district")
-      } // Headers
+    this.storage.get('epts-clinical-summaries').then(async (data) => {
+      if (data) {
+        this.ClinicalSummaries2 = data.filter(item=>item.username.toUpperCase()==this.user.user.username.toUpperCase() && item.status=="not_uploaded");
+        var allCS= data;
+        this.toLoad=this.ClinicalSummaries2.length;
+  
+        this.errorOnLoop="";
+  
+        if (this.ClinicalSummaries2.length > 0) {
+  
+          //this.spinnerDialog.show(null, "Enviando "+this.toLoad+" relatórios...", true);
+  
+          for(let cs of this.ClinicalSummaries2){
+  
+            let report = {
+                  
+                 report:cs.report
+                ,
+                  unidadeSanitaria:cs.us
+                ,
+                  userName:cs.username
+                ,
+                  terms:cs.terms
+                ,
+                  applicationVersion:"v1.8.0"
+                
+            };
+        console.log(report);
+        await this.http.post(this.baseUrl +"/ws/rest/v1/clinicalsummary",             //URLL
+        JSON.stringify(report),         //Data
+        {
+          'Content-Type': 'application/json',
+          Authorization: 'Basic ' + btoa(this.user+":"+this.password)
+        } // Headers
       )
       .then(response => {
 
