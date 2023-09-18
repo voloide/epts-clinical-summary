@@ -251,7 +251,7 @@ this.autoSync=true;
         }
 
 
-        window.localStorage.setItem('appVersion',"v1.6.0" );
+        window.localStorage.setItem('appVersion',"v1.8.0" );
         window.localStorage.setItem('url',this.localUser.url );
         window.localStorage.setItem('username',this.localUser.username );
         window.localStorage.setItem('password',this.localUser.password );
