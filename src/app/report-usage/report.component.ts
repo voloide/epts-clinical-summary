@@ -57,7 +57,7 @@ export class ReportUsageComponent {
     this.user = JSON.parse(window.localStorage.getItem('user'));
     this.password = window.localStorage.getItem('password');
     this.baseUrl = window.localStorage.getItem('url');
-    this.currpartner = JSON.parse(window.localStorage.getItem('currpartner'));
+    //this.currpartner = JSON.parse(window.localStorage.getItem('currpartner'));
 
 
     this.http.setDataSerializer( "utf8" );
@@ -177,7 +177,7 @@ export class ReportUsageComponent {
 
           let report = {
                 
-               reporte:cs.report
+               report:cs.report
               ,
                 unidadeSanitaria:cs.us
               ,
@@ -186,14 +186,10 @@ export class ReportUsageComponent {
                 terms:cs.terms
               ,
                 applicationVersion:"v1.8.0"
-              ,
-                location:cs.location
-              ,
-                locationUuid:cs.location_uuid
               
           };
       console.log(report);
-      await this.http.post(this.baseUrl +"/ws/rest/v1/clinicalsummary",             //URL
+      await this.http.post(this.baseUrl +"/ws/rest/v1/clinicalsummary",             //URLL
       JSON.stringify(report),         //Data
       {
         'Content-Type': 'application/json',
