@@ -185,6 +185,8 @@ export class ReportUsageComponent {
               ,
                 terms:cs.terms
               ,
+                dateOpened:cs.dateOpened
+              ,
                 applicationVersion:"v1.8.0"
               
           };
