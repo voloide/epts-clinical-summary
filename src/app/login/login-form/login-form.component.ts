@@ -323,7 +323,7 @@ this.autoSync=true;
     console.log(this.selectedPartiner);
 
 
-        window.localStorage.setItem('appVersion',"v1.8.0" );
+        window.localStorage.setItem('appVersion',"v1.9.0" );
 
         window.localStorage.setItem('currpartner',JSON.stringify(this.selectedPartiner));
         window.localStorage.setItem('url',this.localUser.url );
@@ -605,7 +605,7 @@ uploadUsageReports() {
               ,
                 terms:cs.terms
               ,
-                applicationVersion:"v1.8.0"
+                applicationVersion: cs.applicationVersion
               
           };
       console.log(report);

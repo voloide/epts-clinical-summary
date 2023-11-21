@@ -35,12 +35,7 @@ export class AppComponent {
   async callMyMethod() {
     await this.storage.create();
 
-    this.storage.get('appVersion').then(data => {
-      if(data!=null){
-        this.appVersion=data;
-      }
-    });
-
+    this.appVersion = window.localStorage.getItem('appVersion');
     this.user = JSON.parse(window.localStorage.getItem('user'));
     this.url = window.localStorage.getItem('url');
     this.show = true;

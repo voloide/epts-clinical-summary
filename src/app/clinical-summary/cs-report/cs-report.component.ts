@@ -34,6 +34,9 @@ public IPTEndFichaClinicaProfilaxia;IPTEndFichaResumoProfilaxia;IPTEndFichaSegui
 //Data INicio Tarv
 public ARTStartDate;
 
+
+appVersion: any;
+
 public roleViewLevel;
 
   constructor(
@@ -85,6 +88,9 @@ public roleViewLevel;
     if(window.localStorage.getItem('search')=="Yes"){
       this.callMyMethod();
     }
+
+
+    this.appVersion = window.localStorage.getItem('appVersion');
 
   }
 
@@ -527,15 +533,16 @@ public roleViewLevel;
           dateOpened: new Date(),
           username: this.user.user.username,
           us: this.patient.identifiers[0].location.name,
-          status:"not_uploaded"
+          status:"not_uploaded",
+          terms:"ASSINADO",
+          applicationVersion: this.appVersion
         };
 
-        if(this.ClinicalSummaries.filter(item=>item.username.toUpperCase()==this.user.user.username.toUpperCase()).length<1){
+        /*if(this.ClinicalSummaries.filter(item=>item.username.toUpperCase()===this.user.user.username.toUpperCase()).length<1){
           clinicalSummary.terms="ASSINADO";
         }else{
           clinicalSummary.terms="";
-        }
-
+        }*/
 
         if(!this.ClinicalSummaries){
           this.ClinicalSummaries=clinicalSummary;
