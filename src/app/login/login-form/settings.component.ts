@@ -144,7 +144,7 @@ uploadUsageReports() {
            ,
              terms:cs.terms
            ,
-             applicationVersion:"v1.8.0"
+             applicationVersion: cs.applicationVersion
            
        };
    console.log(report);

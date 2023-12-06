@@ -19,6 +19,7 @@ export class ReportUsageComponent {
   user: any;
   password: any;
   baseUrl: any;
+  appVersion: any;
 
   isDisabled: boolean;
 
@@ -57,6 +58,7 @@ export class ReportUsageComponent {
     this.user = JSON.parse(window.localStorage.getItem('user'));
     this.password = window.localStorage.getItem('password');
     this.baseUrl = window.localStorage.getItem('url');
+    this.appVersion = window.localStorage.getItem('appVersion');
     //this.currpartner = JSON.parse(window.localStorage.getItem('currpartner'));
 
 
@@ -187,7 +189,7 @@ export class ReportUsageComponent {
               ,
                 dateOpened:cs.dateOpened
               ,
-                applicationVersion:"v1.8.0"
+                applicationVersion: cs.applicationVersion
               
           };
       console.log(report);
