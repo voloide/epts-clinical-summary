@@ -4,8 +4,6 @@ import { Storage } from '@ionic/storage-angular';
 import { SpinnerDialog } from '@ionic-native/spinner-dialog/ngx';
 import { Dialogs } from '@ionic-native/dialogs/ngx';
 import { HTTP } from '@ionic-native/http/ngx';
-import { isArray } from 'util';
-
 
 
 @Component({
@@ -23,9 +21,10 @@ public allCD4Abs;allCD4Coverage;allHGB;allVLCopias;allAST;allALT;allAMI;allGLC;a
 
 //NewVars
 public IPTStartFichaClinica;IPTEndFichaClinica;IPTStartFichaResumo;IPTEndFichaResumo;IPTStartFichaSeguimento;IPTEndFichaSeguimento;IPTEndFichaFILT;allVLCopiasV2;
-public allGenexpert;allBaciloscopia;rastreioCacum;
+public allGenexpert;allBaciloscopia;rastreioCacum;rastreioTBLAM;
 public allVLCopiasFSR;allVLCopiasV2FSR;allVLCopiasFC;allVLCopiasV2FC;ARTPickupRegime;ARTPickupNextDate;ARTPickupMasterCard;
 public allVLsV3;allVLsV2;allVLs;allIPTStart;allIPTStartProfilaxia;allIPTEnd;allIPTEndProfilaxia;
+public allTBLAM;rastreioTBLAMLabGeral;rastreioTBLAMLabGeralPositividade;rastreioTBLAMELab;rastreioTBLAMELabPositividade;rastreioTBLAMFichaClinica;rastreioTBLAMFichaClinicaPositividade;
 public ClinicalSummaries: any[]=[];
 
 // Vars for profilaxia estado
@@ -68,6 +67,7 @@ public roleViewLevel;
     this.allVLCopiasFSR=null;this.allVLCopiasV2FSR=null;this.allVLCopiasFC=null;this.allVLCopiasV2FC=null;
     this.ARTPickupRegime=null;this.ARTPickupNextDate=null;this.ARTPickupMasterCard=null;
     this.allVLs=null;this.allVLsV2=null;this.allIPTStart=null;this.allIPTStartProfilaxia=null;this.allIPTEnd=null;this.allIPTEndProfilaxia=null;
+    this.allTBLAM=null;this.rastreioTBLAMLabGeral=null;this.rastreioTBLAMLabGeralPositividade=null;this.rastreioTBLAMELab=null;this.rastreioTBLAMELabPositividade=null;this.rastreioTBLAMFichaClinica=null;this.rastreioTBLAMFichaClinicaPositividade=null;
 
 
     // Vars for profilaxia estado
@@ -75,6 +75,9 @@ public roleViewLevel;
     this.IPTEndFichaClinicaProfilaxia=null;this.IPTEndFichaResumoProfilaxia=null;this.IPTEndFichaSeguimentoProfilaxia=null;
     //rastreioCacum
     this.rastreioCacum=null;
+    
+    //rastreioTBLAM
+    this.rastreioTBLAM=null;
 
     this.chart1=false;
     this.chart2=true;
@@ -130,6 +133,7 @@ public roleViewLevel;
     this.allVLCopiasFSR=null;this.allVLCopiasV2FSR=null;this.allVLCopiasFC=null;this.allVLCopiasV2FC=null;
     this.ARTPickupRegime=null;this.ARTPickupNextDate=null;this.ARTPickupMasterCard=null;
     this.allVLs=null;this.allVLsV3=null;this.allVLsV2=null;this.allIPTStart=null;this.allIPTEnd=null;
+    this.allTBLAM=null;this.rastreioTBLAMLabGeral=null;this.rastreioTBLAMLabGeralPositividade=null;this.rastreioTBLAMELab=null;this.rastreioTBLAMELabPositividade=null;this.rastreioTBLAMFichaClinica=null;this.rastreioTBLAMFichaClinicaPositividade=null;
 
     this.spinnerDialog.show(null,"Carregando...",true);
 
@@ -498,6 +502,95 @@ public roleViewLevel;
     return 0;
   });
 
+    // TB LAM
+		this.http.get(
+      window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=ef139cb2-97c1-4c0f-9189-5e0711a45b8f&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=12",             //URL
+      {},         //Data
+      {
+        'Content-Type': 'application/json',
+        Authorization: 'Basic ' + btoa(window.localStorage.getItem('username') + ":" + window.localStorage.getItem('password'))
+      } // Headers
+    )
+      .then(response => {
+        var data=JSON.parse(response.data);
+
+        // TB LAM - Laboratorio Geral
+        this.rastreioTBLAMLabGeral=data.results.filter(item=>item.encounter.form.uuid=="8377e4ff-d0fe-44a5-81c3-74c9040fd5f8");
+        this.rastreioTBLAMLabGeral.sort((item1, item2) => item1.encounter.encounterId - item2.encounter.encounterId);
+
+        // TB LAM - Form e-Lab
+        this.rastreioTBLAMELab=data.results.filter(item=>item.encounter.form.uuid=="5b7cecc3-4ba3-4710-85ae-fc0c13e83e27");
+        this.rastreioTBLAMELab.sort((item1, item2) => item1.encounter.encounterId - item2.encounter.encounterId);
+
+        // TB LAM - Ficha Clinica
+        this.rastreioTBLAMFichaClinica=data.results.filter(item=>item.encounter.form.uuid=="3c2d563a-5d37-4735-a125-d3943a3de30a");
+        this.rastreioTBLAMFichaClinica.sort((item1, item2) => item1.encounter.encounterId - item2.encounter.encounterId);
+
+        //this.allTBLAM=this.rastreioTBLAMLabGeral.concat(this.rastreioTBLAMELab.concat(this.rastreioTBLAMFichaClinica));
+
+          // TB LAM - NIVEL DE POSITIVIDADE
+		this.http.get(
+      window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=303a4480-f2b3-4192-a446-725a401ebb09&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=12",             //URL
+      {},         //Data
+      {
+        'Content-Type': 'application/json',
+        Authorization: 'Basic ' + btoa(window.localStorage.getItem('username') + ":" + window.localStorage.getItem('password'))
+      } // Headers
+    )
+      .then(response => {
+        var data=JSON.parse(response.data);
+
+        let arrayTBLAM = [];
+
+        // TB LAM - Laboratorio Geral - Nivel de Positividade
+        let tbLAMLabGeralEncountersUuids = this.rastreioTBLAMLabGeral.map(item => item.encounter.uuid);
+        this.rastreioTBLAMLabGeralPositividade=data.results.filter(item=>tbLAMLabGeralEncountersUuids.includes(item.encounter.uuid));
+        for (let index = 0; index < this.rastreioTBLAMLabGeral.length; index++) {
+          let element = this.rastreioTBLAMLabGeral[index];
+          let npValue = this.rastreioTBLAMLabGeralPositividade.filter(item => item.encounter.uuid == element.encounter.uuid);
+          if(npValue!=null) {
+          element.value.comment=npValue[0].value.display;
+          console.log(element);
+          }
+          arrayTBLAM.push(element);
+        }
+
+        // TB LAM - Form e-Lab - Nivel de Positividade
+        let tbLAMeLabEncountersUuids = this.rastreioTBLAMELab.map(item => item.encounter.uuid);
+        this.rastreioTBLAMELabPositividade=data.results.filter(item=>tbLAMeLabEncountersUuids.includes(item.encounter.uuid));
+        for (let index = 0; index < this.rastreioTBLAMELab.length; index++) {
+          const element = this.rastreioTBLAMELab[index];
+          this.allTBLAM.push(element);
+          let npValue = this.rastreioTBLAMELabPositividade.filter(item => item.encounter.uuid == element.encounter.uuid);
+          if(npValue!=null) {
+            element.value.comment=npValue[0].value.display;
+          }
+          arrayTBLAM.push(element);
+        }
+
+        // TB LAM - Ficha Clinica - Nivel de Positividade
+        let tbLAMFichaClinicaEncountersUuids = this.rastreioTBLAMFichaClinica.map(item => item.encounter.uuid);
+        this.rastreioTBLAMFichaClinicaPositividade=data.results.filter(item=>tbLAMFichaClinicaEncountersUuids.includes(item.encounter.uuid));
+        for (let index = 0; index < this.rastreioTBLAMFichaClinica.length; index++) {
+          const element = this.rastreioTBLAMFichaClinica[index];
+          this.allTBLAM.push(element);
+          let npValue = this.rastreioTBLAMFichaClinicaPositividade.filter(item => item.encounter.uuid == element.encounter.uuid);
+          if(npValue!=null) {
+            element.value.comment=npValue[0].value.display;
+          }
+          arrayTBLAM.push(element);
+        }
+
+        this.allTBLAM=arrayTBLAM;
+
+        console.log('All: ', this.allTBLAM);
+        console.log('Lab Geral: ', this.rastreioTBLAMLabGeral); 
+        console.log('E-Lab: ', this.rastreioTBLAMELab); 
+        console.log('Ficha Clinica: ', this.rastreioTBLAMFichaClinica);
+        console.log('Lab Geral - NP: ', this.rastreioTBLAMLabGeralPositividade); 
+        console.log('E-Lab - NP: ', this.rastreioTBLAMELabPositividade); 
+        console.log('Ficha Clinica - NP: ', this.rastreioTBLAMFichaClinicaPositividade);
+
 
   //FILT
 
@@ -577,6 +670,11 @@ public roleViewLevel;
         this.networkFailure();
       });
 
+    })
+    .catch(response => {
+      this.networkFailure();
+    });
+
 
       })
       .catch(response => {
@@ -584,6 +682,13 @@ public roleViewLevel;
         this.networkFailure();
 
       });
+
+    })
+    .catch(response => {
+
+      this.networkFailure();
+
+    });
 
 
       })
