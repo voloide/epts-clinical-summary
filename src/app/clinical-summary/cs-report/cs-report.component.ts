@@ -4,10 +4,6 @@ import { Storage } from '@ionic/storage-angular';
 import { SpinnerDialog } from '@ionic-native/spinner-dialog/ngx';
 import { Dialogs } from '@ionic-native/dialogs/ngx';
 import { HTTP } from '@ionic-native/http/ngx';
-import { isArray } from 'util';
-import { newArray } from '@angular/compiler/src/util';
-import { element } from 'protractor';
-
 
 
 @Component({
