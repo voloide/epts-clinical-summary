@@ -549,11 +549,13 @@
         </ion-row>
 
     <ion-row *ngFor="let data of allTBLAM">
-      <ion-col class="ion-col-border"  style="padding-top: 18px;"  col-3 text-center *ngIf="data.value.display">{{data.value.display}}</ion-col>
-      <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
-      <ion-row>
-        <ion-col class="ion-col-border" col-3 style="font-weight: bold; font-size: 14px; padding-top: 18px; width: 20rem;">TB LAM (Nível de Positividade)</ion-col>
-        <ion-col class="ion-col-border" style="padding-top: 15px;"  size="6" size-md="4" size-lg="2" text-center *ngIf="data.value.comment">{{data.value.comment}}</ion-col>
+      <ion-row style="width: 100%;">
+        <ion-col class="ion-col-border"  style="padding-top: 18px;"  col-3 text-center *ngIf="data.value.display">{{data.value.display}}</ion-col>
+        <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
+      </ion-row>
+      <ion-row style="width: 100%;">
+        <ion-col class="ion-col-border" col-3 style="font-weight: bold; font-size: 14px; padding-top: 18px;">TB LAM (Nível de Positividade)</ion-col>
+        <ion-col class="ion-col-border" style="padding-top: 15px;" col-6 text-center *ngIf="data.value.comment">{{data.value.comment}}</ion-col>
       </ion-row>
     </ion-row>
     <ion-row *ngIf="rastreioTBLAMLabGeral.length<1">
