@@ -31,13 +31,22 @@ export class LoginFormComponent {
 
   public color;usern;passw;url;
 
-  localUser = { url:'',username: '', password: '',pin:'' ,roles:''};
+
+  localUser = {url:'',username: '', password: '',pin:'' ,roles:'', healthfacility:''};
+
+  indexuser = {accepted:'', key:'', autoSync:'', lastLoggedUsername:'', storelocalUser:'' ,url:'',username: '' , healthfacility:'', user: null, localUser:null};
+
+  configuracoes: any[] = [];
+
 
   public activationList=myGlobals.activationList;
   public activation;
   public ClinicalSummaries2: any[] = [];
   public lastLoggedUsername;
   public toLoad;loaded;errorOnLoop;
+  public selectHealthFacility;
+  public isAddHealthFacility: boolean;
+
 
     // Variavel para Definicao das variaveis de pesquisa com base na role
     public receptionistaUUID = "bd53e025-4bea-441d-ab63-c5f65657bf71"
@@ -70,6 +79,9 @@ export class LoginFormComponent {
         Validators.required
       ]],
       pin: ['', [
+        Validators.required
+      ]],
+      healthfacility: ['', [
         Validators.required
       ]],
  storelocalUser: [],
@@ -106,24 +118,40 @@ export class LoginFormComponent {
 
     await this.storage.create();
 
-    this.localUser.url="http://";
 
-    this.storage.get('key').then((data) => {
-      if(data=="YES"){
+    this.localUser.url="http://";
+    this.isAddHealthFacility=false;
+    this.localUser.username='';
+    this.localUser.pin="";
+    this.localUser.healthfacility="";
+
+  this.storage.get('selectedConfiguration').then((data) => {
+
+      if(data.key=="YES"){
         this.locked=false;
       }else{
         this.locked=true;
         this.localUser.pin="";
       }
-          });
 
-  this.storage.get('accepted').then((data) => {
-    if(data=="YES"){
-      this.accepted=true;
-    }else{
-      this.accepted=false;
-    }
-        });
+            if(data.accepted=="YES"){
+              this.accepted=true;
+            }else{
+              this.accepted=false;
+            }
+
+              this.lastLoggedUsername=data.lastLoggedUsername
+
+              if(this.lastLoggedUsername==null||this.lastLoggedUsername==""){
+  this.storelocalUser=true;
+  this.autoSync=true;
+              }
+
+
+        },
+        error => console.error(error)
+        );
+
 
    if(this.locked){
     this.activation = this.activationList[Math.floor(Math.random() * this.activationList.length)];
@@ -161,10 +189,22 @@ export class LoginFormComponent {
 
 /**/
 
+
+this.storage.get('configuracoes').then((data) => {
+  if(data!=null){
+  this.configuracoes = data;
+
+  }else{
+   this.configuracoes = [];
+  }
+
+});
+
     this.storage.get('storelocalUser').then((data) => {
 
         if(data==='Sim'){
-
+          this.isAddHealthFacility=true;
+          this.storage.remove('storelocalUser');
           this.storage.get('username')
           .then(
             data => {
@@ -177,7 +217,9 @@ export class LoginFormComponent {
             data => {
               if(data!=null){
               this.localUser.url=data;
-              this.url=data;}
+              this.url=data;
+
+            }
             });
 
             this.storelocalUser=true;
@@ -201,7 +243,7 @@ export class LoginFormComponent {
     this.storage.get('autoSync').then((data) => {
 
       if(data==='Sim'){
-
+        this.storage.remove('autoSync');
           this.autoSync=true;
 
       }else{
@@ -211,19 +253,6 @@ export class LoginFormComponent {
       },
       error => console.error(error)
       );
-
-      this.storage.get('lastLoggedUsername').then((data) => {
-
-            this.lastLoggedUsername=data;
-
-            if(this.lastLoggedUsername==null||this.lastLoggedUsername==""){
-this.storelocalUser=true;
-this.autoSync=true;
-            }
-        },
-        error => console.error(error)
-
-        );
 
     this.color = "";
     this.isDisabled = false;
@@ -255,6 +284,7 @@ this.autoSync=true;
         window.localStorage.setItem('url',this.localUser.url );
         window.localStorage.setItem('username',this.localUser.username );
         window.localStorage.setItem('password',this.localUser.password );
+
         this.spinnerDialog.show(null,"Iniciando a sessão...",true);
         setTimeout(() =>
       {
@@ -291,17 +321,45 @@ this.autoSync=true;
 
         }
 
-    this.spinnerDialog.show(null,"Gravando a URL...",true);
-    setTimeout(async () =>
-      {
+        if(this.localUser.healthfacility==null||this.localUser.healthfacility.replace(/\s/g, "")==""){
 
-        if(this.localUser.pin.toUpperCase().replace(/\s/g, "")==this.activation.value){
-          this.storage.set('url',this.localUser.url.replace(/\s/g, ""));
-          window.localStorage.setItem('url',this.localUser.url.replace(/\s/g, ""));
-          this.storage.set('key','YES');
+        this.color = "danger";
+            this.isDisabled = false;
+            this.dialogs.alert("Escreva um Nome válida!","Erro ao gravar O Nome da Unidade Sanitaria");
+
+            return;
+
+      }
+      for(let config of this.configuracoes){
+        if(config.url == this.localUser.url){
+          this.color = "danger";
+          this.isDisabled = false;
+          this.dialogs.alert("Ja Foi Adicionada uma Unidade Sanitaria Neste Servidor" + this.localUser.url,"Erro ao gravar A Unidade Sanitaria");
+
+          return;
+
+        }
+     }
+
+      if(this.isAddHealthFacility){
+        this.spinnerDialog.show(null,"Adicionando uma Unidade...",true);
+      }else{
+        this.spinnerDialog.show(null,"Gravando a URL...",true);
+      }
+
+    setTimeout(async () =>
+
+    {
+
+       if(this.localUser.pin.toUpperCase().replace(/\s/g, "")==this.activation.value){
+
           this.locked=false;
           this.spinnerDialog.hide();
-
+          this.indexuser.key="YES";
+          this.indexuser.url=this.localUser.url;
+          this.indexuser.healthfacility=this.localUser.healthfacility;
+          this.localUser.url="http://";
+          this.localUser.username='';
 
 //Terms and conditions
 if(!this.locked&&!this.accepted){
@@ -310,7 +368,12 @@ if(!this.locked&&!this.accepted){
 
 if (confirm==1){
 
-  this.storage.set('accepted','YES');
+this.indexuser.accepted="YES";
+
+this.configuracoes.push(this.indexuser);
+this.storage.set('selectedConfiguration', this.indexuser)
+this.storage.set('configuracoes', this.configuracoes)
+
   this.accepted=true;
 
     }
@@ -325,7 +388,7 @@ if (confirm==1){
     }
   }
 
-        }else{
+      }else{
 
           this.spinnerDialog.hide();
               this.color = "danger";
@@ -338,6 +401,36 @@ if (confirm==1){
 
   }
 
+  handleChange(ev){
+
+    this.indexuser = ev.target.value;
+    this.localUser.url = this.indexuser.url;
+    this.localUser.username=this.indexuser.username;
+    console.log('Index');
+    console.log(this.indexuser);
+    window.localStorage.setItem('url',this.localUser.url.replace(/\s/g, ""));
+
+    if(this.indexuser.accepted==='YES'){
+      this.accepted = true;
+    }else{
+      this.accepted = false;
+    }
+
+    if(this.indexuser.autoSync==='Sim'){
+      this.autoSync = true;
+    }else{
+      this.autoSync = false;
+    }
+
+    if(this.indexuser.storelocalUser==='Sim'){
+      this.storelocalUser = true;
+    }else{
+      this.storelocalUser = false;
+    }
+
+    this.storage.set('selectedConfiguration', this.indexuser);
+  }
+
   noAcess(){
     this.loginAccess = "";
           this.loginFail = "hide";
@@ -348,26 +441,10 @@ if (confirm==1){
 
           this.dialogs.alert("Credencias invalidas ou Acesso restrito!","Erro ao entrar");
 
-          if (this.autoSync) {
-            this.storage.set('autoSync', 'Sim');
-          }else{
-            this.storage.remove('autoSync');
-          }
-
-          if (this.storelocalUser) {
-
-            this.storage.set('storelocalUser', 'Sim');
-            this.storage.set('url',this.localUser.url );
-            this.storage.set('username',this.localUser.username )
-            } else {
-          this.storage.remove('username');
-          this.storage.remove('storelocalUser');
-
-            }
   }
 
   login() {
-    this.storage.set('lastLoggedUsername', this.localUser.username);
+
     this.http.get(
       this.localUser.url+'/ws/rest/v1/session',             //URL
       {},         //Data
@@ -377,6 +454,17 @@ if (confirm==1){
      .then(response => {
 
       this.user = JSON.parse(response.data);
+
+      this.indexuser.user = this.user;
+      this.indexuser.localUser = this.localUser;
+      this.indexuser.autoSync='Sim';
+      this.indexuser.lastLoggedUsername=this.localUser.username;
+      this.indexuser.username=this.localUser.username;
+      this.indexuser.storelocalUser='Sim';
+      this.indexuser.username=this.localUser.username;
+
+      this.storage.set('selectedConfiguration', this.indexuser);
+      this.storage.set('configuracoes', this.configuracoes);
       if (this.user) {
         if (this.user.authenticated === true) {
 
@@ -409,23 +497,6 @@ if (confirm==1){
 
           this.appService.callMethodOfSecondComponent();
 
-          if (this.autoSync) {
-            this.storage.set('autoSync', 'Sim');
-          }else{
-            this.storage.remove('autoSync');
-          }
-
-          if (this.storelocalUser) {
-
-            this.storage.set('storelocalUser', 'Sim');
-            this.storage.set('url',this.localUser.url );
-            this.storage.set('username',this.localUser.username );
-
-          } else {
-          this.storage.remove('username');
-          this.storage.remove('storelocalUser');
-            }
-
           this.spinnerDialog.hide();
           this.navCtrl.navigateRoot('/home');
         }
@@ -437,24 +508,6 @@ if (confirm==1){
         this.loginAccess = "hide";
         this.loginFail = "";
         this.isDisabled = false;
-
-
-        if (this.autoSync) {
-          this.storage.set('autoSync', 'Sim');
-        }else{
-          this.storage.remove('autoSync');
-        }
-
-        if (this.storelocalUser) {
-
-          this.storage.set('storelocalUser', 'Sim');
-          this.storage.set('url',this.localUser.url );
-          this.storage.set('username',this.localUser.username )
-
-        } else {
-           this.storage.remove('username');
-           this.storage.remove('storelocalUser');
-          }
 
         this.spinnerDialog.hide();
         this.color = "danger";
@@ -472,25 +525,6 @@ if (confirm==1){
       this.dialogs.alert(response,"Erro ao entrar");
       this.dialogs.alert("Não foi possivel iniciar a secção. Verifique o estado da sua ligação com o servidor!","Erro ao entrar");
       this.isDisabled = false;
-
-
-      if (this.autoSync) {
-        this.storage.set('autoSync', 'Sim');
-      }else{
-        this.storage.remove('autoSync');
-      }
-
-      if (this.storelocalUser) {
-
-        this.storage.set('storelocalUser', 'Sim');
-        this.storage.set('url',this.localUser.url );
-        this.storage.set('username',this.localUser.username )
-        //this.storage.set('password',this.localUser.password )
-
-      } else {
-        this.storage.remove('username');
-        this.storage.remove('storelocalUser');
-        }
 
 
      });

@@ -40,6 +40,14 @@
 
       </ion-item>
 
+      <ion-item *ngIf="locked&&activation" >
+        <ion-label position="stacked">
+          Nome da Unidade sanitária
+        </ion-label>
+        <ion-input [(ngModel)]="localUser.healthfacility" type="text" value="" formControlName="healthfacility" placeholder="Escreva o nome "></ion-input>
+        <ion-icon name="medical-outline" slot="start"  size="small" class="ion-align-self-center"></ion-icon>
+      </ion-item>
+
 
       <ion-item *ngIf="locked&&activation" >
         <ion-label position="stacked">
@@ -51,8 +59,25 @@
 
       <ion-item *ngIf="!locked&&accepted">
         <ion-label position="stacked">
+          Unidade Sanitária
+        </ion-label>
+
+        <ion-select position="stacked"
+        aria-label="Select"
+        [compareWith]="compareWith"
+        placeholder="Selecione"
+        (ionChange)="handleChange($event)">
+        <ion-select-option *ngFor="let configuracoe of configuracoes" [value]="configuracoe">{{ configuracoe.healthfacility }}</ion-select-option>
+
+        </ion-select>
+        <ion-icon name="medical-outline" slot="start"  size="small" class="ion-align-self-center"></ion-icon>
+      </ion-item>
+
+      <ion-item *ngIf="!locked&&accepted">
+        <ion-label position="stacked">
           Utilizador
         </ion-label>
+
         <ion-input [(ngModel)]="localUser.username" type="text" value="" formControlName="username" placeholder="Escreva o username">        </ion-input>
         <ion-icon name="person" slot="start"  size="small" class="ion-align-self-center"></ion-icon>
       </ion-item>
@@ -69,11 +94,15 @@
       </ion-item>
 
       <div *ngIf="!locked&&accepted" class="ion-margin-top">
-        <ion-button color="primary" expand="block" (click)="logoutLogin()">ENTRAR</ion-button>
+        <ion-button color="primary" expand="block" (click)="logoutLogin()" >ENTRAR</ion-button>
       </div>
 
-      <div padding *ngIf="locked" class="ion-margin-top">
+      <div padding *ngIf="locked&&!isAddHealthFacility" class="ion-margin-top">
         <ion-button color="success" expand="block" (click)="setURL()">GRAVAR URL</ion-button>
+        </div>
+
+        <div padding *ngIf="locked&&isAddHealthFacility" class="ion-margin-top">
+          <ion-button color="success" expand="block" (click)="setURL()">ADD UNIDADE SANITARIA</ion-button>
         </div>
 
       <ion-item *ngIf="!locked&&accepted" class="ion-hide">
