@@ -46,8 +46,6 @@ public roleViewLevel;
     private storage: Storage) {
 
   }
-
-
   ngOnInit() {
 
     this.allCD4Abs=null;
