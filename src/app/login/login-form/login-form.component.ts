@@ -8,6 +8,7 @@ import { Dialogs } from '@ionic-native/dialogs/ngx';
 import * as myGlobals from '../../../globals';
 import { HTTP } from '@ionic-native/http/ngx';
 import { MenuController } from '@ionic/angular';
+import { Key } from 'protractor';
 
 @Component({
   selector: 'page-login',
@@ -127,6 +128,7 @@ export class LoginFormComponent {
 
   this.storage.get('selectedConfiguration').then((data) => {
 
+if(data!==null){
       if(data.key=="YES"){
         this.locked=false;
       }else{
@@ -148,7 +150,7 @@ export class LoginFormComponent {
               }
 
 
-        },
+        }},
         error => console.error(error)
         );
 
