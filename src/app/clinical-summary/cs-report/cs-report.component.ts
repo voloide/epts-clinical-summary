@@ -67,7 +67,7 @@ public roleViewLevel;
     this.allVLCopiasFSR=null;this.allVLCopiasV2FSR=null;this.allVLCopiasFC=null;this.allVLCopiasV2FC=null;
     this.ARTPickupRegime=null;this.ARTPickupNextDate=null;this.ARTPickupMasterCard=null;
     this.allVLs=null;this.allVLsV2=null;this.allIPTStart=null;this.allIPTStartProfilaxia=null;this.allIPTEnd=null;this.allIPTEndProfilaxia=null;
-    this.allTBLAM=null;this.rastreioTBLAMLabGeral=null;this.rastreioTBLAMLabGeralPositividade=null;this.rastreioTBLAMELab=null;this.rastreioTBLAMELabPositividade=null;this.rastreioTBLAMFichaClinica=null;this.rastreioTBLAMFichaClinicaPositividade=null;
+    this.allTBLAM=[];this.rastreioTBLAMLabGeral=null;this.rastreioTBLAMLabGeralPositividade=null;this.rastreioTBLAMELab=null;this.rastreioTBLAMELabPositividade=null;this.rastreioTBLAMFichaClinica=null;this.rastreioTBLAMFichaClinicaPositividade=null;
 
 
     // Vars for profilaxia estado
@@ -133,7 +133,7 @@ public roleViewLevel;
     this.allVLCopiasFSR=null;this.allVLCopiasV2FSR=null;this.allVLCopiasFC=null;this.allVLCopiasV2FC=null;
     this.ARTPickupRegime=null;this.ARTPickupNextDate=null;this.ARTPickupMasterCard=null;
     this.allVLs=null;this.allVLsV3=null;this.allVLsV2=null;this.allIPTStart=null;this.allIPTEnd=null;
-    this.allTBLAM=null;this.rastreioTBLAMLabGeral=null;this.rastreioTBLAMLabGeralPositividade=null;this.rastreioTBLAMELab=null;this.rastreioTBLAMELabPositividade=null;this.rastreioTBLAMFichaClinica=null;this.rastreioTBLAMFichaClinicaPositividade=null;
+    this.allTBLAM=[];this.rastreioTBLAMLabGeral=null;this.rastreioTBLAMLabGeralPositividade=null;this.rastreioTBLAMELab=null;this.rastreioTBLAMELabPositividade=null;this.rastreioTBLAMFichaClinica=null;this.rastreioTBLAMFichaClinicaPositividade=null;
 
     this.spinnerDialog.show(null,"Carregando...",true);
 
@@ -502,96 +502,7 @@ public roleViewLevel;
     return 0;
   });
 
-    // TB LAM
-		this.http.get(
-      window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=ef139cb2-97c1-4c0f-9189-5e0711a45b8f&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=12",             //URL
-      {},         //Data
-      {
-        'Content-Type': 'application/json',
-        Authorization: 'Basic ' + btoa(window.localStorage.getItem('username') + ":" + window.localStorage.getItem('password'))
-      } // Headers
-    )
-      .then(response => {
-        var data=JSON.parse(response.data);
-
-        // TB LAM - Laboratorio Geral
-        this.rastreioTBLAMLabGeral=data.results.filter(item=>item.encounter.form.uuid=="8377e4ff-d0fe-44a5-81c3-74c9040fd5f8");
-        this.rastreioTBLAMLabGeral.sort((item1, item2) => item1.encounter.encounterId - item2.encounter.encounterId);
-
-        // TB LAM - Form e-Lab
-        this.rastreioTBLAMELab=data.results.filter(item=>item.encounter.form.uuid=="5b7cecc3-4ba3-4710-85ae-fc0c13e83e27");
-        this.rastreioTBLAMELab.sort((item1, item2) => item1.encounter.encounterId - item2.encounter.encounterId);
-
-        // TB LAM - Ficha Clinica
-        this.rastreioTBLAMFichaClinica=data.results.filter(item=>item.encounter.form.uuid=="3c2d563a-5d37-4735-a125-d3943a3de30a");
-        this.rastreioTBLAMFichaClinica.sort((item1, item2) => item1.encounter.encounterId - item2.encounter.encounterId);
-
-        //this.allTBLAM=this.rastreioTBLAMLabGeral.concat(this.rastreioTBLAMELab.concat(this.rastreioTBLAMFichaClinica));
-
-          // TB LAM - NIVEL DE POSITIVIDADE
-		this.http.get(
-      window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=303a4480-f2b3-4192-a446-725a401ebb09&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=12",             //URL
-      {},         //Data
-      {
-        'Content-Type': 'application/json',
-        Authorization: 'Basic ' + btoa(window.localStorage.getItem('username') + ":" + window.localStorage.getItem('password'))
-      } // Headers
-    )
-      .then(response => {
-        var data=JSON.parse(response.data);
-
-        let arrayTBLAM = [];
-
-        // TB LAM - Laboratorio Geral - Nivel de Positividade
-        let tbLAMLabGeralEncountersUuids = this.rastreioTBLAMLabGeral.map(item => item.encounter.uuid);
-        this.rastreioTBLAMLabGeralPositividade=data.results.filter(item=>tbLAMLabGeralEncountersUuids.includes(item.encounter.uuid));
-        for (let index = 0; index < this.rastreioTBLAMLabGeral.length; index++) {
-          let element = this.rastreioTBLAMLabGeral[index];
-          let npValue = this.rastreioTBLAMLabGeralPositividade.filter(item => item.encounter.uuid == element.encounter.uuid);
-          if(npValue!=null) {
-          element.value.comment=npValue[0].value.display;
-          console.log(element);
-          }
-          arrayTBLAM.push(element);
-        }
-
-        // TB LAM - Form e-Lab - Nivel de Positividade
-        let tbLAMeLabEncountersUuids = this.rastreioTBLAMELab.map(item => item.encounter.uuid);
-        this.rastreioTBLAMELabPositividade=data.results.filter(item=>tbLAMeLabEncountersUuids.includes(item.encounter.uuid));
-        for (let index = 0; index < this.rastreioTBLAMELab.length; index++) {
-          const element = this.rastreioTBLAMELab[index];
-          this.allTBLAM.push(element);
-          let npValue = this.rastreioTBLAMELabPositividade.filter(item => item.encounter.uuid == element.encounter.uuid);
-          if(npValue!=null) {
-            element.value.comment=npValue[0].value.display;
-          }
-          arrayTBLAM.push(element);
-        }
-
-        // TB LAM - Ficha Clinica - Nivel de Positividade
-        let tbLAMFichaClinicaEncountersUuids = this.rastreioTBLAMFichaClinica.map(item => item.encounter.uuid);
-        this.rastreioTBLAMFichaClinicaPositividade=data.results.filter(item=>tbLAMFichaClinicaEncountersUuids.includes(item.encounter.uuid));
-        for (let index = 0; index < this.rastreioTBLAMFichaClinica.length; index++) {
-          const element = this.rastreioTBLAMFichaClinica[index];
-          this.allTBLAM.push(element);
-          let npValue = this.rastreioTBLAMFichaClinicaPositividade.filter(item => item.encounter.uuid == element.encounter.uuid);
-          if(npValue!=null) {
-            element.value.comment=npValue[0].value.display;
-          }
-          arrayTBLAM.push(element);
-        }
-
-        this.allTBLAM=arrayTBLAM;
-
-        console.log('All: ', this.allTBLAM);
-        console.log('Lab Geral: ', this.rastreioTBLAMLabGeral); 
-        console.log('E-Lab: ', this.rastreioTBLAMELab); 
-        console.log('Ficha Clinica: ', this.rastreioTBLAMFichaClinica);
-        console.log('Lab Geral - NP: ', this.rastreioTBLAMLabGeralPositividade); 
-        console.log('E-Lab - NP: ', this.rastreioTBLAMELabPositividade); 
-        console.log('Ficha Clinica - NP: ', this.rastreioTBLAMFichaClinicaPositividade);
-
-
+   
   //FILT
 
   this.http.get(
@@ -606,10 +517,9 @@ public roleViewLevel;
       var data=JSON.parse(response.data);
       this.IPTEndFichaFILT=data.results.filter(item=>item.encounter.form.uuid=="4ce83895-5c0e-4170-b0cc-d3974b54131f");
 
-  //ART START Date
-
-  this.http.get(
-    window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=e1d8f690-1d5f-11e0-b929-000c29ad1d07&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=1",             //URL
+   // TB LAM
+   this.http.get(
+    window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=ef139cb2-97c1-4c0f-9189-5e0711a45b8f&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=12",             //URL
     {},         //Data
     {
       'Content-Type': 'application/json',
@@ -617,44 +527,144 @@ public roleViewLevel;
     } // Headers
   )
     .then(response => {
-
       var data=JSON.parse(response.data);
-      this.ARTStartDate=data.results;
-       var clinicalSummary:any={
-          report:"Sumário Clínico",
-          patient_uuid: this.patient.uuid,
-          dateOpened: new Date(),
-          username: this.user.user.username,
-          us: this.patient.identifiers[0].location.name,
-          status:"not_uploaded",
-          terms:"ASSINADO",
-          applicationVersion: this.appVersion
-        };
 
-        /*if(this.ClinicalSummaries.filter(item=>item.username.toUpperCase()===this.user.user.username.toUpperCase()).length<1){
-          clinicalSummary.terms="ASSINADO";
-        }else{
-          clinicalSummary.terms="";
-        }*/
+      // TB LAM - Laboratorio Geral
+      this.rastreioTBLAMLabGeral=data.results.filter(item=>item.encounter.form.uuid=="8377e4ff-d0fe-44a5-81c3-74c9040fd5f8");
+      this.rastreioTBLAMLabGeral.sort((item1, item2) => item1.encounter.encounterId - item2.encounter.encounterId);
 
-        if(!this.ClinicalSummaries){
-          this.ClinicalSummaries=clinicalSummary;
-        }else{
+      // TB LAM - Form e-Lab
+      this.rastreioTBLAMELab=data.results.filter(item=>item.encounter.form.uuid=="5b7cecc3-4ba3-4710-85ae-fc0c13e83e27");
+      this.rastreioTBLAMELab.sort((item1, item2) => item1.encounter.encounterId - item2.encounter.encounterId);
 
-          this.ClinicalSummaries=this.ClinicalSummaries.filter(item => new Date(item.dateOpened)>=new Date(new Date().setMonth(new Date().getMonth()-4)));
-          this.ClinicalSummaries.push(clinicalSummary);
+      // TB LAM - Ficha Clinica
+      this.rastreioTBLAMFichaClinica=data.results.filter(item=>item.encounter.form.uuid=="3c2d563a-5d37-4735-a125-d3943a3de30a");
+      this.rastreioTBLAMFichaClinica.sort((item1, item2) => item1.encounter.encounterId - item2.encounter.encounterId);
+
+      //this.allTBLAM=this.rastreioTBLAMLabGeral.concat(this.rastreioTBLAMELab.concat(this.rastreioTBLAMFichaClinica));
+
+        // TB LAM - NIVEL DE POSITIVIDADE
+  this.http.get(
+    window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=303a4480-f2b3-4192-a446-725a401ebb09&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=12",             //URL
+    {},         //Data
+    {
+      'Content-Type': 'application/json',
+      Authorization: 'Basic ' + btoa(window.localStorage.getItem('username') + ":" + window.localStorage.getItem('password'))
+    } // Headers
+  )
+    .then(response => {
+      var data=JSON.parse(response.data);
+
+      let arrayTBLAM = [];
+
+      // TB LAM - Laboratorio Geral - Nivel de Positividade
+      let tbLAMLabGeralEncountersUuids = this.rastreioTBLAMLabGeral.map(item => item.encounter.uuid);
+      this.rastreioTBLAMLabGeralPositividade=data.results.filter(item=>tbLAMLabGeralEncountersUuids.includes(item.encounter.uuid));
+      for (let index = 0; index < this.rastreioTBLAMLabGeral.length; index++) {
+        let element = this.rastreioTBLAMLabGeral[index];
+        let npValue = this.rastreioTBLAMLabGeralPositividade.filter(item => item.encounter.uuid == element.encounter.uuid);
+        
+        if(npValue!=null && npValue != undefined && npValue.length > 0) {
+          element.value.comment=npValue[0].value.display;
         }
+        if (element != null) {
+          arrayTBLAM.push(element);
+        }
+      }
 
-        this.storage.set("epts-clinical-summaries",this.ClinicalSummaries);
+      // TB LAM - Form e-Lab - Nivel de Positividade
+      let tbLAMeLabEncountersUuids = this.rastreioTBLAMELab.map(item => item.encounter.uuid);
+      this.rastreioTBLAMELabPositividade=data.results.filter(item=>tbLAMeLabEncountersUuids.includes(item.encounter.uuid));
+      for (let index = 0; index < this.rastreioTBLAMELab.length; index++) {
+        const element = this.rastreioTBLAMELab[index];
+        if (element != null) { this.allTBLAM.push(element);}
+        let npValue = this.rastreioTBLAMELabPositividade.filter(item => item.encounter.uuid == element.encounter.uuid);
+        if(npValue!=null && npValue != undefined  && npValue.length > 0) {
+          element.value.comment=npValue[0].value.display;
+        }
+        if (element != null) { arrayTBLAM.push(element); }
+      }
 
-        this.spinnerDialog.hide();
+      // TB LAM - Ficha Clinica - Nivel de Positividade
+      let tbLAMFichaClinicaEncountersUuids = this.rastreioTBLAMFichaClinica.map(item => item.encounter.uuid);
+      this.rastreioTBLAMFichaClinicaPositividade=data.results.filter(item=>tbLAMFichaClinicaEncountersUuids.includes(item.encounter.uuid));
+      for (let index = 0; index < this.rastreioTBLAMFichaClinica.length; index++) {
+        const element = this.rastreioTBLAMFichaClinica[index];
+        if (element != null) { this.allTBLAM.push(element); }
+        let npValue = this.rastreioTBLAMFichaClinicaPositividade.filter(item => item.encounter.uuid == element.encounter.uuid);
+        if(npValue!=null  && npValue != undefined  && npValue.length > 0) {
+          element.value.comment=npValue[0].value.display;
+        }
+        if (element != null) { arrayTBLAM.push(element);} 
+      }
 
-      })
-      .catch(response => {
+      this.allTBLAM=arrayTBLAM;
+    
 
-        this.networkFailure();
+   //ART START Date
 
-      });
+this.http.get(
+  window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=e1d8f690-1d5f-11e0-b929-000c29ad1d07&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=1",             //URL
+  {},         //Data
+  {
+    'Content-Type': 'application/json',
+    Authorization: 'Basic ' + btoa(window.localStorage.getItem('username') + ":" + window.localStorage.getItem('password'))
+  } // Headers
+)
+  .then(response => {
+
+    var data=JSON.parse(response.data);
+    this.ARTStartDate=data.results;
+     var clinicalSummary:any={
+        report:"Sumário Clínico",
+        patient_uuid: this.patient.uuid,
+        dateOpened: new Date(),
+        username: this.user.user.username,
+        us: this.patient.identifiers[0].location.name,
+        status:"not_uploaded",
+        terms:"ASSINADO",
+        applicationVersion: this.appVersion
+      };
+      
+
+      /*if(this.ClinicalSummaries.filter(item=>item.username.toUpperCase()===this.user.user.username.toUpperCase()).length<1){
+        clinicalSummary.terms="ASSINADO";
+      }else{
+        clinicalSummary.terms="";
+      }*/
+
+      if(!this.ClinicalSummaries){
+        this.ClinicalSummaries=clinicalSummary;
+      }else{
+
+        this.ClinicalSummaries=this.ClinicalSummaries.filter(item => new Date(item.dateOpened)>=new Date(new Date().setMonth(new Date().getMonth()-4)));
+        this.ClinicalSummaries.push(clinicalSummary);
+      }
+
+      this.storage.set("epts-clinical-summaries",this.ClinicalSummaries);
+
+      this.spinnerDialog.hide();
+
+    })
+    .catch(response => {
+
+console.log(response);
+      this.networkFailure();
+
+    });   
+
+ }).catch(response => {
+console.log(response);
+    this.networkFailure();
+
+  });
+
+})
+.catch(response => {
+console.log(response);
+this.networkFailure();
+
+});
 
 
       })
@@ -675,20 +685,6 @@ public roleViewLevel;
       this.networkFailure();
     });
 
-
-      })
-      .catch(response => {
-
-        this.networkFailure();
-
-      });
-
-    })
-    .catch(response => {
-
-      this.networkFailure();
-
-    });
 
 
       })
