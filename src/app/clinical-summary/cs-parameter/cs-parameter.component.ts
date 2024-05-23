@@ -47,9 +47,6 @@ export class CsParameterComponent {
 
   async confirmReport(patient) {
 
-    console.log("PACIENTE SELECIONADO");
-    console.log(patient);
-
     let gender = patient.person.gender;
     if (gender == 'F') {
       gender = 'a'
