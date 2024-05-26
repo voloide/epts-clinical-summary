@@ -17,8 +17,13 @@ import { HTTP } from '@ionic-native/http/ngx';
 export class ReportUsageComponent {
 
   user: any;
+  password: any;
+  baseUrl: any;
+  appVersion: any;
 
   isDisabled: boolean;
+
+  currpartner: any;
 
   public color;
 
@@ -51,6 +56,10 @@ export class ReportUsageComponent {
     this.color = "primary";
     this.isDisabled = false;
     this.user = JSON.parse(window.localStorage.getItem('user'));
+    this.password = window.localStorage.getItem('password');
+    this.baseUrl = window.localStorage.getItem('url');
+    this.appVersion = window.localStorage.getItem('appVersion');
+    //this.currpartner = JSON.parse(window.localStorage.getItem('currpartner'));
 
 
     this.http.setDataSerializer( "utf8" );
@@ -152,6 +161,8 @@ export class ReportUsageComponent {
   this.color="primary";
   this.loaded=1;
 
+  console.log(this.currpartner);
+
   this.storage.get('epts-clinical-summaries').then(async (data) => {
     if (data) {
       this.ClinicalSummaries2 = data.filter(item=>item.username.toUpperCase()==this.user.user.username.toUpperCase() && item.status=="not_uploaded");
@@ -166,49 +177,33 @@ export class ReportUsageComponent {
 
         for(let cs of this.ClinicalSummaries2){
 
-          let payload = {
-            eventDate: cs.dateOpened,
-            status:"COMPLETED",
-            completedDate:new Date(),
-            program:"zUzKes56b9I",
-            programStage:"t4XLfwKYcuO",
-            orgUnit:"HxSLEPpHkuK",
-            dataValues:[
-              {
-                 dataElement:"B1ifFNRXkzo",
-                 value:cs.report
-              },
-              {
-                dataElement:"D37WjvR8AIt",
-                value:cs.us
-              },
-              {
-                dataElement:"bRYKxt09HrK",
-                value:cs.username
-              },
-              {
-                dataElement:"iYompJgWa6M",
-                value:""
-              },
-              {
-                dataElement:"PEK0zg7jLdy",
-                value:cs.terms
-              },
-              {
-                dataElement:"N3ZdmJS2k14",
-                value:"v1.8.0"
-              }
-            ]
-          };
 
-      await this.http.post("https://dhis2.fgh.org.mz/api/events",             //URL
-      JSON.stringify(payload),         //Data
+          let report = {
+                
+               report:cs.report
+              ,
+                unidadeSanitaria:cs.us
+              ,
+                userName:cs.username
+              ,
+                terms:cs.terms
+              ,
+                dateOpened:cs.dateOpened
+              ,
+                applicationVersion: cs.applicationVersion
+              
+
+          };
+      console.log(report);
+      await this.http.post(this.baseUrl +"/ws/rest/v1/clinicalsummary",             //URLL
+      JSON.stringify(report),         //Data
       {
         'Content-Type': 'application/json',
-        Authorization: 'Basic ' + btoa("clinical.summary:Local123@")
+        Authorization: 'Basic ' + btoa(this.user+":"+this.password)
       } // Headers
       )
       .then(response => {
+        console.log(response);
 
         this.loaded=this.loaded+1;
 
@@ -226,9 +221,11 @@ export class ReportUsageComponent {
 
       })
       .catch(response => {
+        console.log("Negativo");
+        console.log(response);
         this.color="danger";
         this.spinnerDialog.hide();
-        this.dialogs.alert("Não foi possivel envir os dados para a nuvem. Verifique o seu sinal de internet!","Erro ao enviar");
+        this.dialogs.alert("Não foi possivel enviar os dados para a nuvem. Verifique o seu sinal de internet!","Erro ao enviar");
         this.errorOnLoop="errorOnLoop";
 
       });

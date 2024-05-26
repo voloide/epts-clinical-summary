@@ -31,7 +31,7 @@ export class LoginFormComponent {
   public accepted: boolean=false;
 
   public color;usern;passw;url;
-
+  public selectedPartiner;
 
   localUser = {url:'',username: '', password: '',pin:'' ,roles:'', healthfacility:''};
 
@@ -56,6 +56,44 @@ export class LoginFormComponent {
     public tecLabUUID = "e2f0b55e-1d5f-11e0-b929-000c29ad1d07"
     public provedorSaudeUUID = "e2f0acbc-1d5f-11e0-b929-000c29ad1d07"
     public roleViewLevel = null;
+
+    partiners = [
+      {id: 2,
+        dataElement: 'FxLCZVLqB9w',
+        name: 'FGH',
+        description: 'Friends in Global Health'
+      },
+      {id: 3,
+        dataElement: 'qZoZUS1sCHe',
+        name: 'ICAP',
+        description: 'ICAP'
+      },
+      {id: 4,
+        dataElement: 'mdkw6StfCAb',
+        name: 'ARIEL',
+        description: 'ARIEL'
+      },
+      {id: 5,
+        dataElement: 'UOr99ZPFds7',
+        name: 'CCS',
+        description: 'CCS'
+      },
+      {id: 6,
+        dataElement: 'ykW4YbFZVEN',
+        name: 'ECHO',
+        description: 'ECHO'
+      },
+      {id: 7,
+        dataElement: 'Z7fi2jfwPZ5',
+        name: 'EGPAF',
+        description: 'EGPAF'
+      },
+      {id: 8,
+        dataElement: 'vtM2Be0xJ6Z',
+        name: 'JHPIEGO',
+        description: 'JHPIEGO'
+      }
+    ]; 
 
   constructor(
     private appService: AppService,
@@ -82,6 +120,7 @@ export class LoginFormComponent {
       pin: ['', [
         Validators.required
       ]],
+
       healthfacility: ['', [
         Validators.required
       ]],
@@ -90,6 +129,26 @@ export class LoginFormComponent {
 
     });
 
+  }
+
+
+  compareWith(o1, o2) {
+    return o1 && o2 ? o1.id === o2.id : o1 === o2;
+  }
+
+  handleChange(ev) {
+    this.selectedPartiner = ev.target.value;
+    console.log(JSON.stringify(this.selectedPartiner));
+
+    console.log('handleChange');
+
+    this.storage.set('currpartner',this.selectedPartiner);
+    //window.localStorage.setItem('currpartner',JSON.stringify(this.selectedPartiner));
+
+
+    console.log(JSON.stringify(this.selectedPartiner));
+    console.log(this.selectedPartiner);
+   
   }
 
   showPassword() {
@@ -101,7 +160,6 @@ export class LoginFormComponent {
       this.type = 'password';
     }
   }
-
 
   openSettings() {
    this.navCtrl.navigateForward('/settings');
@@ -168,7 +226,7 @@ if(data!==null){
         if(!this.locked&&!this.accepted){
 
           var confirm=await this.dialogs.confirm('O utilizador deste aplicativo se compromete a fazer uso adequado dos conteúdos e das informações que o aplicativo oferece respeitando as políticas de sigilo e confidencialidade em vigor na organização;\n\na) Ao acessar este sistema, você está prestes a visualizar informações altamente confidenciais de utentes. É sua responsabilidade protegê-las adequadamente e usá-las somente para os fins autorizados. A privacidade dos utentes é essencial para nossa missão. \n\nb) O utilizador não deve se envolver em actividades que sejam ilegais ou contrárias à boa fé do compromisso sigilo e confidencialidade durante a utilização do aplicativo;\n\nc) O utilizador não deve difundir o conteúdo do aplicativo (ex.: informação mostrada sobre os pacientes, credenciais de acesso).', 'Política de Privacidade e Termos de Uso', ['Concordo', 'Não concordo']);
-
+        
      if (confirm==1){
 
           this.storage.set('accepted','YES');
@@ -204,6 +262,7 @@ this.storage.get('configuracoes').then((data) => {
 
     this.storage.get('storelocalUser').then((data) => {
 
+
         if(data==='Sim'){
           this.isAddHealthFacility=true;
           this.storage.remove('storelocalUser');
@@ -223,6 +282,8 @@ this.storage.get('configuracoes').then((data) => {
 
             }
             });
+
+           
 
             this.storelocalUser=true;
 
@@ -264,7 +325,6 @@ this.storage.get('configuracoes').then((data) => {
 
   }
 
-
   logoutLogin(){
         this.color = "";
         this.isDisabled = true;
@@ -281,8 +341,11 @@ this.storage.get('configuracoes').then((data) => {
 
         }
 
+        console.log(JSON.stringify(this.selectedPartiner));
+    console.log(this.selectedPartiner);
 
-        window.localStorage.setItem('appVersion',"v1.8.0" );
+
+        window.localStorage.setItem('appVersion',"v1.10.0" );
         window.localStorage.setItem('url',this.localUser.url );
         window.localStorage.setItem('username',this.localUser.username );
         window.localStorage.setItem('password',this.localUser.password );
@@ -540,9 +603,12 @@ uploadUsageReports() {
 
   this.loaded=1;
 
+  var currpartner = this.storage.get('currpartner');
+  console.log(currpartner);
+
   this.storage.get('epts-clinical-summaries').then(async (data) => {
     if (data) {
-      this.ClinicalSummaries2 = data.filter(item=>item.username.toUpperCase()==this.lastLoggedUsername.toUpperCase() && item.status=="not_uploaded");
+      this.ClinicalSummaries2 = data.filter(item=>item.username.toUpperCase()==this.user.user.username.toUpperCase() && item.status=="not_uploaded");
       var allCS= data;
       this.toLoad=this.ClinicalSummaries2.length;
 
@@ -550,46 +616,29 @@ uploadUsageReports() {
 
       if (this.ClinicalSummaries2.length > 0) {
 
-        this.spinnerDialog.show(null, "Enviando "+this.toLoad+" relatórios...", true);
+        //this.spinnerDialog.show(null, "Enviando "+this.toLoad+" relatórios...", true);
 
         for(let cs of this.ClinicalSummaries2){
 
-          let payload = {
-            eventDate: cs.dateOpened,
-            status:"COMPLETED",
-            completedDate:new Date(),
-            program:"zUzKes56b9I",
-            programStage:"t4XLfwKYcuO",
-            orgUnit:"HxSLEPpHkuK",
-            dataValues:[
-              {
-                 dataElement:"B1ifFNRXkzo",
-                 value:cs.report
-              },
-              {
-                dataElement:"D37WjvR8AIt",
-                value:cs.us
-              },
-              {
-                dataElement:"bRYKxt09HrK",
-                value:cs.username
-              },
-              {
-                dataElement:"iYompJgWa6M",
-                value:""
-              },
-              {
-                dataElement:"PEK0zg7jLdy",
-                value:cs.terms
-              }
-            ]
+          let report = {
+                
+               report:cs.report
+              ,
+                unidadeSanitaria:cs.us
+              ,
+                userName:cs.username
+              ,
+                terms:cs.terms
+              ,
+                applicationVersion: cs.applicationVersion
+              
           };
-
-      await this.http.post("https://dhis2.fgh.org.mz/api/events",             //URL
-      JSON.stringify(payload),         //Data
+      console.log(report);
+      await this.http.post(this.localUser.url +"/ws/rest/v1/clinicalsummary",             //URLL
+      JSON.stringify(report),         //Data
       {
         'Content-Type': 'application/json',
-        Authorization: 'Basic ' + btoa("clinical.summary:Local123@")
+        Authorization: 'Basic ' + btoa(this.localUser.username+":"+this.localUser.password)
       } // Headers
       )
       .then(response => {
