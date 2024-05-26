@@ -134,6 +134,7 @@ uploadUsageReports() {
 
         for(let cs of this.ClinicalSummaries2){
 
+
           let report = {
                 
             report:cs.report
@@ -154,6 +155,7 @@ uploadUsageReports() {
      'Content-Type': 'application/json',
      Authorization: 'Basic ' + btoa(this.user+":"+this.password)
    } // Headers
+
       )
       .then(response => {
 
@@ -195,11 +197,6 @@ uploadUsageReports() {
     }
   }).catch(error=>{this.dialogs.alert("Sem relatórios por enviar!","Informação");});
 
-
-
-
-
-
 }
 
 
@@ -224,4 +221,26 @@ uploadUsageReports() {
 }
 
   }
+
+
+  async addHealthFacility(){
+
+    var confirm = await this.dialogs.confirm('Deseja Adicionar mais uma unidade Sanitária?', 'Confirmação', ['Sim', 'Não']);
+
+    if(confirm == 1){
+      this.spinnerDialog.show(null, "Adicionando uma unidade ", true);
+
+      this.storage.remove('healthfacility');
+      this.storage.remove('selectedConfiguration');
+      this.storage.remove('url');
+
+      setTimeout(() => {
+        this.navCtrl.navigateRoot("/login");
+        this.spinnerDialog.hide();
+      }, 3000);
+
+    }
+
+  }
+
 }

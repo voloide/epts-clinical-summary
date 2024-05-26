@@ -27,6 +27,10 @@ public allVLsV3;allVLsV2;allVLs;allIPTStart;allIPTStartProfilaxia;allIPTEnd;allI
 public allTBLAM;rastreioTBLAMLabGeral;rastreioTBLAMLabGeralPositividade;rastreioTBLAMELab;rastreioTBLAMELabPositividade;rastreioTBLAMFichaClinica;rastreioTBLAMFichaClinicaPositividade;
 public ClinicalSummaries: any[]=[];
 
+public CTZStartFichaClinica;CTZEndFichaClinica;
+public heaghtGeneralLaboratory; bmiGeneralLaboratory;
+public confidentesName; confidantContact;
+
 // Vars for profilaxia estado
 public IPTStartFichaClinicaProfilaxia;IPTStartFichaResumoProfilaxia;IPTStartFichaSeguimentoProfilaxia;
 public IPTEndFichaClinicaProfilaxia;IPTEndFichaResumoProfilaxia;IPTEndFichaSeguimentoProfilaxia;
@@ -46,8 +50,6 @@ public roleViewLevel;
     private storage: Storage) {
 
   }
-
-
   ngOnInit() {
 
     this.allCD4Abs=null;
@@ -69,6 +71,11 @@ public roleViewLevel;
     this.allVLs=null;this.allVLsV2=null;this.allIPTStart=null;this.allIPTStartProfilaxia=null;this.allIPTEnd=null;this.allIPTEndProfilaxia=null;
     this.allTBLAM=[];this.rastreioTBLAMLabGeral=null;this.rastreioTBLAMLabGeralPositividade=null;this.rastreioTBLAMELab=null;this.rastreioTBLAMELabPositividade=null;this.rastreioTBLAMFichaClinica=null;this.rastreioTBLAMFichaClinicaPositividade=null;
 
+    this.CTZStartFichaClinica=null;
+    this.CTZEndFichaClinica=null;
+
+    this.heaghtGeneralLaboratory=null;
+    this.bmiGeneralLaboratory=null;
 
     // Vars for profilaxia estado
     this.IPTStartFichaClinicaProfilaxia=null;this.IPTStartFichaResumoProfilaxia=null;this.IPTStartFichaSeguimentoProfilaxia=null;
@@ -79,12 +86,16 @@ public roleViewLevel;
     //rastreioTBLAM
     this.rastreioTBLAM=null;
 
+    this.confidentesName=null;
+    this.confidantContact=null;
+
     this.chart1=false;
     this.chart2=true;
 
     this.color="primary";
     this.user = JSON.parse(window.localStorage.getItem('user'));
     this.patient = JSON.parse(window.localStorage.getItem('patient'));
+
 
     this.searchParams = JSON.parse(window.localStorage.getItem('payload'));
 
@@ -134,6 +145,9 @@ public roleViewLevel;
     this.ARTPickupRegime=null;this.ARTPickupNextDate=null;this.ARTPickupMasterCard=null;
     this.allVLs=null;this.allVLsV3=null;this.allVLsV2=null;this.allIPTStart=null;this.allIPTEnd=null;
     this.allTBLAM=[];this.rastreioTBLAMLabGeral=null;this.rastreioTBLAMLabGeralPositividade=null;this.rastreioTBLAMELab=null;this.rastreioTBLAMELabPositividade=null;this.rastreioTBLAMFichaClinica=null;this.rastreioTBLAMFichaClinicaPositividade=null;
+
+    this.heaghtGeneralLaboratory=null;
+    this.bmiGeneralLaboratory=null;
 
     this.spinnerDialog.show(null,"Carregando...",true);
 
@@ -286,6 +300,44 @@ public roleViewLevel;
             this.rastreioCacum=data.results;
             
 
+        //Confidente
+        //confidente's Name
+    this.http.get(
+      window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=e1de46a4-1d5f-11e0-b929-000c29ad1d07&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=12",             //URL
+      {},       //Data
+         {
+          'Content-Type': 'application/json',
+          Authorization: 'Basic ' + btoa(window.localStorage.getItem('username') + ":" + window.localStorage.getItem('password'))
+         } // Headers
+      )
+      .then(response => {
+        var data=JSON.parse(response.data);
+        this.confidentesName=data.results.filter(item=>item.encounter.form.uuid=="05496c70-845c-40b1-9d28-070f67b3f7da");
+
+        console.log("confidente's Name ");
+        if(this.confidentesName >= 1){
+     //     console.log(this.confidentesName);
+        }
+
+    //confidant Contact
+    this.http.get(
+      window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=eb23c94a-2c2e-40fa-ab82-22308b1c5f27&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=2",             //URL
+      {},       //Data
+         {
+          'Content-Type': 'application/json',
+          Authorization: 'Basic ' + btoa(window.localStorage.getItem('username') + ":" + window.localStorage.getItem('password'))
+         } // Headers
+      )
+      .then(response => {
+        var data=JSON.parse(response.data);
+        this.confidantContact=data.results.filter(item=>item.encounter.form.uuid=="05496c70-845c-40b1-9d28-070f67b3f7da");
+
+        console.log("confidant Contact ");
+        if(this.confidantContact >= 1){
+   //       console.log(this.confidantContact);
+        }
+
+
         this.http.get(
           window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=e1e2efd8-1d5f-11e0-b929-000c29ad1d07&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=1",             //URL
           {},         //Data
@@ -386,6 +438,34 @@ public roleViewLevel;
         this.allGLC=data.results.filter(item=>item.encounter.form.uuid=="8377e4ff-d0fe-44a5-81c3-74c9040fd5f8");
 
 
+    // Dados da Consulta Clínica
+
+    // Altura
+    this.http.get(
+    window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=5090AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=12",             //URL
+    {},       //Data
+       {
+        'Content-Type': 'application/json',
+        Authorization: 'Basic ' + btoa(window.localStorage.getItem('username') + ":" + window.localStorage.getItem('password'))
+       } // Headers
+    )
+    .then(response => {
+      var data=JSON.parse(response.data);
+      this.heaghtGeneralLaboratory=data.results.filter(item=>item.encounter.form.uuid=="3c2d563a-5d37-4735-a125-d3943a3de30a");
+
+          // BMI
+    this.http.get(
+      window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=e1da52ba-1d5f-11e0-b929-000c29ad1d07&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=12",             //URL
+      {},       //Data
+         {
+          'Content-Type': 'application/json',
+          Authorization: 'Basic ' + btoa(window.localStorage.getItem('username') + ":" + window.localStorage.getItem('password'))
+         } // Headers
+      )
+      .then(response => {
+        var data=JSON.parse(response.data);
+        this.bmiGeneralLaboratory=data.results.filter(item=>item.encounter.form.uuid=="3c2d563a-5d37-4735-a125-d3943a3de30a");
+
         	//TPT
 		//Data de Inicio TPT
 
@@ -410,6 +490,25 @@ public roleViewLevel;
         this.IPTEndFichaResumo=data.results.filter(item=>item.encounter.form.uuid=="05496c70-845c-40b1-9d28-070f67b3f7da"  && item.value.uuid=="e1d9facc-1d5f-11e0-b929-000c29ad1d07");
         this.IPTEndFichaSeguimento=data.results.filter(item=>item.encounter.form.uuid=="78d47629-5ac4-4e16-8972-2166eef30bfd" && item.value.uuid=="e1d9facc-1d5f-11e0-b929-000c29ad1d07");
 
+        // Data de CTZ
+
+        this.http.get(
+          window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=2616b3c9-9a99-4b9a-b673-10871f4a4c71&v=custom:(obsDatetime,concept:(uuid),value,encounter:(uuid,location.name,form:(uuid,display)))&limit=12",   //URL
+         {},    //Data
+         {
+          'Content-Type': 'application/json',
+           Authorization: 'Basic ' + btoa(window.localStorage.getItem('username') + ":" + window.localStorage.getItem('password'))
+           // Headers
+         }
+          ).then(response => {
+            var data=JSON.parse(response.data);
+
+            //Data de Inicio do CTZ
+             this.CTZStartFichaClinica=data.results.filter(item=>item.value.uuid=="e1d9ef28-1d5f-11e0-b929-000c29ad1d07");
+
+             //Data de FIM do CTZ
+             this.CTZEndFichaClinica=data.results.filter(item=>item.value.uuid=="e1d9facc-1d5f-11e0-b929-000c29ad1d07");
+          // O feixo desse get e' feito no final da classe;
 
         //  TPT Profilaxia
      this.http.get(
@@ -451,8 +550,8 @@ public roleViewLevel;
            this.allIPTStartProfilaxia=this.IPTStartFichaClinicaProfilaxia.concat(this.IPTStartFichaResumoProfilaxia.concat(this.IPTStartFichaSeguimentoProfilaxia));
            this.allIPTEnd=this.IPTEndFichaClinica.concat(this.IPTEndFichaResumo.concat(this.IPTEndFichaSeguimento));
 
-           console.log(this.allIPTStartProfilaxia);
-           console.log(this.allIPTStart);
+          // console.log(this.allIPTStartProfilaxia);
+          // console.log(this.allIPTStart);
 
           this.allIPTStart.forEach(element => {
             this.allIPTStartProfilaxia.forEach(elementb => {
@@ -761,14 +860,35 @@ this.networkFailure();
             this.networkFailure();
           });
 
-
-
-
-
       })
       .catch(response => {
         this.networkFailure();
       });
+
+    })
+    .catch(response => {
+      this.networkFailure();
+    });
+
+  })
+  .catch(response => {
+    this.networkFailure();
+  });
+
+})
+.catch(response => {
+  this.networkFailure();
+});
+
+})
+.catch(response => {
+  this.networkFailure();
+});
+
+})
+.catch(response => {
+  this.networkFailure();
+});
 
 
   }

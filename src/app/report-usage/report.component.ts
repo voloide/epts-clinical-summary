@@ -177,6 +177,7 @@ export class ReportUsageComponent {
 
         for(let cs of this.ClinicalSummaries2){
 
+
           let report = {
                 
                report:cs.report
@@ -191,6 +192,7 @@ export class ReportUsageComponent {
               ,
                 applicationVersion: cs.applicationVersion
               
+
           };
       console.log(report);
       await this.http.post(this.baseUrl +"/ws/rest/v1/clinicalsummary",             //URLL

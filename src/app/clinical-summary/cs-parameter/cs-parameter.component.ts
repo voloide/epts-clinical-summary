@@ -5,6 +5,7 @@ import { SpinnerDialog } from '@ionic-native/spinner-dialog/ngx';
 import { Dialogs } from '@ionic-native/dialogs/ngx';
 import { Router } from '@angular/router';
 import { HTTP } from '@ionic-native/http/ngx';
+import { Console } from 'console';
 
 @Component({
   selector: 'cs-paramerter',
@@ -45,6 +46,7 @@ export class CsParameterComponent {
   }
 
   async confirmReport(patient) {
+
     let gender = patient.person.gender;
     if (gender == 'F') {
       gender = 'a'
@@ -71,7 +73,7 @@ export class CsParameterComponent {
     this.newPatients = [];
     this.index = this.index + 50;
 
-    var newURL= encodeURI(window.localStorage.getItem('url') + "/ws/rest/v1/patient?q=" + this.search + "&v=custom:(uuid,display,identifiers:(uuid,location:(name)),person:(gender,age,dead,birthdate,addresses:(display,preferred,address5),attributes:(display))&limit=50&startIndex=" + this.index);
+    var newURL= encodeURI(window.localStorage.getItem('url') + "/ws/rest/v1/patient?q=" + this.search + "&v=custom:(uuid,display,identifiers:(uuid,location:(name)),person:(gender,age,dead,birthdate,addresses:(display,preferred,address1,address3,address5,address6),attributes:(display))&limit=50&startIndex=" + this.index);
 
     this.http.get(
       newURL,             //URL
@@ -126,8 +128,7 @@ export class CsParameterComponent {
 
       if ((this.search.match(/\//g) || []).length==2&&this.search.replace(/\s/g, "").length>12) {
 
-        var newURL= encodeURI(window.localStorage.getItem('url') + "/ws/rest/v1/patient?identifier=" + this.search.replace(/\s/g, "") + "&v=custom:(uuid,display,identifiers:(uuid,location:(name)),person:(gender,age,dead,birthdate,addresses:(display,preferred,address5),attributes:(display))");
-
+        var newURL= encodeURI(window.localStorage.getItem('url') + "/ws/rest/v1/patient?identifier=" + this.search.replace(/\s/g, "") + "&v=custom:(uuid,display,identifiers:(uuid,location:(name)),person:(gender,age,dead,birthdate,addresses:(display,preferred,address1,address3,address5,address6),attributes:(display))");
 
         this.storage.set('search-criteria', this.search);
         this.http.get(
@@ -141,6 +142,7 @@ export class CsParameterComponent {
           .then(response => {
 
             this.patients = JSON.parse(response.data);
+
             this.patients = this.patients.results;
             this.count = this.patients.length;
             this.spinnerDialog.hide();
@@ -160,7 +162,7 @@ export class CsParameterComponent {
         this.patients = [];
         this.storage.remove('search-criteria');
 
-        var newURL= encodeURI(window.localStorage.getItem('url') + "/ws/rest/v1/patient?q=" + this.search + "&v=custom:(uuid,display,identifiers:(uuid,location:(name)),person:(gender,age,dead,birthdate,addresses:(display,preferred,address5),attributes:(display))&limit=50&startIndex=" + this.index);
+        var newURL= encodeURI(window.localStorage.getItem('url') + "/ws/rest/v1/patient?q=" + this.search + "&v=custom:(uuid,display,identifiers:(uuid,location:(name)),person:(gender,age,dead,birthdate,addresses:(display,preferred,address1,address3,address5,address6),attributes:(display))&limit=50&startIndex=" + this.index);
 
         this.http.get(
           newURL,             //URL
@@ -171,8 +173,6 @@ export class CsParameterComponent {
           } // Headers
         )
           .then(response => {
-
-            console.log(response)
 
             this.patients = JSON.parse(response.data);
             this.patients = this.patients.results;
