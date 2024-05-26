@@ -15,6 +15,9 @@ import { MenuController } from '@ionic/angular';
 })
 export class SettingsComponent {
 
+  user: any;
+  password: any;
+  baseUrl: any;
 
   public storelocalUser: boolean=true;
   public autoSync: boolean=true;
@@ -41,6 +44,11 @@ export class SettingsComponent {
 //Comment this
 //this.locked=false;
 //this.accepted=true;
+
+
+this.user = JSON.parse(window.localStorage.getItem('user'));
+this.password = window.localStorage.getItem('password');
+this.baseUrl = window.localStorage.getItem('url');
 
 /**/
 this.http.setRequestTimeout(30);
@@ -126,47 +134,28 @@ uploadUsageReports() {
 
         for(let cs of this.ClinicalSummaries2){
 
-          let payload = {
-            eventDate: cs.dateOpened,
-            status:"COMPLETED",
-            completedDate:new Date(),
-            program:"zUzKes56b9I",
-            programStage:"t4XLfwKYcuO",
-            orgUnit:"HxSLEPpHkuK",
-            dataValues:[
-              {
-                 dataElement:"B1ifFNRXkzo",
-                 value:cs.report
-              },
-              {
-                dataElement:"D37WjvR8AIt",
-                value:cs.us
-              },
-              {
-                dataElement:"bRYKxt09HrK",
-                value:cs.username
-              },
-              {
-                dataElement:"iYompJgWa6M",
-                value:""
-              },
-              {
-                dataElement:"PEK0zg7jLdy",
-                value:cs.terms
-              },
-              {
-                dataElement:"N3ZdmJS2k14",
-                value:"v1.8.0"
-              }
-            ]
-          };
 
-      await this.http.post("https://dhis2.fgh.org.mz/api/events",             //URL
-      JSON.stringify(payload),         //Data
-      {
-        'Content-Type': 'application/json',
-        Authorization: 'Basic ' + btoa("clinical.summary:Local123@")
-      } // Headers
+          let report = {
+                
+            report:cs.report
+           ,
+             unidadeSanitaria:cs.us
+           ,
+             userName:cs.username
+           ,
+             terms:cs.terms
+           ,
+             applicationVersion: cs.applicationVersion
+           
+       };
+   console.log(report);
+   await this.http.post(this.baseUrl +"/ws/rest/v1/clinicalsummary",             //URLL
+   JSON.stringify(report),         //Data
+   {
+     'Content-Type': 'application/json',
+     Authorization: 'Basic ' + btoa(this.user+":"+this.password)
+   } // Headers
+
       )
       .then(response => {
 
