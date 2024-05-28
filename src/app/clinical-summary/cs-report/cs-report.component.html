@@ -177,6 +177,52 @@
       </ion-row>
     </div>
       <br>
+
+      <ion-row>
+        <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Alternativo a<br>Primeita Linha</b></ion-col>
+        <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 15px;"  col-6 text-center><b>Fonte</b></ion-col>
+        </ion-row>
+
+  <ion-row *ngFor="let data of alternativeFirstRow">
+    <ion-col class="ion-col-border"  style="padding-top: 18px;"  col-6 text-center>{{data.value.display}}</ion-col>
+       <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
+       </ion-row>
+  <ion-row *ngIf="alternativeFirstRow.length<1">
+    <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
+    <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">FICHA RESUMO</span></ion-col>
+      </ion-row>
+    <br>
+
+    <ion-row>
+      <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Mudança para <br>Segunda Linha</b></ion-col>
+      <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 15px;"  col-6 text-center><b>Fonte</b></ion-col>
+      </ion-row>
+
+<ion-row *ngFor="let data of switchSecondRow">
+  <ion-col class="ion-col-border"  style="padding-top: 18px;"  col-6 text-center>{{data.value.display}}</ion-col>
+     <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
+     </ion-row>
+<ion-row *ngIf="switchSecondRow.length<1">
+  <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
+  <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">FICHA RESUMO</span></ion-col>
+    </ion-row>
+  <br>
+
+  <ion-row>
+    <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Mudança para <br>Terceira Linha</b></ion-col>
+    <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 15px;"  col-6 text-center><b>Fonte</b></ion-col>
+    </ion-row>
+
+<ion-row *ngFor="let data of switchThirdRow">
+<ion-col class="ion-col-border"  style="padding-top: 18px;"  col-6 text-center>{{data.value.display}}</ion-col>
+   <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
+   </ion-row>
+<ion-row *ngIf="switchThirdRow.length<1">
+<ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
+<ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">FICHA RESUMO</span></ion-col>
+  </ion-row>
+<br>
+
      </ion-grid>
     </ion-slide>
     <!-- Tela de Levantamentos de ARV -->
@@ -458,6 +504,42 @@
           </ion-toolbar>
 
           <ion-grid *ngIf="heaghtGeneralLaboratory&&bmiGeneralLaboratory" style="font-size: 16px;">
+
+          <ion-row>
+              <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Data da próxima <br> consulta </b></ion-col>
+              <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 15px;"  col-6 text-center><b>Fonte</b></ion-col>
+              </ion-row>
+
+            <ion-row *ngFor="let data of dateNextAppointment">
+              <ion-col class="ion-col-border" col-6 style="font-size: 14px; padding-top: 18px;">{{data.value | date:'dd-MM-yyyy' }}</ion-col>
+              <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px; color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span> </ion-col>
+
+            </ion-row>
+
+            <ion-row *ngIf="dateNextAppointment.length<1">
+            <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
+            <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">FICHA CLINICA</span></ion-col>
+            </ion-row>
+
+          <br>
+
+            <ion-row>
+              <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Peso </b></ion-col>
+              <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 15px;"  col-6 text-center><b>Fonte</b></ion-col>
+              </ion-row>
+
+            <ion-row *ngFor="let data of weight">
+              <ion-col class="ion-col-border" col-6 style="font-size: 14px; padding-top: 18px;">{{data.value}}</ion-col>
+              <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px; color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span> </ion-col>
+
+            </ion-row>
+
+      <ion-row *ngIf="weight.length<1">
+        <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
+        <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">FICHA CLINICA</span></ion-col>
+          </ion-row>
+
+          <br>
 
             <ion-row>
               <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Altura</b></ion-col>
