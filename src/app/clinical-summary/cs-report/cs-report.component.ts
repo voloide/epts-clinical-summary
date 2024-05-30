@@ -30,6 +30,8 @@ public ClinicalSummaries: any[]=[];
 public CTZStartFichaClinica;CTZEndFichaClinica;
 public heaghtGeneralLaboratory; bmiGeneralLaboratory;
 public confidentesName; confidantContact;
+public regimeChangeHistory; alternativeFirstRow; switchSecondRow; switchThirdRow;
+public dateNextAppointment; weight;
 
 // Vars for profilaxia estado
 public IPTStartFichaClinicaProfilaxia;IPTStartFichaResumoProfilaxia;IPTStartFichaSeguimentoProfilaxia;
@@ -88,6 +90,12 @@ public roleViewLevel;
 
     this.confidentesName=null;
     this.confidantContact=null;
+
+    this.alternativeFirstRow=null;
+    this.switchSecondRow=null;
+    this.switchThirdRow=null;
+    this.dateNextAppointment=null;
+    this.weight=null;
 
     this.chart1=false;
     this.chart2=true;
@@ -222,6 +230,46 @@ public roleViewLevel;
 
                //ARRAY CONCAT
               // console.log(this.allVLsV2)
+
+                  //Regime Change History
+                  this.http.get(
+                    window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=618650c6-90c3-4acd-ae4d-ffb2f6452a5b&v=custom:(obsDatetime,value,comment,encounter:(uuid,location.name,form:(uuid,display)))",             //URL
+                    {},         //Data
+                    {
+                      'Content-Type': 'application/json',
+                      Authorization: 'Basic ' + btoa(window.localStorage.getItem('username') + ":" + window.localStorage.getItem('password'))
+                    } // Headers
+                  )
+                    .then(response => {
+                      var data=JSON.parse(response.data);
+                      this.alternativeFirstRow=data.results.filter(item=>item.encounter.form.uuid=="05496c70-845c-40b1-9d28-070f67b3f7da");
+
+                  //switch the Second Row
+                  this.http.get(
+                    window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=79c143ea-eeeb-4cdb-bfd7-fed8f029c15b&v=custom:(obsDatetime,value,comment,encounter:(uuid,location.name,form:(uuid,display)))",             //URL
+                    {},         //Data
+                    {
+                      'Content-Type': 'application/json',
+                      Authorization: 'Basic ' + btoa(window.localStorage.getItem('username') + ":" + window.localStorage.getItem('password'))
+                    } // Headers
+                  )
+                    .then(response => {
+                      var data=JSON.parse(response.data);
+                      this.switchSecondRow=data.results.filter(item=>item.encounter.form.uuid=="05496c70-845c-40b1-9d28-070f67b3f7da");
+
+
+                  //switch the Third Row
+                  this.http.get(
+                    window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=4281f035-183f-407d-8286-92613f3039c8&v=custom:(obsDatetime,value,comment,encounter:(uuid,location.name,form:(uuid,display)))",             //URL
+                    {},         //Data
+                    {
+                      'Content-Type': 'application/json',
+                      Authorization: 'Basic ' + btoa(window.localStorage.getItem('username') + ":" + window.localStorage.getItem('password'))
+                    } // Headers
+                  )
+                    .then(response => {
+                      var data=JSON.parse(response.data);
+                      this.switchThirdRow=data.results.filter(item=>item.encounter.form.uuid=="05496c70-845c-40b1-9d28-070f67b3f7da");
 
 
                     //Harmonizacao de Nomes CV
@@ -439,6 +487,33 @@ public roleViewLevel;
 
 
     // Dados da Consulta Clínica
+    // Data da consulta mais recente
+
+            // Data da próxima consulta
+            this.http.get(
+              window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=e1dae630-1d5f-11e0-b929-000c29ad1d07&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=1",             //URL
+              {},       //Data
+                 {
+                  'Content-Type': 'application/json',
+                  Authorization: 'Basic ' + btoa(window.localStorage.getItem('username') + ":" + window.localStorage.getItem('password'))
+                 } // Headers
+              )
+              .then(response => {
+                var data=JSON.parse(response.data);
+                this.dateNextAppointment=data.results.filter(item=>item.encounter.form.uuid=="3c2d563a-5d37-4735-a125-d3943a3de30a");
+
+        // Peso
+        this.http.get(
+          window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=12",             //URL
+          {},       //Data
+             {
+              'Content-Type': 'application/json',
+              Authorization: 'Basic ' + btoa(window.localStorage.getItem('username') + ":" + window.localStorage.getItem('password'))
+             } // Headers
+          )
+          .then(response => {
+            var data=JSON.parse(response.data);
+            this.weight=data.results.filter(item=>item.encounter.form.uuid=="3c2d563a-5d37-4735-a125-d3943a3de30a");
 
     // Altura
     this.http.get(
@@ -874,6 +949,31 @@ this.networkFailure();
   .catch(response => {
     this.networkFailure();
   });
+
+})
+.catch(response => {
+  this.networkFailure();
+});
+
+})
+.catch(response => {
+  this.networkFailure();
+});
+
+})
+.catch(response => {
+  this.networkFailure();
+});
+
+})
+.catch(response => {
+  this.networkFailure();
+});
+
+})
+.catch(response => {
+  this.networkFailure();
+});
 
 })
 .catch(response => {
