@@ -136,21 +136,6 @@ export class LoginFormComponent {
     return o1 && o2 ? o1.id === o2.id : o1 === o2;
   }
 
-  handleChange1(ev) {
-    this.selectedPartiner = ev.target.value;
-    console.log(JSON.stringify(this.selectedPartiner));
-
-    console.log('handleChange');
-
-    this.storage.set('currpartner',this.selectedPartiner);
-    //window.localStorage.setItem('currpartner',JSON.stringify(this.selectedPartiner));
-
-
-    console.log(JSON.stringify(this.selectedPartiner));
-    console.log(this.selectedPartiner);
-
-  }
-
   showPassword() {
     this.showPass = !this.showPass;
 
