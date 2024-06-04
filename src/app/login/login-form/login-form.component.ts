@@ -375,7 +375,7 @@ this.isAddHealthFacility = true;
 
         this.color = "danger";
             this.isDisabled = false;
-            this.dialogs.alert("Escreva um Nome válida!","Erro ao gravar O Nome da Unidade Sanitaria");
+            this.dialogs.alert("Escreva um Nome válido!","Erro ao gravar O Nome da Unidade Sanitaria");
 
             return;
 
@@ -392,7 +392,7 @@ this.isAddHealthFacility = true;
      }
 
       if(this.isAddHealthFacility){
-        this.spinnerDialog.show(null,"Adicionando uma Unidade...",true);
+        this.spinnerDialog.show(null,"Adicionando Unidade Sanitária",true);
       }else{
         this.spinnerDialog.show(null,"Gravando a URL...",true);
       }

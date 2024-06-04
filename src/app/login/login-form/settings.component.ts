@@ -228,7 +228,7 @@ uploadUsageReports() {
     var confirm = await this.dialogs.confirm('Deseja Adicionar mais uma unidade Sanitária?', 'Confirmação', ['Sim', 'Não']);
 
     if(confirm == 1){
-      this.spinnerDialog.show(null, "Adicionando uma unidade ", true);
+      this.spinnerDialog.show(null, "Adicionando unidade sanitária ", true);
 
       this.storage.remove('healthfacility');
       this.storage.remove('selectedConfiguration');
