@@ -62,9 +62,8 @@
           Unidade Sanitária
         </ion-label>
 
-        <ion-select position="stacked"
-        aria-label="Select"
-        [compareWith]="compareWith"
+        <ion-select
+
         placeholder="Selecione"
         (ionChange)="handleChange($event)">
         <ion-select-option *ngFor="let configuracoe of configuracoes" [value]="configuracoe">{{ configuracoe.healthfacility }}</ion-select-option>
@@ -81,7 +80,7 @@
         <ion-input [(ngModel)]="localUser.username" type="text" value="" formControlName="username" placeholder="Escreva o username">        </ion-input>
         <ion-icon name="person" slot="start"  size="small" class="ion-align-self-center"></ion-icon>
       </ion-item>
-       
+
       <ion-item *ngIf="!locked&&accepted" >
         <ion-label position="stacked">
           Password
