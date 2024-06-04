@@ -104,6 +104,10 @@
           <ion-button color="success" expand="block" (click)="setURL()">ADD UNIDADE SANITARIA</ion-button>
         </div>
 
+        <div padding *ngIf="locked&&isAddHealthFacility" class="ion-margin-top">
+          <ion-button color="warning" expand="block" (click)="cancelAddUS()">CANCELAR</ion-button>
+        </div>
+
       <ion-item *ngIf="!locked&&accepted" class="ion-hide">
         <ion-label>Recordar utilizador</ion-label>
         <ion-checkbox [(ngModel)]="storelocalUser" formControlName="storelocalUser"></ion-checkbox>

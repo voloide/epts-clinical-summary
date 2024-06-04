@@ -93,7 +93,7 @@ export class LoginFormComponent {
         name: 'JHPIEGO',
         description: 'JHPIEGO'
       }
-    ]; 
+    ];
 
   constructor(
     private appService: AppService,
@@ -148,7 +148,7 @@ export class LoginFormComponent {
 
     console.log(JSON.stringify(this.selectedPartiner));
     console.log(this.selectedPartiner);
-   
+
   }
 
   showPassword() {
@@ -226,7 +226,7 @@ if(data!==null){
         if(!this.locked&&!this.accepted){
 
           var confirm=await this.dialogs.confirm('O utilizador deste aplicativo se compromete a fazer uso adequado dos conteúdos e das informações que o aplicativo oferece respeitando as políticas de sigilo e confidencialidade em vigor na organização;\n\na) Ao acessar este sistema, você está prestes a visualizar informações altamente confidenciais de utentes. É sua responsabilidade protegê-las adequadamente e usá-las somente para os fins autorizados. A privacidade dos utentes é essencial para nossa missão. \n\nb) O utilizador não deve se envolver em actividades que sejam ilegais ou contrárias à boa fé do compromisso sigilo e confidencialidade durante a utilização do aplicativo;\n\nc) O utilizador não deve difundir o conteúdo do aplicativo (ex.: informação mostrada sobre os pacientes, credenciais de acesso).', 'Política de Privacidade e Termos de Uso', ['Concordo', 'Não concordo']);
-        
+
      if (confirm==1){
 
           this.storage.set('accepted','YES');
@@ -283,7 +283,7 @@ this.storage.get('configuracoes').then((data) => {
             }
             });
 
-           
+
 
             this.storelocalUser=true;
 
@@ -466,6 +466,16 @@ this.storage.set('configuracoes', this.configuracoes)
 
   }
 
+  cancelAddUS(){
+
+    this.locked=false;
+    this.accepted=true;
+    this.indexuser.accepted="YES";
+    this.indexuser.key="YES";
+
+  }
+
+
   handleChange(ev){
 
     this.indexuser = ev.target.value;
@@ -621,7 +631,7 @@ uploadUsageReports() {
         for(let cs of this.ClinicalSummaries2){
 
           let report = {
-                
+
                report:cs.report
               ,
                 unidadeSanitaria:cs.us
@@ -631,7 +641,7 @@ uploadUsageReports() {
                 terms:cs.terms
               ,
                 applicationVersion: cs.applicationVersion
-              
+
           };
       console.log(report);
       await this.http.post(this.localUser.url +"/ws/rest/v1/clinicalsummary",             //URLL
