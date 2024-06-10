@@ -95,8 +95,9 @@
       <div *ngIf="!locked&&accepted" class="ion-margin-top">
         <ion-button color="primary" expand="block" (click)="logoutLogin()" >ENTRAR</ion-button>
       </div>
+      <br/>
 
-      <ion-button *ngIf="!locked&&accepted" color="primary"  expand="block" (click)="addHealthFacility()">ADICIONAR UNIDADE SANITARIA</ion-button>
+      <ion-button *ngIf="!locked&&accepted" color="warning" style="margin-top: 3px;" expand="block" (click)="addHealthFacility()">ADICIONAR UNIDADE SANITARIA</ion-button>
 
       <div padding *ngIf="locked&&!isAddHealthFacility" class="ion-margin-top">
         <ion-button color="success" expand="block" (click)="setURL()">GRAVAR URL</ion-button>
