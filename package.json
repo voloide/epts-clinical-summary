@@ -33,6 +33,7 @@
     "jspdf-autotable": "^3.5.14",
     "rxjs": "~6.6.0",
     "tslib": "^2.1.0",
+    "web": "0.0.2",
     "zone.js": "~0.10.2"
   },
   "devDependencies": {

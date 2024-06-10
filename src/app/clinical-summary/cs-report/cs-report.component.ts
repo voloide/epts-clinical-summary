@@ -16,12 +16,12 @@ export class CsReportComponent  {
   public searchParams;chart1;chart2;chart3;cabinet;door;timeOfDay;
 
 //Vars
-public allCD4Abs;allCD4Coverage;allHGB;allVLCopias;allAST;allALT;allAMI;allGLC;allCD4AbsFSR;allCD4CoverageFSR;allCD4AbsFLG;allCD4CoverageFLG;
+public allCD4Abs;allCD4Coverage;allHGB;allVLCopias;allAST;allALT;allAMI;allGLC;allCD4AbsFSR;allCD4CoverageFSR;allCD4AbsFLG;allCD4CoverageFLG;allPCR
 
 
 //NewVars
 public IPTStartFichaClinica;IPTEndFichaClinica;IPTStartFichaResumo;IPTEndFichaResumo;IPTStartFichaSeguimento;IPTEndFichaSeguimento;IPTEndFichaFILT;allVLCopiasV2;
-public allGenexpert;allBaciloscopia;rastreioCacum;rastreioTBLAM;
+public allGenexpert;allBaciloscopia;rastreioCacum;rastreioTBLAM;HPVDNAResult;programEnroll;
 public allVLCopiasFSR;allVLCopiasV2FSR;allVLCopiasFC;allVLCopiasV2FC;ARTPickupRegime;ARTPickupNextDate;ARTPickupMasterCard;
 public allVLsV3;allVLsV2;allVLs;allIPTStart;allIPTStartProfilaxia;allIPTEnd;allIPTEndProfilaxia;
 public allTBLAM;rastreioTBLAMLabGeral;rastreioTBLAMLabGeralPositividade;rastreioTBLAMELab;rastreioTBLAMELabPositividade;rastreioTBLAMFichaClinica;rastreioTBLAMFichaClinicaPositividade;
@@ -38,6 +38,13 @@ public IPTStartFichaClinicaProfilaxia;IPTStartFichaResumoProfilaxia;IPTStartFich
 public IPTEndFichaClinicaProfilaxia;IPTEndFichaResumoProfilaxia;IPTEndFichaSeguimentoProfilaxia;
 //Data INicio Tarv
 public ARTStartDate;
+public HfARTStart;
+public PregnancyAtARTStart;
+public WHOStagingAtARTStart;
+public mds;
+public mdsState;
+public pregnancy;
+public brestFeeding;
 
 
 appVersion: any;
@@ -62,12 +69,20 @@ public roleViewLevel;
     this.allALT=null;
     this.allAMI=null;
     this.allGLC=null;
+    this.allPCR=null;
     this.ARTStartDate=null;
+    this.WHOStagingAtARTStart=null;
+    this.PregnancyAtARTStart=null;
+    this.HfARTStart=null;
+    this.mds=null;
+    this.mdsState=null;
+    this.pregnancy=null;
+    this.brestFeeding=null;
 
     this.roleViewLevel = window.localStorage.getItem('roleViewLevel')
     //new VArs
     this.IPTStartFichaClinica=null;this.IPTEndFichaClinica=null;this.IPTStartFichaResumo=null;this.IPTEndFichaResumo=null;this.IPTStartFichaSeguimento=null;this.IPTEndFichaSeguimento=null;this.IPTEndFichaFILT=null;
-    this.allGenexpert=null;this.allBaciloscopia=null;
+    this.allGenexpert=null;this.allBaciloscopia=null;this.HPVDNAResult=null;this.programEnroll=null;
     this.allVLCopiasFSR=null;this.allVLCopiasV2FSR=null;this.allVLCopiasFC=null;this.allVLCopiasV2FC=null;
     this.ARTPickupRegime=null;this.ARTPickupNextDate=null;this.ARTPickupMasterCard=null;
     this.allVLs=null;this.allVLsV2=null;this.allIPTStart=null;this.allIPTStartProfilaxia=null;this.allIPTEnd=null;this.allIPTEndProfilaxia=null;
@@ -144,11 +159,19 @@ public roleViewLevel;
     this.allALT=null;
     this.allAMI=null;
     this.allGLC=null;
+    this.allPCR;
     this.ARTStartDate=null;
+    this.WHOStagingAtARTStart=null;
+    this.PregnancyAtARTStart=null;
+    this.HfARTStart=null;
+    this.mds=null;
+    this.mdsState=null;
+    this.pregnancy=null;
+    this.brestFeeding=null;
 
     //new VArs
     this.IPTStartFichaClinica=null;this.IPTEndFichaClinica=null;this.IPTStartFichaResumo=null;this.IPTEndFichaResumo=null;this.IPTStartFichaSeguimento=null;this.IPTEndFichaSeguimento=null;this.IPTEndFichaFILT=null;
-    this.allGenexpert=null;this.allBaciloscopia=null;
+    this.allGenexpert=null;this.allBaciloscopia=null;this.HPVDNAResult=null;this.programEnroll=null;
     this.allVLCopiasFSR=null;this.allVLCopiasV2FSR=null;this.allVLCopiasFC=null;this.allVLCopiasV2FC=null;
     this.ARTPickupRegime=null;this.ARTPickupNextDate=null;this.ARTPickupMasterCard=null;
     this.allVLs=null;this.allVLsV3=null;this.allVLsV2=null;this.allIPTStart=null;this.allIPTEnd=null;
@@ -347,7 +370,31 @@ public roleViewLevel;
             var data=JSON.parse(response.data);
             this.rastreioCacum=data.results;
             
-
+            //Most Recent HPV-DNA Result and Date
+            this.http.get(
+              window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=527d62e2-b43e-4523-835f-2f0919ef46c5&v=custom:(obsDatetime,value,encounter:(uuid,encounterDatetime,encounterType:(uuid),location.name,form:(uuid,display)))&limit=12",             //URL
+              {},       //Data
+                 {
+                  'Content-Type': 'application/json',
+                  Authorization: 'Basic ' + btoa(window.localStorage.getItem('username') + ":" + window.localStorage.getItem('password'))
+                 } // Headers
+              )
+              .then(response => {
+                var data=JSON.parse(response.data);
+                this.HPVDNAResult=data.results.filter(item=>item.encounter.encounterType.uuid=="e2791f26-1d5f-11e0-b929-000c29ad1d07");
+//Last State from Program Enrollment
+  this.http.get(
+    window.localStorage.getItem('url') + "//ws/rest/v1/programenrollment?patient="+this.patient.uuid+"&v=custom:(uuid,display,dateEnrolled,dateCompleted,states,patient:(uuid))",             //URL
+    {},       //Data
+      {
+        'Content-Type': 'application/json',
+        Authorization: 'Basic ' + btoa(window.localStorage.getItem('username') + ":" + window.localStorage.getItem('password'))
+      } // Headers
+    )
+    .then(response => {
+      var data=JSON.parse(response.data);
+      this.programEnroll=data.results[0];
+      console.log(this.programEnroll);
         //Confidente
         //confidente's Name
     this.http.get(
@@ -361,11 +408,6 @@ public roleViewLevel;
       .then(response => {
         var data=JSON.parse(response.data);
         this.confidentesName=data.results.filter(item=>item.encounter.form.uuid=="05496c70-845c-40b1-9d28-070f67b3f7da");
-
-        console.log("confidente's Name ");
-        if(this.confidentesName >= 1){
-     //     console.log(this.confidentesName);
-        }
 
     //confidant Contact
     this.http.get(
@@ -485,13 +527,25 @@ public roleViewLevel;
         var data=JSON.parse(response.data);
         this.allGLC=data.results.filter(item=>item.encounter.form.uuid=="8377e4ff-d0fe-44a5-81c3-74c9040fd5f8");
 
+        //PCR
+        this.http.get(
+          window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=e1d64968-1d5f-11e0-b929-000c29ad1d07&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=12",             //URL
+          {},         //Data
+          {
+            'Content-Type': 'application/json',
+            Authorization: 'Basic ' + btoa(window.localStorage.getItem('username') + ":" + window.localStorage.getItem('password'))
+          } // Headers
+        )
+          .then(response => {
+            var data=JSON.parse(response.data);
+            this.allPCR=data.results.filter(item=>item.encounter.form.uuid=="8377e4ff-d0fe-44a5-81c3-74c9040fd5f8");
 
     // Dados da Consulta Clínica
     // Data da consulta mais recente
 
             // Data da próxima consulta
             this.http.get(
-              window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=e1dae630-1d5f-11e0-b929-000c29ad1d07&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=1",             //URL
+              window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=e1d7f61e-1d5f-11e0-b929-000c29ad1d07&v=custom:(obsDatetime,value,encounter:(uuid,encounterDatetime,location.name,form:(uuid,display)))&limit=1",             //URL
               {},       //Data
                  {
                   'Content-Type': 'application/json',
@@ -541,6 +595,56 @@ public roleViewLevel;
         var data=JSON.parse(response.data);
         this.bmiGeneralLaboratory=data.results.filter(item=>item.encounter.form.uuid=="3c2d563a-5d37-4735-a125-d3943a3de30a");
 
+        //MDS
+
+        this.http.get(
+          window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=40a9a12b-1205-4a55-bb93-caf15452bf61&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=5",             //URL
+          {},       //Data
+             {
+              'Content-Type': 'application/json',
+              Authorization: 'Basic ' + btoa(window.localStorage.getItem('username') + ":" + window.localStorage.getItem('password'))
+             } // Headers
+          )
+          .then(response => {
+            var data=JSON.parse(response.data);
+            this.mds=data.results.filter(item=>item.encounter.form.uuid=="3c2d563a-5d37-4735-a125-d3943a3de30a");
+//Estado MDS
+        this.http.get(
+          window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=fef178f2-d4c9-4035-9989-11c9afe81ea3&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=5",             //URL
+          {},       //Data
+             {
+              'Content-Type': 'application/json',
+              Authorization: 'Basic ' + btoa(window.localStorage.getItem('username') + ":" + window.localStorage.getItem('password'))
+             } // Headers
+          )
+          .then(response => {
+            var data=JSON.parse(response.data);
+            this.mdsState=data.results.filter(item=>item.encounter.form.uuid=="3c2d563a-5d37-4735-a125-d3943a3de30a");
+//Gravidez na Última Consulta Clínica
+        this.http.get(
+          window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=e1e056a6-1d5f-11e0-b929-000c29ad1d07&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=1",             //URL
+          {},       //Data
+             {
+              'Content-Type': 'application/json',
+              Authorization: 'Basic ' + btoa(window.localStorage.getItem('username') + ":" + window.localStorage.getItem('password'))
+             } // Headers
+          )
+          .then(response => {
+            var data=JSON.parse(response.data);
+            this.pregnancy=data.results.filter(item=>item.encounter.form.uuid=="3c2d563a-5d37-4735-a125-d3943a3de30a");
+
+            //Lactante na Última Consulta Clínica
+            this.http.get(
+              window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=bc4fe755-fc8f-49b8-9956-baf2477e8313&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=1",             //URL
+              {},       //Data
+                 {
+                  'Content-Type': 'application/json',
+                  Authorization: 'Basic ' + btoa(window.localStorage.getItem('username') + ":" + window.localStorage.getItem('password'))
+                 } // Headers
+              )
+              .then(response => {
+                var data=JSON.parse(response.data);
+                this.brestFeeding=data.results.filter(item=>item.encounter.form.uuid=="3c2d563a-5d37-4735-a125-d3943a3de30a");
         	//TPT
 		//Data de Inicio TPT
 
@@ -789,6 +893,47 @@ this.http.get(
 
     var data=JSON.parse(response.data);
     this.ARTStartDate=data.results;
+//Health Facility at ART start 
+    this.http.get(
+      window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=760180a9-bcf0-4820-8771-d57d73d1f68d&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=1",             //URL
+      {},         //Data
+      {
+        'Content-Type': 'application/json',
+        Authorization: 'Basic ' + btoa(window.localStorage.getItem('username') + ":" + window.localStorage.getItem('password'))
+      } // Headers
+    )
+      .then(response => {
+    
+        var data=JSON.parse(response.data);
+        this.HfARTStart=data.results;
+//Pregnancy Status at ART start
+this.http.get(
+  window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=e1e056a6-1d5f-11e0-b929-000c29ad1d07&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=1",             //URL
+  {},         //Data
+  {
+    'Content-Type': 'application/json',
+    Authorization: 'Basic ' + btoa(window.localStorage.getItem('username') + ":" + window.localStorage.getItem('password'))
+  } // Headers
+)
+  .then(response => {
+
+    var data=JSON.parse(response.data);
+    this.PregnancyAtARTStart=data.results;
+//WHO staging at ART start
+
+this.http.get(
+  window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=e1e53c02-1d5f-11e0-b929-000c29ad1d07&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=1",             //URL
+  {},         //Data
+  {
+    'Content-Type': 'application/json',
+    Authorization: 'Basic ' + btoa(window.localStorage.getItem('username') + ":" + window.localStorage.getItem('password'))
+  } // Headers
+)
+  .then(response => {
+
+    var data=JSON.parse(response.data);
+    this.WHOStagingAtARTStart=data.results;
+
      var clinicalSummary:any={
         report:"Sumário Clínico",
         patient_uuid: this.patient.uuid,
@@ -826,12 +971,62 @@ console.log(response);
       this.networkFailure();
 
     });   
+  })
+  .catch(response => {
 
+console.log(response);
+    this.networkFailure();
+
+  });   
+})
+.catch(response => {
+
+console.log(response);
+  this.networkFailure();
+
+});   
+})
+.catch(response => {
+
+console.log(response);
+  this.networkFailure();
+
+});   
  }).catch(response => {
 console.log(response);
     this.networkFailure();
 
-  });
+  }); 
+}).catch(response => {
+console.log(response);
+   this.networkFailure();
+
+ }); 
+}).catch(response => {
+console.log(response);
+   this.networkFailure();
+
+ });
+}).catch(response => {
+console.log(response);
+   this.networkFailure();
+
+ });
+}).catch(response => {
+console.log(response);
+   this.networkFailure();
+
+ });
+}).catch(response => {
+console.log(response);
+   this.networkFailure();
+
+ });
+}).catch(response => {
+console.log(response);
+   this.networkFailure();
+
+ });
 
 })
 .catch(response => {
@@ -912,6 +1107,10 @@ this.networkFailure();
           });
 
 
+        })
+        .catch(response => {
+          this.networkFailure();
+        });
       })
       .catch(response => {
         this.networkFailure();

@@ -109,7 +109,7 @@
           <ion-icon *ngIf="patient.person.gender=='F'" size="large" name="female-outline" color="danger"></ion-icon>
 <br>
           <ion-badge slot="start" color="light">{{patient.display | splitAndGet:"-":1}}<br>{{patient.display | splitAndGet:"-":0}}<br>Idade: {{patient.person.age}}, {{patient.identifiers[0].location.name}}<span *ngIf="patient.person.dead==true" style="color: red;">, Óbito</span></ion-badge><br>
-          <b>RESULTADO DE CARGA VIRAL <span *ngIf="roleViewLevel !== 'three'">E CD4</span></b>
+          <b>Resultados Laboratoriais</b>
           <br>
           <ion-button (click)="refreshSummary()" color="light" size="small" shape="round" style="margin-bottom: 5px;">
             <ion-icon slot="icon-only" name="refresh"></ion-icon>
@@ -178,53 +178,166 @@
     </div>
       <br>
 
-      <ion-row>
-        <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Alternativo a<br>Primeita Linha</b></ion-col>
-        <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 15px;"  col-6 text-center><b>Fonte</b></ion-col>
-        </ion-row>
+  <ion-row>
+    <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>GeneXpert</b></ion-col>
+    <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Fonte</b></ion-col>
+   </ion-row>
 
-  <ion-row *ngFor="let data of alternativeFirstRow">
-    <ion-col class="ion-col-border"  style="padding-top: 18px;"  col-6 text-center>{{data.value.display}}</ion-col>
-       <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
-       </ion-row>
-  <ion-row *ngIf="alternativeFirstRow.length<1">
-    <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
-    <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">FICHA RESUMO</span></ion-col>
-      </ion-row>
-    <br>
+<ion-row *ngFor="let data of allGenexpert">
+<ion-col class="ion-col-border"  style="padding-top: 18px;"  col-6 text-center>{{data.value.display}}</ion-col>
+<ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
+   </ion-row>
+<ion-row *ngIf="allGenexpert!== null && allGenexpert.length<1">
+<ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
+<ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">LABORATORIO GERAL</span></ion-col>
+  </ion-row>
 
-    <ion-row>
-      <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Mudança para <br>Segunda Linha</b></ion-col>
-      <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 15px;"  col-6 text-center><b>Fonte</b></ion-col>
-      </ion-row>
-
-<ion-row *ngFor="let data of switchSecondRow">
-  <ion-col class="ion-col-border"  style="padding-top: 18px;"  col-6 text-center>{{data.value.display}}</ion-col>
-     <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
-     </ion-row>
-<ion-row *ngIf="switchSecondRow.length<1">
-  <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
-  <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">FICHA RESUMO</span></ion-col>
-    </ion-row>
   <br>
 
   <ion-row>
-    <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Mudança para <br>Terceira Linha</b></ion-col>
+    <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Baciloscopia</b></ion-col>
+  <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Fonte</b></ion-col>
+    </ion-row>
+
+
+<ion-row *ngFor="let data of allBaciloscopia">
+<ion-col class="ion-col-border"  style="padding-top: 18px;"  col-6 text-center>{{data.value.display}}</ion-col>
+<ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
+   </ion-row>
+<ion-row *ngIf="allBaciloscopia.length<1">
+<ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
+<ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">LABORATORIO GERAL</span></ion-col>
+  </ion-row>
+
+  <!--TB LAM-->
+  <br>
+
+  <ion-row>
+    <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-3 text-center><b>TB LAM</b></ion-col>
+    <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 15px;"  col-6 text-center><b>Fonte</b></ion-col>
+  </ion-row>
+
+<ion-row *ngFor="let data of allTBLAM">
+<ion-row style="width: 100%;">
+  <ion-col class="ion-col-border"  style="padding-top: 18px;"  col-3 text-center *ngIf="data.value.display">{{data.value.display}}</ion-col>
+  <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
+</ion-row>
+<ion-row style="width: 100%;">
+  <ion-col class="ion-col-border" col-3 style="font-weight: bold; font-size: 14px; padding-top: 18px;" *ngIf="data.value.comment">TB LAM (Nível de Positividade)</ion-col>
+  <ion-col class="ion-col-border" style="padding-top: 15px;" col-6 text-center *ngIf="data.value.comment">{{data.value.comment}}</ion-col>
+</ion-row>
+</ion-row>
+<ion-row *ngIf="rastreioTBLAMLabGeral.length<1">
+<ion-col  class="ion-col-border" col-3 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
+<ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">LABORATORIO GERAL</span></ion-col>
+</ion-row>
+<ion-row *ngIf="rastreioTBLAMELab.length<1">
+<ion-col  class="ion-col-border" col-3 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
+<ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">FORMULARIO ELECTRONICO DE LABORATORIO</span></ion-col>
+</ion-row>
+<ion-row *ngIf="rastreioTBLAMFichaClinica.length<1">
+<ion-col  class="ion-col-border" col-3 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
+<ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">FICHA CLINICA</span></ion-col>
+</ion-row>
+
+<!--TB LAM END-->
+  <br>
+
+<div *ngIf="roleViewLevel === 'five'">
+  <ion-row >
+    <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Hemoglobina<br>(HGB ou HB)</b></ion-col>
     <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 15px;"  col-6 text-center><b>Fonte</b></ion-col>
     </ion-row>
 
-<ion-row *ngFor="let data of switchThirdRow">
-<ion-col class="ion-col-border"  style="padding-top: 18px;"  col-6 text-center>{{data.value.display}}</ion-col>
-   <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
+<ion-row *ngFor="let data of allHGB">
+<ion-col class="ion-col-border"  style="padding-top: 18px;"  col-6 text-center>{{data.value}}</ion-col>
+<ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
    </ion-row>
-<ion-row *ngIf="switchThirdRow.length<1">
+<ion-row *ngIf="allHGB.length<1">
 <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
-<ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">FICHA RESUMO</span></ion-col>
+<ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">LABORATORIO GERAL</span></ion-col>
   </ion-row>
-<br>
 
-     </ion-grid>
-    </ion-slide>
+
+  <br>
+  <ion-row>
+    <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Aspartato<br>Aminotransferase</b></ion-col>
+    <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 15px;"  col-6 text-center><b>Fonte</b></ion-col>
+    </ion-row>
+
+<ion-row *ngFor="let data of allAST">
+<ion-col class="ion-col-border"  style="padding-top: 18px;"  col-6 text-center>{{data.value}}</ion-col>
+<ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
+   </ion-row>
+<ion-row *ngIf="allAST.length<1">
+<ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
+<ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">LABORATORIO GERAL</span></ion-col>
+  </ion-row>
+
+  <br>
+
+  <ion-row>
+    <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Alanina<br>Aminotransferase</b></ion-col>
+  <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 15px;"  col-6 text-center><b>Fonte</b></ion-col>
+    </ion-row>
+
+  <ion-row *ngFor="let data of allALT">
+  <ion-col class="ion-col-border"  style="padding-top: 18px;"  col-6 text-center>{{data.value}}</ion-col>
+  <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
+    </ion-row>
+  <ion-row *ngIf="allALT.length<1">
+  <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
+  <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">LABORATORIO GERAL</span></ion-col>
+    </ion-row>
+
+    <br>
+
+    <ion-row>
+      <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Amilase<br>(AMI)</b></ion-col>
+    <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 15px;"  col-6 text-center><b>Fonte</b></ion-col>
+      </ion-row>
+
+  <ion-row *ngFor="let data of allAMI">
+  <ion-col class="ion-col-border"  style="padding-top: 18px;"  col-6 text-center>{{data.value}}</ion-col>
+  <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
+    </ion-row>
+  <ion-row *ngIf="allAMI.length<1">
+  <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
+  <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">LABORATORIO GERAL</span></ion-col>
+    </ion-row>
+
+    <br>
+
+    <ion-row>
+      <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Glucose<br>(GLC)</b></ion-col>
+    <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 15px;"  col-6 text-center><b>Fonte</b></ion-col>
+      </ion-row>
+
+    <ion-row *ngFor="let data of allGLC">
+      <ion-col class="ion-col-border"  style="padding-top: 18px;"  col-6 text-center>{{data.value}}</ion-col>
+      <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
+    </ion-row>
+    <ion-row *ngIf="allGLC.length<1">
+      <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
+      <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">LABORATORIO GERAL</span></ion-col>
+    </ion-row>
+    <br>
+
+    <ion-row>
+      <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>PCR</b></ion-col>
+      <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 15px;"  col-6 text-center><b>Fonte</b></ion-col>
+    </ion-row>
+    <ion-row *ngFor="let data of allPCR">
+      <ion-col class="ion-col-border"  style="padding-top: 18px;"  col-6 text-center>{{data.value}}</ion-col>
+      <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
+    </ion-row>
+    <ion-row *ngIf="allPCR.length<1">
+      <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
+      <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">LABORATORIO GERAL</span></ion-col>
+    </ion-row>
+  </div>
+  </ion-grid>
+</ion-slide>
     <!-- Tela de Levantamentos de ARV -->
     <ion-slide>
       <ion-toolbar color="light" style="margin-top: 5px;margin-bottom: 5px;">
@@ -243,22 +356,7 @@
         </span>
       </ion-toolbar>
 
-      <ion-grid style="font-size: 16px;" *ngIf="ARTPickupNextDate&&ARTPickupRegime&&allVLs&&ARTStartDate">
-
-
-        <ion-row *ngIf="roleViewLevel ==='one' || roleViewLevel ==='three' || roleViewLevel === 'five'">
-          <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Data de Início TARV</b></ion-col>
-          <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 7px;"  col-6 text-center><b>Fonte</b></ion-col>
-          </ion-row>
-
-        <ion-row *ngIf="roleViewLevel ==='one' || roleViewLevel ==='three' || roleViewLevel === 'five'">
-          <ion-col *ngIf="ARTPickupRegime[0]" style="padding-top: 18px;" class="ion-col-border" col-6 text-center>{{ARTStartDate[0].value | date:'dd-MM-yyyy'}}</ion-col>
-          <ion-col *ngIf="ARTPickupRegime[0]" class="ion-col-border" col-6 style="font-size: 14px;">{{ARTStartDate[0].obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{ARTStartDate[0].encounter.form.display}}<br>{{ARTStartDate[0].encounter['location.name']}}</span></ion-col>
-          <ion-col *ngIf="!ARTPickupRegime[0]" class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
-          <ion-col *ngIf="!ARTPickupRegime[0]" class="ion-col-border" col-6><span style="font-size: 13px;">Ficha Mestra / Processo Clínico</span></ion-col>
-          </ion-row>
-
-        <br>
+      <ion-grid style="font-size: 16px;" *ngIf="ARTPickupNextDate&&ARTPickupRegime&&allVLs">
 
         <ion-row *ngIf="roleViewLevel ==='one' || roleViewLevel ==='three' || roleViewLevel === 'five'">
           <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Data do último levantamento de ARV</b></ion-col>
@@ -286,7 +384,6 @@
           <ion-col *ngIf="!ARTPickupRegime[0]" class="ion-col-border" col-6><span style="font-size: 13px;">FILA</span></ion-col>
           </ion-row>
 
-
         <br>
 
         <ion-row>
@@ -300,188 +397,148 @@
           <ion-col *ngIf="!ARTPickupNextDate[0]" class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
         <ion-col *ngIf="!ARTPickupNextDate[0]" class="ion-col-border" col-6><span style="font-size: 13px;">FILA</span></ion-col>
           </ion-row>
-
+          <ion-row>
+            <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Alternativo a<br>Primeita Linha</b></ion-col>
+            <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 15px;"  col-6 text-center><b>Fonte</b></ion-col>
+            </ion-row>
+        
+          <ion-row *ngFor="let data of alternativeFirstRow">
+            <ion-col class="ion-col-border"  style="padding-top: 18px;"  col-6 text-center>{{data.value.display}}</ion-col>
+               <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
+               </ion-row>
+          <ion-row *ngIf="alternativeFirstRow.length<1">
+            <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
+            <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">FICHA RESUMO</span></ion-col>
+              </ion-row>
+            <br>
+        
+            <ion-row>
+              <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Mudança para <br>Segunda Linha</b></ion-col>
+              <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 15px;"  col-6 text-center><b>Fonte</b></ion-col>
+              </ion-row>
+        
+        <ion-row *ngFor="let data of switchSecondRow">
+          <ion-col class="ion-col-border"  style="padding-top: 18px;"  col-6 text-center>{{data.value.display}}</ion-col>
+             <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
+             </ion-row>
+        <ion-row *ngIf="switchSecondRow.length<1">
+          <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
+          <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">FICHA RESUMO</span></ion-col>
+            </ion-row>
+          <br>
+        
+          <ion-row>
+            <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Mudança para <br>Terceira Linha</b></ion-col>
+            <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 15px;"  col-6 text-center><b>Fonte</b></ion-col>
+            </ion-row>
+        
+            <ion-row *ngFor="let data of switchThirdRow">
+              <ion-col class="ion-col-border"  style="padding-top: 18px;"  col-6 text-center>{{data.value.display}}</ion-col>
+              <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
+            </ion-row>
+            <ion-row *ngIf="switchThirdRow.length<1">
+              <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
+              <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">FICHA RESUMO</span></ion-col>
+            </ion-row>
+          <br>
 
       </ion-grid>
 
       <br>
 
     </ion-slide>
-    <!-- Tela de Laboratorio -->
-    <ion-slide *ngIf="roleViewLevel ==='one' || roleViewLevel === 'five'">
+    <!-- Tela de Levantamentos -->
+    
+<!-- Dados do Início TARV -->
+<ion-slide>
+  <ion-toolbar color="light" style="margin-top: 5px;margin-bottom: 5px;">
 
-      <ion-toolbar color="light" style="margin-top: 5px;margin-bottom: 5px;">
+    <span style="font-size: 17px;margin-top: 3px;">
 
-        <span style="font-size: 17px;margin-top: 3px;">
-
-          <ion-icon *ngIf="patient.person.gender=='M'" size="large" name="male-outline" color="primary"></ion-icon>
-          <ion-icon *ngIf="patient.person.gender=='F'" size="large" name="female-outline" color="danger"></ion-icon>
+      <ion-icon *ngIf="patient.person.gender=='M'" size="large" name="male-outline" color="primary"></ion-icon>
+      <ion-icon *ngIf="patient.person.gender=='F'" size="large" name="female-outline" color="danger"></ion-icon>
 <br>
-          <ion-badge slot="start" color="light">{{patient.display | splitAndGet:"-":1}}<br>{{patient.display | splitAndGet:"-":0}}<br>Idade: {{patient.person.age}}, {{patient.identifiers[0].location.name}}<span *ngIf="patient.person.dead==true" style="color: red;">, Óbito</span></ion-badge><br>
-          <b>LABORATÓRIO - OUTRO</b>
-          <br>
-          <ion-button (click)="refreshSummary()" color="light" size="small" shape="round" style="margin-bottom: 5px;">
-            <ion-icon slot="icon-only" name="refresh"></ion-icon>
-          </ion-button>
-        </span>
-      </ion-toolbar>
-
-      <ion-grid style="font-size: 16px;" *ngIf="allHGB&&allBaciloscopia&&allGenexpert&&allAST&&allALT&&allAMI&&allGLC&&allVLs">
-
-        <ion-row>
-          <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>GeneXpert</b></ion-col>
-          <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Fonte</b></ion-col>
-         </ion-row>
-
-    <ion-row *ngFor="let data of allGenexpert">
-      <ion-col class="ion-col-border"  style="padding-top: 18px;"  col-6 text-center>{{data.value.display}}</ion-col>
-      <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
-         </ion-row>
-    <ion-row *ngIf="allGenexpert.length<1">
-      <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
-      <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">LABORATORIO GERAL</span></ion-col>
-        </ion-row>
-
-        <br>
-
-        <ion-row>
-          <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Baciloscopia</b></ion-col>
-        <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Fonte</b></ion-col>
-          </ion-row>
-
-
-    <ion-row *ngFor="let data of allBaciloscopia">
-      <ion-col class="ion-col-border"  style="padding-top: 18px;"  col-6 text-center>{{data.value.display}}</ion-col>
-      <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
-         </ion-row>
-    <ion-row *ngIf="allBaciloscopia.length<1">
-      <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
-      <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">LABORATORIO GERAL</span></ion-col>
-        </ion-row>
-
-        <!--TB LAM-->
-        <br>
-
-        <ion-row>
-          <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-3 text-center><b>TB LAM</b></ion-col>
-          <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 15px;"  col-6 text-center><b>Fonte</b></ion-col>
-        </ion-row>
-
-    <ion-row *ngFor="let data of allTBLAM">
-      <ion-row style="width: 100%;">
-        <ion-col class="ion-col-border"  style="padding-top: 18px;"  col-3 text-center *ngIf="data.value.display">{{data.value.display}}</ion-col>
-        <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
-      </ion-row>
-      <ion-row style="width: 100%;">
-        <ion-col class="ion-col-border" col-3 style="font-weight: bold; font-size: 14px; padding-top: 18px;" *ngIf="data.value.comment">TB LAM (Nível de Positividade)</ion-col>
-        <ion-col class="ion-col-border" style="padding-top: 15px;" col-6 text-center *ngIf="data.value.comment">{{data.value.comment}}</ion-col>
-      </ion-row>
-    </ion-row>
-    <ion-row *ngIf="rastreioTBLAMLabGeral.length<1">
-      <ion-col  class="ion-col-border" col-3 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
-      <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">LABORATORIO GERAL</span></ion-col>
-      </ion-row>
-    <ion-row *ngIf="rastreioTBLAMELab.length<1">
-      <ion-col  class="ion-col-border" col-3 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
-      <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">FORMULARIO ELECTRONICO DE LABORATORIO</span></ion-col>
-      </ion-row>
-    <ion-row *ngIf="rastreioTBLAMFichaClinica.length<1">
-      <ion-col  class="ion-col-border" col-3 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
-      <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">FICHA CLINICA</span></ion-col>
-      </ion-row>
-      
-      <ion-row *ngIf="allTBLAM.length<1">
-        <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
-        <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">TB LAM</span></ion-col>
-          </ion-row>
-      <!--TB LAM END-->
-        <br>
-
-      <div *ngIf="roleViewLevel === 'five'">
-        <ion-row >
-          <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Hemoglobina<br>(HGB ou HB)</b></ion-col>
-          <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 15px;"  col-6 text-center><b>Fonte</b></ion-col>
-          </ion-row>
-
-    <ion-row *ngFor="let data of allHGB">
-      <ion-col class="ion-col-border"  style="padding-top: 18px;"  col-6 text-center>{{data.value}}</ion-col>
-      <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
-         </ion-row>
-    <ion-row *ngIf="allHGB.length<1">
-      <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
-      <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">LABORATORIO GERAL</span></ion-col>
-        </ion-row>
-
-
-        <br>
-        <ion-row>
-          <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Aspartato<br>Aminotransferase</b></ion-col>
-          <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 15px;"  col-6 text-center><b>Fonte</b></ion-col>
-          </ion-row>
-
-    <ion-row *ngFor="let data of allAST">
-      <ion-col class="ion-col-border"  style="padding-top: 18px;"  col-6 text-center>{{data.value}}</ion-col>
-      <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
-         </ion-row>
-    <ion-row *ngIf="allAST.length<1">
-      <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
-      <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">LABORATORIO GERAL</span></ion-col>
-        </ion-row>
-
-        <br>
-
-        <ion-row>
-          <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Alanina<br>Aminotransferase</b></ion-col>
-        <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 15px;"  col-6 text-center><b>Fonte</b></ion-col>
-          </ion-row>
-
-    <ion-row *ngFor="let data of allALT">
-      <ion-col class="ion-col-border"  style="padding-top: 18px;"  col-6 text-center>{{data.value}}</ion-col>
-      <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
-         </ion-row>
-    <ion-row *ngIf="allALT.length<1">
-      <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
-      <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">LABORATORIO GERAL</span></ion-col>
-        </ion-row>
-
-        <br>
-
-        <ion-row>
-          <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Amilase<br>(AMI)</b></ion-col>
-        <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 15px;"  col-6 text-center><b>Fonte</b></ion-col>
-          </ion-row>
-
-    <ion-row *ngFor="let data of allAMI">
-      <ion-col class="ion-col-border"  style="padding-top: 18px;"  col-6 text-center>{{data.value}}</ion-col>
-      <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
-         </ion-row>
-    <ion-row *ngIf="allAMI.length<1">
-      <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
-      <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">LABORATORIO GERAL</span></ion-col>
-        </ion-row>
-
-        <br>
-
-        <ion-row>
-          <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Glucose<br>(GLC)</b></ion-col>
-        <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 15px;"  col-6 text-center><b>Fonte</b></ion-col>
-          </ion-row>
-
-    <ion-row *ngFor="let data of allGLC">
-      <ion-col class="ion-col-border"  style="padding-top: 18px;"  col-6 text-center>{{data.value}}</ion-col>
-      <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
-    </ion-row>
-    <ion-row *ngIf="allGLC.length<1">
-      <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
-      <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">LABORATORIO GERAL</span></ion-col>
-        </ion-row>
-      </div>
-</ion-grid>
-
-
+      <ion-badge slot="start" color="light">{{patient.display | splitAndGet:"-":1}}<br>{{patient.display | splitAndGet:"-":0}}<br>Idade: {{patient.person.age}}, {{patient.identifiers[0].location.name}}<span *ngIf="patient.person.dead==true" style="color: red;">, Óbito</span></ion-badge><br>
+      <b>Dados do Início TARV</b>
       <br>
+      <ion-button (click)="refreshSummary()" color="light" size="small" shape="round" style="margin-bottom: 5px;">
+        <ion-icon slot="icon-only" name="refresh"></ion-icon>
+      </ion-button>
+    </span>
+  </ion-toolbar>
 
-    </ion-slide>
+  <ion-grid style="font-size: 16px;" *ngIf="ARTStartDate">
+
+
+
+
+<ion-row *ngIf="roleViewLevel ==='one' || roleViewLevel ==='three' || roleViewLevel === 'five'">
+<ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Data de Início TARV</b></ion-col>
+<ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 7px;"  col-6 text-center><b>Fonte</b></ion-col>
+</ion-row>
+
+<ion-row *ngFor="let data of ARTStartDate">
+  <ion-col class="ion-col-border"  style="padding-top: 18px;"  col-6 text-center>{{data.value | date:'dd-MM-yyyy'}}</ion-col>
+  <ion-col class="ion-col-border" col-6 style="font-size: 14px;"><span style="font-size: 13px;color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
+</ion-row>
+<ion-row *ngIf="ARTStartDate.length<1">
+  <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
+  <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">FICHA RESUMO</span></ion-col>
+</ion-row>
+
+
+    <br>
+    <ion-row>
+      <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Unidade Sanitária de Início TARV</b></ion-col>
+      <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 15px;"  col-6 text-center><b>Fonte</b></ion-col>
+      </ion-row>
+  
+      <ion-row *ngFor="let data of HfARTStart">
+        <ion-col class="ion-col-border"  style="padding-top: 18px;"  col-6 text-center>{{data.value}}</ion-col>
+        <ion-col class="ion-col-border" col-6 style="font-size: 14px;"><span style="font-size: 13px;color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
+      </ion-row>
+      <ion-row *ngIf="HfARTStart.length<1">
+        <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
+        <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">FICHA RESUMO</span></ion-col>
+      </ion-row>
+    <br>
+
+    <ion-row>
+      <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Estado de Gravidez no Início TARV</b></ion-col>
+      <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 15px;"  col-6 text-center><b>Fonte</b></ion-col>
+      </ion-row>
+  
+      <ion-row *ngFor="let data of PregnancyAtARTStart">
+        <ion-col class="ion-col-border"  style="padding-top: 18px;"  col-6 text-center>{{data.value.display}}</ion-col>
+        <ion-col class="ion-col-border" col-6 style="font-size: 14px;"><span style="font-size: 13px;color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
+      </ion-row>
+      <ion-row *ngIf="PregnancyAtARTStart.length<1">
+        <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
+        <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">FICHA RESUMO</span></ion-col>
+      </ion-row>
+    <br>
+
+    <ion-row>
+      <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Estado de OMS no Início TARV</b></ion-col>
+      <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 15px;"  col-6 text-center><b>Fonte</b></ion-col>
+      </ion-row>
+  
+      <ion-row *ngFor="let data of WHOStagingAtARTStart">
+        <ion-col class="ion-col-border"  style="padding-top: 18px;"  col-6 text-center>{{data.value.display}}</ion-col>
+        <ion-col class="ion-col-border" col-6 style="font-size: 14px;"><span style="font-size: 13px;color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span></ion-col>
+      </ion-row>
+      <ion-row *ngIf="WHOStagingAtARTStart.length<1">
+        <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
+        <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">FICHA RESUMO</span></ion-col>
+      </ion-row>
+    <br>
+
+    </ion-grid>
+
+  <br>
+
+</ion-slide>
+ <!-- Dados de inicio TARV -->
 
 
         <!-- Dados da Consulta Clínica -->
@@ -504,6 +561,23 @@
           </ion-toolbar>
 
           <ion-grid *ngIf="heaghtGeneralLaboratory&&bmiGeneralLaboratory" style="font-size: 16px;">
+
+            <ion-row>
+              <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Data da consulta <br> mais recente </b></ion-col>
+              <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 15px;"  col-6 text-center><b>Fonte</b></ion-col>
+              </ion-row>
+
+            <ion-row *ngFor="let data of dateNextAppointment">
+              <ion-col class="ion-col-border" col-6 style="font-size: 14px; padding-top: 18px;">{{data.value | date:'dd-MM-yyyy' }}</ion-col>
+              <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.encounter.encounterDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px; color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span> </ion-col>
+
+            </ion-row>
+            <ion-row *ngIf="dateNextAppointment.length<1">
+              <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
+              <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">FICHA CLINICA</span></ion-col>
+              </ion-row>
+  
+            <br>
 
           <ion-row>
               <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Data da próxima <br> consulta </b></ion-col>
@@ -579,6 +653,89 @@
 
         <br>
 
+        <ion-row>
+          <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>MDS</b></ion-col>
+          <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 15px;"  col-6 text-center><b>Fonte</b></ion-col>
+        </ion-row>
+
+        <ion-row *ngFor="let data of mds">
+          <ion-col class="ion-col-border" col-6 style="font-size: 14px; padding-top: 18px;">{{data.value.display}}</ion-col>
+          <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px; color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span> </ion-col>
+        </ion-row>
+
+        <ion-row *ngIf="mds.length<1">
+          <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
+          <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">FICHA CLINICA</span></ion-col>
+        </ion-row>
+      <br>
+
+
+
+      <ion-row>
+        <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Estado MDS</b></ion-col>
+        <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 15px;"  col-6 text-center><b>Fonte</b></ion-col>
+      </ion-row>
+
+      <ion-row *ngFor="let data of mdsState">
+        <ion-col class="ion-col-border" col-6 style="font-size: 14px; padding-top: 18px;">{{data.value.display}}</ion-col>
+        <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px; color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span> </ion-col>
+      </ion-row>
+
+      <ion-row *ngIf="mdsState.length<1">
+        <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
+        <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">FICHA CLINICA</span></ion-col>
+      </ion-row>
+      <br>
+
+
+      <ion-row>
+        <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Gravidez na Última Consulta Clínica</b></ion-col>
+        <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 15px;"  col-6 text-center><b>Fonte</b></ion-col>
+      </ion-row>
+
+      <ion-row *ngFor="let data of pregnancy">
+        <ion-col class="ion-col-border" col-6 style="font-size: 14px; padding-top: 18px;">{{data.value.display}}</ion-col>
+        <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px; color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span> </ion-col>
+      </ion-row>
+
+      <ion-row *ngIf="pregnancy.length<1">
+        <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
+        <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">FICHA CLINICA</span></ion-col>
+      </ion-row>
+      <br>
+      <ion-row>
+        <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Lactante na Última Consulta Clínica</b></ion-col>
+        <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 15px;"  col-6 text-center><b>Fonte</b></ion-col>
+      </ion-row>
+
+      <ion-row *ngFor="let data of brestFeeding">
+        <ion-col class="ion-col-border" col-6 style="font-size: 14px; padding-top: 18px;">{{data.value.display}}</ion-col>
+        <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px; color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span> </ion-col>
+      </ion-row>
+
+      <ion-row *ngIf="brestFeeding.length<1">
+        <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
+        <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">FICHA CLINICA</span></ion-col>
+      </ion-row>
+      <br>
+
+      <ion-row>
+        <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Programa</b></ion-col>
+        <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 15px;"  col-6 text-center><b>Estado</b></ion-col>
+        <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 15px;"  col-6 text-center><b>Data de Início</b></ion-col>
+      </ion-row>
+
+      <ion-row *ngIf="programEnroll !== null">
+        <ion-col class="ion-col-border" col-6 style="font-size: 14px; padding-top: 18px;">{{programEnroll.states[0].patientProgram.display}}</ion-col>
+        <ion-col class="ion-col-border" col-6 style="font-size: 14px; padding-top: 18px;">{{programEnroll.states[0].state.concept.display}}</ion-col>
+        <ion-col class="ion-col-border" col-6 style="font-size: 14px; padding-top: 18px;">{{programEnroll.states[0].startDate | date:'dd-MM-yyyy'}}<br></ion-col>
+      </ion-row>
+
+      <ion-row *ngIf="programEnroll === null">
+        <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
+      </ion-row>
+      <br>
+
          </ion-grid>
         </ion-slide>
 
@@ -595,7 +752,7 @@
           <ion-icon *ngIf="patient.person.gender=='F'" size="large" name="female-outline" color="danger"></ion-icon>
 <br>
           <ion-badge slot="start" color="light">{{patient.display | splitAndGet:"-":1}}<br>{{patient.display | splitAndGet:"-":0}}<br>Idade: {{patient.person.age}}, {{patient.identifiers[0].location.name}}<span *ngIf="patient.person.dead==true" style="color: red;">, Óbito</span></ion-badge><br>
-          <b>TPT</b>
+          <b>Profilaxias</b>
           <br>
           <ion-button (click)="refreshSummary()" color="light" size="small" shape="round" style="margin-bottom: 5px;">
             <ion-icon slot="icon-only" name="refresh"></ion-icon>
@@ -748,21 +905,36 @@
         <ion-row>
           <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Data do último rastreio</b></ion-col>
           <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 15px;"  col-6 text-center><b>Fonte</b></ion-col>
-          </ion-row>
+        </ion-row>
 
 
         <ion-row *ngFor="let data of rastreioCacum">
           <ion-col class="ion-col-border" col-6 style="font-size: 14px; padding-top: 18px;">{{data.encounterDatetime | date:'dd-MM-yyyy'}}</ion-col>
           <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.auditInfo.dateCreated | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{data.form.display}}<br>{{data.location.display}}</span></ion-col>
-
         </ion-row>
 
-  <ion-row *ngIf="rastreioCacum.length<1">
-    <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
-    <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">CCU: RASTREIO</span></ion-col>
+      <ion-row *ngIf="rastreioCacum.length<1">
+        <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
+        <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">CCU: RASTREIO</span></ion-col>
       </ion-row>
 
       <br>
+
+      <ion-row>
+        <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Resultado de HPV-DNA</b></ion-col>
+        <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 15px;"  col-6 text-center><b>Fonte</b></ion-col>
+      </ion-row>
+
+
+      <ion-row *ngFor="let data of HPVDNAResult">
+        <ion-col class="ion-col-border" col-6 style="font-size: 14px; padding-top: 18px;">{{data.value.display}}</ion-col>
+        <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.auditInfo.dateCreated | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{data.form.display}}<br>{{data.location.display}}</span></ion-col>
+      </ion-row>
+
+    <ion-row *ngIf="HPVDNAResult.length<1">
+      <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
+      <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">CCU: RASTREIO</span></ion-col>
+    </ion-row>
      </ion-grid>
     </ion-slide>
 
@@ -777,7 +949,7 @@
                   <ion-icon *ngIf="patient.person.gender=='F'" size="large" name="female-outline" color="danger"></ion-icon>
         <br>
                   <ion-badge slot="start" color="light">{{patient.display | splitAndGet:"-":1}}<br>{{patient.display | splitAndGet:"-":0}}<br>Idade: {{patient.person.age}}, {{patient.identifiers[0].location.name}}<span *ngIf="patient.person.dead==true" style="color: red;">, Óbito</span></ion-badge><br>
-                  <b>Dados da Consulta Clínica</b>
+                  <b>Confidente</b>
                   <br>
                   <ion-button (click)="refreshSummary()" color="light" size="small" shape="round" style="margin-bottom: 5px;">
                     <ion-icon slot="icon-only" name="refresh"></ion-icon>
