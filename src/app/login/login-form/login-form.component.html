@@ -96,6 +96,8 @@
         <ion-button color="primary" expand="block" (click)="logoutLogin()" >ENTRAR</ion-button>
       </div>
 
+      <ion-button *ngIf="!locked&&accepted" color="primary"  expand="block" (click)="addHealthFacility()">ADICIONAR UNIDADE SANITARIA</ion-button>
+
       <div padding *ngIf="locked&&!isAddHealthFacility" class="ion-margin-top">
         <ion-button color="success" expand="block" (click)="setURL()">GRAVAR URL</ion-button>
         </div>
