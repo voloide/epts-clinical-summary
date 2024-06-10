@@ -136,7 +136,7 @@ export class LoginFormComponent {
     return o1 && o2 ? o1.id === o2.id : o1 === o2;
   }
 
-  handleChange(ev) {
+  handleChange1(ev) {
     this.selectedPartiner = ev.target.value;
     console.log(JSON.stringify(this.selectedPartiner));
 
@@ -253,7 +253,7 @@ if(data!==null){
 this.storage.get('configuracoes').then((data) => {
   if(data!=null){
   this.configuracoes = data;
-
+this.isAddHealthFacility = true;
   }else{
    this.configuracoes = [];
   }
@@ -475,6 +475,26 @@ this.storage.set('configuracoes', this.configuracoes)
 
   }
 
+  async addHealthFacility(){
+
+    var confirm = await this.dialogs.confirm('Deseja Adicionar mais uma unidade Sanitária?', 'Confirmação', ['Sim', 'Não']);
+
+    if(confirm == 1){
+      this.spinnerDialog.show(null, "Adicionando uma unidade ", true);
+
+      this.storage.remove('healthfacility');
+     this.storage.remove('selectedConfiguration');
+      this.storage.remove('url');
+
+      setTimeout(() => {
+        this.ngOnInit();
+        this.isAddHealthFacility=true;
+        this.spinnerDialog.hide();
+      }, 3000);
+
+    }
+
+  }
 
   handleChange(ev){
 
