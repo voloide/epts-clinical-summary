@@ -16,12 +16,12 @@ export class CsReportComponent  {
   public searchParams;chart1;chart2;chart3;cabinet;door;timeOfDay;
 
 //Vars
-public allCD4Abs;allCD4Coverage;allHGB;allVLCopias;allAST;allALT;allAMI;allGLC;allCD4AbsFSR;allCD4CoverageFSR;allCD4AbsFLG;allCD4CoverageFLG;allPCR
+public allCD4Abs;allCD4Coverage;allHGB;allVLCopias;allAST;allALT;allAMI;allGLC;allCD4AbsFSR;allCD4CoverageFSR;allCD4AbsFLG;allCD4CoverageFLG;allPCR;nextAppointment;
 
 
 //NewVars
 public IPTStartFichaClinica;IPTEndFichaClinica;IPTStartFichaResumo;IPTEndFichaResumo;IPTStartFichaSeguimento;IPTEndFichaSeguimento;IPTEndFichaFILT;allVLCopiasV2;
-public allGenexpert;allBaciloscopia;rastreioCacum;rastreioTBLAM;HPVDNAResult;programEnroll;
+public allGenexpert;allGenexpertFC;allBaciloscopia;allBaciloscopiaFC;rastreioCacum;rastreioTBLAM;HPVDNAResult;programEnroll;
 public allVLCopiasFSR;allVLCopiasV2FSR;allVLCopiasFC;allVLCopiasV2FC;ARTPickupRegime;ARTPickupNextDate;ARTPickupMasterCard;
 public allVLsV3;allVLsV2;allVLs;allIPTStart;allIPTStartProfilaxia;allIPTEnd;allIPTEndProfilaxia;
 public allTBLAM;rastreioTBLAMLabGeral;rastreioTBLAMLabGeralPositividade;rastreioTBLAMELab;rastreioTBLAMELabPositividade;rastreioTBLAMFichaClinica;rastreioTBLAMFichaClinicaPositividade;
@@ -37,7 +37,7 @@ public dateNextAppointment; weight;
 public IPTStartFichaClinicaProfilaxia;IPTStartFichaResumoProfilaxia;IPTStartFichaSeguimentoProfilaxia;
 public IPTEndFichaClinicaProfilaxia;IPTEndFichaResumoProfilaxia;IPTEndFichaSeguimentoProfilaxia;
 //Data INicio Tarv
-public ARTStartDate;
+public ARTStartDate;ARTStartDateFR;
 public HfARTStart;
 public PregnancyAtARTStart;
 public WHOStagingAtARTStart;
@@ -45,6 +45,7 @@ public mds;
 public mdsState;
 public pregnancy;
 public brestFeeding;
+public mostRecentConsultation;
 
 
 appVersion: any;
@@ -69,8 +70,11 @@ public roleViewLevel;
     this.allALT=null;
     this.allAMI=null;
     this.allGLC=null;
+    this.nextAppointment=null;
     this.allPCR=null;
+    this.mostRecentConsultation=null;
     this.ARTStartDate=null;
+    this.ARTStartDateFR=null;
     this.WHOStagingAtARTStart=null;
     this.PregnancyAtARTStart=null;
     this.HfARTStart=null;
@@ -82,7 +86,7 @@ public roleViewLevel;
     this.roleViewLevel = window.localStorage.getItem('roleViewLevel')
     //new VArs
     this.IPTStartFichaClinica=null;this.IPTEndFichaClinica=null;this.IPTStartFichaResumo=null;this.IPTEndFichaResumo=null;this.IPTStartFichaSeguimento=null;this.IPTEndFichaSeguimento=null;this.IPTEndFichaFILT=null;
-    this.allGenexpert=null;this.allBaciloscopia=null;this.HPVDNAResult=null;this.programEnroll=null;
+    this.allGenexpert=null;this.allGenexpertFC=null;this.allBaciloscopia=null;this.allBaciloscopiaFC=null;this.HPVDNAResult=null;this.programEnroll=null;
     this.allVLCopiasFSR=null;this.allVLCopiasV2FSR=null;this.allVLCopiasFC=null;this.allVLCopiasV2FC=null;
     this.ARTPickupRegime=null;this.ARTPickupNextDate=null;this.ARTPickupMasterCard=null;
     this.allVLs=null;this.allVLsV2=null;this.allIPTStart=null;this.allIPTStartProfilaxia=null;this.allIPTEnd=null;this.allIPTEndProfilaxia=null;
@@ -159,8 +163,11 @@ public roleViewLevel;
     this.allALT=null;
     this.allAMI=null;
     this.allGLC=null;
-    this.allPCR;
+    this.allPCR=null;
+    this.nextAppointment=null;
+    this.mostRecentConsultation=null;
     this.ARTStartDate=null;
+    this.ARTStartDateFR=null;
     this.WHOStagingAtARTStart=null;
     this.PregnancyAtARTStart=null;
     this.HfARTStart=null;
@@ -171,7 +178,7 @@ public roleViewLevel;
 
     //new VArs
     this.IPTStartFichaClinica=null;this.IPTEndFichaClinica=null;this.IPTStartFichaResumo=null;this.IPTEndFichaResumo=null;this.IPTStartFichaSeguimento=null;this.IPTEndFichaSeguimento=null;this.IPTEndFichaFILT=null;
-    this.allGenexpert=null;this.allBaciloscopia=null;this.HPVDNAResult=null;this.programEnroll=null;
+    this.allGenexpert=null;this.allGenexpertFC=null;this.allBaciloscopia=null;this.allBaciloscopiaFC=null;this.HPVDNAResult=null;this.programEnroll=null;
     this.allVLCopiasFSR=null;this.allVLCopiasV2FSR=null;this.allVLCopiasFC=null;this.allVLCopiasV2FC=null;
     this.ARTPickupRegime=null;this.ARTPickupNextDate=null;this.ARTPickupMasterCard=null;
     this.allVLs=null;this.allVLsV3=null;this.allVLsV2=null;this.allIPTStart=null;this.allIPTEnd=null;
@@ -384,7 +391,7 @@ public roleViewLevel;
                 this.HPVDNAResult=data.results.filter(item=>item.encounter.encounterType.uuid=="e2791f26-1d5f-11e0-b929-000c29ad1d07");
 //Last State from Program Enrollment
   this.http.get(
-    window.localStorage.getItem('url') + "//ws/rest/v1/programenrollment?patient="+this.patient.uuid+"&v=custom:(uuid,display,dateEnrolled,dateCompleted,states,patient:(uuid))",             //URL
+    window.localStorage.getItem('url') + "//ws/rest/v1/programenrollment?patient="+this.patient.uuid+"&v=full",             //URL
     {},       //Data
       {
         'Content-Type': 'application/json',
@@ -393,8 +400,20 @@ public roleViewLevel;
     )
     .then(response => {
       var data=JSON.parse(response.data);
-      this.programEnroll=data.results[0];
-      console.log(this.programEnroll);
+      this.programEnroll=[]
+      data.results.forEach(enrollment => {
+          let state = {program: '', dateEnrolled:'', dateCompleted:'', states:''};
+
+          state.program = enrollment.program && enrollment.program.name ? enrollment.program.name : 'N/A';
+          state.dateEnrolled = enrollment.dateEnrolled;
+          state.dateCompleted = enrollment.dateCompleted;
+          state.states = enrollment.states && enrollment.states.length > 0 
+              ? enrollment.states.map(state => state.state.concept.display).join(", ") 
+              : 'N/A';
+  
+          this.programEnroll.push(state);
+      });
+
         //Confidente
         //confidente's Name
     this.http.get(
@@ -421,11 +440,6 @@ public roleViewLevel;
       .then(response => {
         var data=JSON.parse(response.data);
         this.confidantContact=data.results.filter(item=>item.encounter.form.uuid=="05496c70-845c-40b1-9d28-070f67b3f7da");
-
-        console.log("confidant Contact ");
-        if(this.confidantContact >= 1){
-   //       console.log(this.confidantContact);
-        }
 
 
         this.http.get(
@@ -464,6 +478,7 @@ public roleViewLevel;
             .then(response => {
               var data=JSON.parse(response.data);
               this.allGenexpert=data.results.filter(item=>item.encounter.form.uuid=="8377e4ff-d0fe-44a5-81c3-74c9040fd5f8");
+              this.allGenexpertFC=data.results.filter(item=>item.encounter.form.uuid=="3c2d563a-5d37-4735-a125-d3943a3de30a");
 
               this.http.get(
                 window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=e1d1564c-1d5f-11e0-b929-000c29ad1d07&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=12",             //URL
@@ -476,6 +491,7 @@ public roleViewLevel;
                 .then(response => {
                   var data=JSON.parse(response.data);
                   this.allBaciloscopia=data.results.filter(item=>item.encounter.form.uuid=="8377e4ff-d0fe-44a5-81c3-74c9040fd5f8");
+                  this.allBaciloscopiaFC=data.results.filter(item=>item.encounter.form.uuid=="3c2d563a-5d37-4735-a125-d3943a3de30a");
 
 
                   this.http.get(
@@ -542,20 +558,34 @@ public roleViewLevel;
 
     // Dados da Consulta Clínica
     // Data da consulta mais recente
+    this.http.get(
+      window.localStorage.getItem('url') + "/ws/rest/v1/encounter?patient="+this.patient.uuid+"&encounterType=e278f956-1d5f-11e0-b929-000c29ad1d07&v=custom:(uuid,encounterDatetime,auditInfo,form:(display),location:(display))&limit=1&order=desc",             //URL
+      {},         //Data
+      {
+        'Content-Type': 'application/json',
+        Authorization: 'Basic ' + btoa(window.localStorage.getItem('username') + ":" + window.localStorage.getItem('password'))
+      } // Headers
+    )
+      .then(response => {
+        var data=JSON.parse(response.data);
+        this.mostRecentConsultation=data.results;
 
             // Data da próxima consulta
             this.http.get(
-              window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=e1d7f61e-1d5f-11e0-b929-000c29ad1d07&v=custom:(obsDatetime,value,encounter:(uuid,encounterDatetime,location.name,form:(uuid,display)))&limit=1",             //URL
-              {},       //Data
-                 {
-                  'Content-Type': 'application/json',
-                  Authorization: 'Basic ' + btoa(window.localStorage.getItem('username') + ":" + window.localStorage.getItem('password'))
-                 } // Headers
-              )
+              window.localStorage.getItem('url') + "/ws/rest/v1/encounter?patient=" + this.patient.uuid + "&encounterType=e278f956-1d5f-11e0-b929-000c29ad1d07&v=full&limit=1&order=desc",
+              {},  
+              {
+                'Content-Type': 'application/json',
+                Authorization: 'Basic ' + btoa(window.localStorage.getItem('username') + ":" + window.localStorage.getItem('password'))
+              } // Headers
+            )
               .then(response => {
                 var data=JSON.parse(response.data);
-                this.dateNextAppointment=data.results.filter(item=>item.encounter.form.uuid=="3c2d563a-5d37-4735-a125-d3943a3de30a");
-
+                this.nextAppointment=data.results[0].obs.filter(item=>item.concept.uuid=="e1dae630-1d5f-11e0-b929-000c29ad1d07");
+                if (this.nextAppointment !== undefined && this.nextAppointment !== null && this.nextAppointment.length > 0){
+                this.nextAppointment[0].encounter=data.results[0];
+                }
+           
         // Peso
         this.http.get(
           window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=12",             //URL
@@ -584,7 +614,7 @@ public roleViewLevel;
 
           // BMI
     this.http.get(
-      window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=e1da52ba-1d5f-11e0-b929-000c29ad1d07&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=12",             //URL
+      window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=e1da52ba-1d5f-11e0-b929-000c29ad1d07&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=12&order=desc",             //URL
       {},       //Data
          {
           'Content-Type': 'application/json',
@@ -598,7 +628,7 @@ public roleViewLevel;
         //MDS
 
         this.http.get(
-          window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=40a9a12b-1205-4a55-bb93-caf15452bf61&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=5",             //URL
+          window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=40a9a12b-1205-4a55-bb93-caf15452bf61&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=5&order=desc",             //URL
           {},       //Data
              {
               'Content-Type': 'application/json',
@@ -608,9 +638,10 @@ public roleViewLevel;
           .then(response => {
             var data=JSON.parse(response.data);
             this.mds=data.results.filter(item=>item.encounter.form.uuid=="3c2d563a-5d37-4735-a125-d3943a3de30a");
+           
 //Estado MDS
         this.http.get(
-          window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=fef178f2-d4c9-4035-9989-11c9afe81ea3&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=5",             //URL
+          window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=fef178f2-d4c9-4035-9989-11c9afe81ea3&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=5&order=desc",             //URL
           {},       //Data
              {
               'Content-Type': 'application/json',
@@ -672,7 +703,7 @@ public roleViewLevel;
         // Data de CTZ
 
         this.http.get(
-          window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=2616b3c9-9a99-4b9a-b673-10871f4a4c71&v=custom:(obsDatetime,concept:(uuid),value,encounter:(uuid,location.name,form:(uuid,display)))&limit=12",   //URL
+          window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=2616b3c9-9a99-4b9a-b673-10871f4a4c71&v=custom:(obsDatetime,concept:(uuid),value,encounter:(uuid,location.name,form:(uuid,display)))&limit=12&order=desc",   //URL
          {},    //Data
          {
           'Content-Type': 'application/json',
@@ -683,10 +714,10 @@ public roleViewLevel;
             var data=JSON.parse(response.data);
 
             //Data de Inicio do CTZ
-             this.CTZStartFichaClinica=data.results.filter(item=>item.value.uuid=="e1d9ef28-1d5f-11e0-b929-000c29ad1d07");
-
+             this.CTZStartFichaClinica=data.results.filter(item=>item.encounter.form.uuid=="3c2d563a-5d37-4735-a125-d3943a3de30a" && item.value !== null && item.value.uuid !== undefined && item.value.uuid=="e1d9ef28-1d5f-11e0-b929-000c29ad1d07");
+console.log("this.CTZStartFichaClinica", this.CTZStartFichaClinica);
              //Data de FIM do CTZ
-             this.CTZEndFichaClinica=data.results.filter(item=>item.value.uuid=="e1d9facc-1d5f-11e0-b929-000c29ad1d07");
+             this.CTZEndFichaClinica=data.results.filter(item=>item.encounter.form.uuid=="3c2d563a-5d37-4735-a125-d3943a3de30a" && item.value !== null && item.value.uuid !== undefined && item.value.uuid=="e1d9facc-1d5f-11e0-b929-000c29ad1d07");
           // O feixo desse get e' feito no final da classe;
 
         //  TPT Profilaxia
@@ -882,7 +913,7 @@ public roleViewLevel;
    //ART START Date
 
 this.http.get(
-  window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=e1d8f690-1d5f-11e0-b929-000c29ad1d07&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=1",             //URL
+  window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=e1d8f690-1d5f-11e0-b929-000c29ad1d07&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=12",             //URL
   {},         //Data
   {
     'Content-Type': 'application/json',
@@ -892,7 +923,8 @@ this.http.get(
   .then(response => {
 
     var data=JSON.parse(response.data);
-    this.ARTStartDate=data.results;
+    this.ARTStartDate=data.results.filter(item=>item.encounter.form.uuid=="78d47629-5ac4-4e16-8972-2166eef30bfd");
+    this.ARTStartDateFR=data.results.filter(item=>item.encounter.form.uuid=="05496c70-845c-40b1-9d28-070f67b3f7da");
 //Health Facility at ART start 
     this.http.get(
       window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=760180a9-bcf0-4820-8771-d57d73d1f68d&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=1",             //URL
@@ -968,70 +1000,71 @@ this.http.get(
     .catch(response => {
 
 console.log(response);
-      this.networkFailure();
+      this.networkFailure(response);
 
     });   
   })
   .catch(response => {
 
 console.log(response);
-    this.networkFailure();
+    this.networkFailure(response);
 
   });   
 })
 .catch(response => {
 
 console.log(response);
-  this.networkFailure();
+  this.networkFailure(response);
 
 });   
 })
 .catch(response => {
 
 console.log(response);
-  this.networkFailure();
+  this.networkFailure(response);
 
 });   
+}).catch(response => {
+console.log(response);
+   this.networkFailure(response);
+
+ });  
  }).catch(response => {
 console.log(response);
-    this.networkFailure();
+    this.networkFailure(response);
 
   }); 
 }).catch(response => {
 console.log(response);
-   this.networkFailure();
+   this.networkFailure(response);
 
  }); 
 }).catch(response => {
 console.log(response);
-   this.networkFailure();
+   this.networkFailure(response);
+
+ });
+
+}).catch(response => {
+console.log(response);
+   this.networkFailure(response);
 
  });
 }).catch(response => {
 console.log(response);
-   this.networkFailure();
+   this.networkFailure(response);
 
  });
 }).catch(response => {
 console.log(response);
-   this.networkFailure();
-
- });
-}).catch(response => {
-console.log(response);
-   this.networkFailure();
-
- });
-}).catch(response => {
-console.log(response);
-   this.networkFailure();
+   this.networkFailure(response);
 
  });
 
 })
 .catch(response => {
 console.log(response);
-this.networkFailure();
+this.networkFailure(response);
 
 });
 
@@ -1039,160 +1072,166 @@ this.networkFailure();
       })
       .catch(response => {
 
-        this.networkFailure();
+        this.networkFailure(response);
 
       });
 
 
       })
       .catch(response => {
-        this.networkFailure();
+        this.networkFailure(response);
       });
 
     })
     .catch(response => {
-      this.networkFailure();
+      this.networkFailure(response);
     });
 
 
 
       })
       .catch(response => {
-        this.networkFailure();
+        this.networkFailure(response);
       });
 
              })
                             .catch(response => {
-                              this.networkFailure();
+                              this.networkFailure(response);
                             });
 
                         })
                         .catch(response => {
-                          this.networkFailure();
+                          this.networkFailure(response);
                         });
 
 
                     })
                     .catch(response => {
-                      this.networkFailure();
+                      this.networkFailure(response);
                     });
 
                 })
                 .catch(response => {
-                  this.networkFailure();
+                  this.networkFailure(response);
                 });
 
 
             })
             .catch(response => {
-              this.networkFailure();
+              this.networkFailure(response);
             });
 
 
         })
         .catch(response => {
-          this.networkFailure();
+          this.networkFailure(response);
         });
 
 
     })
         .catch(response => {
-          this.networkFailure();
+          this.networkFailure(response);
         });
 
 
           })
           .catch(response => {
-            this.networkFailure();
+            this.networkFailure(response);
           });
 
 
         })
         .catch(response => {
-          this.networkFailure();
+          this.networkFailure(response);
         });
       })
       .catch(response => {
-        this.networkFailure();
+        this.networkFailure(response);
       });
+    })
+    .catch(response => {
+      this.networkFailure(response);
+    });
+
 
 
                   })
                   .catch(response => {
-                    this.networkFailure();
+                    this.networkFailure(response);
                   });
 
 
               })
               .catch(response => {
-                this.networkFailure();
+                this.networkFailure(response);
               });
 
 
           })
           .catch(response => {
-            this.networkFailure();
+            this.networkFailure(response);
           });
 
       })
       .catch(response => {
-        this.networkFailure();
+        this.networkFailure(response);
       });
 
     })
     .catch(response => {
-      this.networkFailure();
+      this.networkFailure(response);
     });
 
   })
   .catch(response => {
-    this.networkFailure();
+    this.networkFailure(response);
   });
 
 })
 .catch(response => {
-  this.networkFailure();
+  this.networkFailure(response);
 });
 
 })
 .catch(response => {
-  this.networkFailure();
+  this.networkFailure(response);
 });
 
 })
 .catch(response => {
-  this.networkFailure();
+  this.networkFailure(response);
 });
 
 })
 .catch(response => {
-  this.networkFailure();
+  this.networkFailure(response);
 });
 
 })
 .catch(response => {
-  this.networkFailure();
+  this.networkFailure(response);
 });
 
 })
 .catch(response => {
-  this.networkFailure();
+  this.networkFailure(response);
 });
 
 })
 .catch(response => {
-  this.networkFailure();
+  this.networkFailure(response);
 });
 
 })
 .catch(response => {
-  this.networkFailure();
+  this.networkFailure(response);
 });
 
 
   }
 
-  networkFailure(){
+  networkFailure(response){
+    console.log(response);
     this.spinnerDialog.hide();
     this.color="danger";
     this.dialogs.alert("Não foi possivel carregar todos dados. Verifique o estado da sua ligação com o servidor e se tem uma sessão valida!","Erro ao carregar");
