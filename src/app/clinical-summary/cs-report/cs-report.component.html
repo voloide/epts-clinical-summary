@@ -520,7 +520,7 @@
 </ion-row>
 <ion-row *ngIf="ARTStartDate.length<1">
   <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
-  <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">FICHA CLÍNICA</span></ion-col>
+  <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">Ficha de Seguimento</span></ion-col>
 </ion-row>
 
 <ion-row *ngFor="let data of ARTStartDateFR">
@@ -701,12 +701,14 @@
 
         <ion-row>
           <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>MDS</b></ion-col>
+          <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Estado</b></ion-col>
           <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 15px;"  col-6 text-center><b>Fonte</b></ion-col>
         </ion-row>
 
         <ion-row *ngFor="let data of mds">
-          <ion-col class="ion-col-border" col-6 style="font-size: 14px; padding-top: 18px;">{{data.value.display}}</ion-col>
-          <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px; color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span> </ion-col>
+          <ion-col class="ion-col-border" col-6 style="font-size: 14px; padding-top: 18px;">{{data.mds}}</ion-col>
+          <ion-col class="ion-col-border" col-6 style="font-size: 14px; padding-top: 18px;">{{data.state}}</ion-col>
+          <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.date | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px; color: gray;">{{data.source}}<br>{{data.hf}}</span> </ion-col>
         </ion-row>
 
         <ion-row *ngIf="mds.length<1">
@@ -714,25 +716,6 @@
           <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">FICHA CLINICA</span></ion-col>
         </ion-row>
       <br>
-
-
-
-      <ion-row>
-        <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Estado MDS</b></ion-col>
-        <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 15px;"  col-6 text-center><b>Fonte</b></ion-col>
-      </ion-row>
-
-      <ion-row *ngFor="let data of mdsState">
-        <ion-col class="ion-col-border" col-6 style="font-size: 14px; padding-top: 18px;">{{data.value.display}}</ion-col>
-        <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px; color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span> </ion-col>
-      </ion-row>
-
-      <ion-row *ngIf="mdsState.length<1">
-        <ion-col  class="ion-col-border" col-6 text-center><span style="color:red;font-size: 12px;">Sem dados no SESP</span></ion-col>
-        <ion-col  class="ion-col-border" col-6 ><span style="font-size: 13px;">FICHA CLINICA</span></ion-col>
-      </ion-row>
-      <br>
-
 
       <ion-row>
         <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>Gravidez na Última Consulta Clínica</b></ion-col>
@@ -775,8 +758,7 @@
         <ion-col class="ion-col-border" col-6 style="font-size: 14px; padding-top: 18px;">{{data.program}}</ion-col>
         <ion-col class="ion-col-border" col-6 style="font-size: 14px; padding-top: 18px;">{{data.states}}</ion-col>
         <ion-col class="ion-col-border" col-6 style="font-size: 14px; padding-top: 18px;">
-          {{data.dateEnrolled | date:'dd-MM-yyyy'}} 
-          <span *ngIf="data.dateCompleted !== null">/ {{data.dateCompleted | date:'dd-MM-yyyy'}}</span>
+          {{data.stateDate | date:'dd-MM-yyyy'}} 
         
           <br></ion-col>
       </ion-row>
@@ -954,7 +936,7 @@
       <ion-grid *ngIf="rastreioCacum" style="font-size: 16px;">
 
         <ion-row>
-          <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>VIA</b></ion-col>
+          <ion-col class="ion-col-border" style="background-color: #E8E8E8;"  col-6 text-center><b>VIA: Data do último rastreio</b></ion-col>
           <ion-col class="ion-col-border" style="background-color: #E8E8E8;padding-top: 15px;"  col-6 text-center><b>Fonte</b></ion-col>
         </ion-row>
 
@@ -979,7 +961,7 @@
 
       <ion-row *ngFor="let data of HPVDNAResult">
         <ion-col class="ion-col-border" col-6 style="font-size: 14px; padding-top: 18px;">{{data.value.display}}</ion-col>
-        <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.auditInfo.dateCreated | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px;color: gray;">{{data.form.display}}<br>{{data.location.display}}</span></ion-col>
+        <ion-col class="ion-col-border" col-6 style="font-size: 14px;">{{data.obsDatetime | date:'dd-MM-yyyy'}}<br><span style="font-size: 13px; color: gray;">{{data.encounter.form.display}}<br>{{data.encounter['location.name']}}</span> </ion-col>
       </ion-row>
 
     <ion-row *ngIf="HPVDNAResult.length<1">

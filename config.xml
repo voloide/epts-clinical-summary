@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="mz.org.fgh.eptsclinicalsummary" version="1.2.1" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="mz.org.fgh.eptsclinicalsummary" version="1.10.0" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>SESP Sumário Clínico</name>
-    <description>An awesome Ionic/Cordova app.</description>
-    <author email="hi@ionicframework.com" href="http://ionicframework.com/">Ionic Framework Team</author>
+    <description>SESP Sumário Clínico</description>
+    <author email="hi@ionicframework.com" href="http://ionicframework.com/">C-Saude</author>
     <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />

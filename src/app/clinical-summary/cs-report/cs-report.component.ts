@@ -337,7 +337,6 @@ public roleViewLevel;
                });
 
                this.allVLs=this.allVLsV3.concat(this.allVLsV2);
-                    //console.log(this.allVLs)
 
                     this.allVLs = this.allVLs.sort(function (a, b) {
                       var nameA = a.obsDatetime.toString().toUpperCase(); // ignore upper and lowercase
@@ -389,6 +388,7 @@ public roleViewLevel;
               .then(response => {
                 var data=JSON.parse(response.data);
                 this.HPVDNAResult=data.results.filter(item=>item.encounter.encounterType.uuid=="e2791f26-1d5f-11e0-b929-000c29ad1d07");
+                console.log("++++++++++this.HPVDNAResult", this.HPVDNAResult);
 //Last State from Program Enrollment
   this.http.get(
     window.localStorage.getItem('url') + "//ws/rest/v1/programenrollment?patient="+this.patient.uuid+"&v=full",             //URL
@@ -400,19 +400,23 @@ public roleViewLevel;
     )
     .then(response => {
       var data=JSON.parse(response.data);
+      var enrolls = [];
       this.programEnroll=[]
       data.results.forEach(enrollment => {
-          let state = {program: '', dateEnrolled:'', dateCompleted:'', states:''};
+          let state = {program: '', dateEnrolled:'', dateCompleted:'', states:'', stateDate:''};
 
           state.program = enrollment.program && enrollment.program.name ? enrollment.program.name : 'N/A';
           state.dateEnrolled = enrollment.dateEnrolled;
           state.dateCompleted = enrollment.dateCompleted;
-          state.states = enrollment.states && enrollment.states.length > 0 
-              ? enrollment.states.map(state => state.state.concept.display).join(", ") 
+          state.stateDate = enrollment.dateCompleted ? enrollment.dateCompleted : enrollment.dateEnrolled
+              state.states = enrollment.states && enrollment.states.length > 0 
+              ? enrollment.states[enrollment.states.length-1].state.concept.display
               : 'N/A';
-  
-          this.programEnroll.push(state);
+          enrolls.push(state);
       });
+      if (enrolls.length > 0) {
+        this.programEnroll.push(enrolls[enrolls.length-1]);
+      }
 
         //Confidente
         //confidente's Name
@@ -614,7 +618,7 @@ public roleViewLevel;
 
           // BMI
     this.http.get(
-      window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=e1da52ba-1d5f-11e0-b929-000c29ad1d07&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=12&order=desc",             //URL
+      window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=e1da52ba-1d5f-11e0-b929-000c29ad1d07&v=custom:(obsDatetime,concept,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=12",             //URL
       {},       //Data
          {
           'Content-Type': 'application/json',
@@ -623,12 +627,12 @@ public roleViewLevel;
       )
       .then(response => {
         var data=JSON.parse(response.data);
-        this.bmiGeneralLaboratory=data.results.filter(item=>item.encounter.form.uuid=="3c2d563a-5d37-4735-a125-d3943a3de30a");
+        this.bmiGeneralLaboratory=data.results.filter(item=>item.encounter.form.uuid==="3c2d563a-5d37-4735-a125-d3943a3de30a");
 
         //MDS
 
         this.http.get(
-          window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=40a9a12b-1205-4a55-bb93-caf15452bf61&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=5&order=desc",             //URL
+          window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=bebcfbe3-bb5b-4c5c-a41e-808fc4457fc3&v=custom:(obsDatetime,value,groupMembers:(obsDatetime,value,concept:(uuid,display)),encounter:(uuid,location.name,form:(uuid,display)))&limit=5",             //URL
           {},       //Data
              {
               'Content-Type': 'application/json',
@@ -637,11 +641,40 @@ public roleViewLevel;
           )
           .then(response => {
             var data=JSON.parse(response.data);
-            this.mds=data.results.filter(item=>item.encounter.form.uuid=="3c2d563a-5d37-4735-a125-d3943a3de30a");
+            var filteredData = data.results.filter(item=>item.encounter.form.uuid=="3c2d563a-5d37-4735-a125-d3943a3de30a");
+            this.mds=[];
+            filteredData.forEach((item) => {
+              var mdsInfo = {mds: '', state: '', date: '', source: '', hf: ''};
+              mdsInfo.source = item.encounter.form.display;
+              mdsInfo.hf = item.encounter['location.name'];
+
+              if (item.groupMembers && item.groupMembers.length > 0) {
+                item.groupMembers.forEach(member => {
+                  
+
+                  if (member.concept.uuid ==='40a9a12b-1205-4a55-bb93-caf15452bf61') {
+                    mdsInfo.mds = member.value.display;
+                    mdsInfo.date = member.obsDatetime
+                  } else {
+                    if (member.value.uuid === 'e1d9ef28-1d5f-11e0-b929-000c29ad1d07') {
+                      mdsInfo.state = 'Início (I)';
+                    } else if (member.value.uuid === 'e1d9f036-1d5f-11e0-b929-000c29ad1d07') {
+                      mdsInfo.state = 'Continua (C)';
+                    } else if (member.value.uuid === 'e1d9facc-1d5f-11e0-b929-000c29ad1d07') {
+                      mdsInfo.state = 'Fim (F)';
+                    }
+                  }
+                  
+                });
+                this.mds.push(mdsInfo);
+              }
+            })
+          
+            console.log("==========this.mds",this.mds);
            
 //Estado MDS
         this.http.get(
-          window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=fef178f2-d4c9-4035-9989-11c9afe81ea3&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=5&order=desc",             //URL
+          window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=fef178f2-d4c9-4035-9989-11c9afe81ea3&v=custom:(obsDatetime,concept,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=5",             //URL
           {},       //Data
              {
               'Content-Type': 'application/json',
@@ -651,6 +684,17 @@ public roleViewLevel;
           .then(response => {
             var data=JSON.parse(response.data);
             this.mdsState=data.results.filter(item=>item.encounter.form.uuid=="3c2d563a-5d37-4735-a125-d3943a3de30a");
+            if (this.mdsState.length > 0) {
+              this.mdsState.forEach((item) => {
+                if (item.value.uuid === 'e1d9ef28-1d5f-11e0-b929-000c29ad1d07') {
+                  item.label = 'Início (I)';
+                } else if (item.value.uuid === 'e1d9f036-1d5f-11e0-b929-000c29ad1d07') {
+                  item.label = 'Continua (C)';
+                } else if (item.value.uuid === 'e1d9facc-1d5f-11e0-b929-000c29ad1d07') {
+                  item.label = 'Fim (F)';
+                }
+              });
+            }
 //Gravidez na Última Consulta Clínica
         this.http.get(
           window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=e1e056a6-1d5f-11e0-b929-000c29ad1d07&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=1",             //URL
@@ -703,7 +747,7 @@ public roleViewLevel;
         // Data de CTZ
 
         this.http.get(
-          window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=2616b3c9-9a99-4b9a-b673-10871f4a4c71&v=custom:(obsDatetime,concept:(uuid),value,encounter:(uuid,location.name,form:(uuid,display)))&limit=12&order=desc",   //URL
+          window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=2616b3c9-9a99-4b9a-b673-10871f4a4c71&v=custom:(obsDatetime,concept:(uuid),value,encounter:(uuid,location.name,form:(uuid,display)))&limit=12",   //URL
          {},    //Data
          {
           'Content-Type': 'application/json',
@@ -715,7 +759,7 @@ public roleViewLevel;
 
             //Data de Inicio do CTZ
              this.CTZStartFichaClinica=data.results.filter(item=>item.encounter.form.uuid=="3c2d563a-5d37-4735-a125-d3943a3de30a" && item.value !== null && item.value.uuid !== undefined && item.value.uuid=="e1d9ef28-1d5f-11e0-b929-000c29ad1d07");
-console.log("this.CTZStartFichaClinica", this.CTZStartFichaClinica);
+
              //Data de FIM do CTZ
              this.CTZEndFichaClinica=data.results.filter(item=>item.encounter.form.uuid=="3c2d563a-5d37-4735-a125-d3943a3de30a" && item.value !== null && item.value.uuid !== undefined && item.value.uuid=="e1d9facc-1d5f-11e0-b929-000c29ad1d07");
           // O feixo desse get e' feito no final da classe;
@@ -940,31 +984,36 @@ this.http.get(
         this.HfARTStart=data.results;
 //Pregnancy Status at ART start
 this.http.get(
-  window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=e1e056a6-1d5f-11e0-b929-000c29ad1d07&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=1",             //URL
-  {},         //Data
+  window.localStorage.getItem('url') + "/ws/rest/v1/encounter?patient=" + this.patient.uuid + "&encounterType=e422ecf9-75dd-4367-b21e-54bccabc4763&v=full&limit=1&order=desc",
+  {},  
   {
     'Content-Type': 'application/json',
     Authorization: 'Basic ' + btoa(window.localStorage.getItem('username') + ":" + window.localStorage.getItem('password'))
   } // Headers
 )
   .then(response => {
-
     var data=JSON.parse(response.data);
-    this.PregnancyAtARTStart=data.results;
+    this.PregnancyAtARTStart=data.results[0].obs.filter(item=>item.concept.uuid=="e1e056a6-1d5f-11e0-b929-000c29ad1d07");
+    if (this.PregnancyAtARTStart !== undefined && this.PregnancyAtARTStart !== null && this.PregnancyAtARTStart.length > 0){
+    this.PregnancyAtARTStart[0].encounter=data.results[0];
+    }
 //WHO staging at ART start
 
+
 this.http.get(
-  window.localStorage.getItem('url') + "/ws/rest/v1/obs?patient="+this.patient.uuid+"&concept=e1e53c02-1d5f-11e0-b929-000c29ad1d07&v=custom:(obsDatetime,value,encounter:(uuid,location.name,form:(uuid,display)))&limit=1",             //URL
-  {},         //Data
+  window.localStorage.getItem('url') + "/ws/rest/v1/encounter?patient=" + this.patient.uuid + "&encounterType=e422ecf9-75dd-4367-b21e-54bccabc4763&v=full&limit=1&order=desc",
+  {},  
   {
     'Content-Type': 'application/json',
     Authorization: 'Basic ' + btoa(window.localStorage.getItem('username') + ":" + window.localStorage.getItem('password'))
   } // Headers
 )
   .then(response => {
-
     var data=JSON.parse(response.data);
-    this.WHOStagingAtARTStart=data.results;
+    this.WHOStagingAtARTStart=data.results[0].obs.filter(item=>item.concept.uuid=="e1e53c02-1d5f-11e0-b929-000c29ad1d07");
+    if (this.WHOStagingAtARTStart !== undefined && this.WHOStagingAtARTStart !== null && this.WHOStagingAtARTStart.length > 0){
+    this.WHOStagingAtARTStart[0].encounter=data.results[0];
+    }
 
      var clinicalSummary:any={
         report:"Sumário Clínico",
