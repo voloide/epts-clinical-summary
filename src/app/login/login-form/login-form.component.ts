@@ -330,7 +330,7 @@ this.isAddHealthFacility = true;
     console.log(this.selectedPartiner);
 
 
-        window.localStorage.setItem('appVersion',"v1.10.0" );
+        window.localStorage.setItem('appVersion',"v1.10.1" );
         window.localStorage.setItem('url',this.localUser.url );
         window.localStorage.setItem('username',this.localUser.username );
         window.localStorage.setItem('password',this.localUser.password );

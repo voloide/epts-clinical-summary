@@ -73,7 +73,7 @@ export class CsParameterComponent {
     this.newPatients = [];
     this.index = this.index + 50;
 
-    var newURL= encodeURI(window.localStorage.getItem('url') + "/ws/rest/v1/patient?q=" + this.search + "&v=custom:(uuid,display,identifiers:(uuid,location:(name)),person:(gender,age,dead,birthdate,addresses:(display,preferred,address1,address3,address5,address6),attributes:(display))&limit=50&startIndex=" + this.index);
+    var newURL= encodeURI(window.localStorage.getItem('url') + "/ws/rest/v1/patient?q=" + this.search + "&v=custom:(uuid,display,identifiers:(uuid,location:(name)),person:(gender,age,dead,birthdate,addresses:(display,preferred,address1,address3,address5,address6),attributes:(display,attributeType:(display)))&limit=50&startIndex=" + this.index);
 
     this.http.get(
       newURL,             //URL
@@ -128,7 +128,7 @@ export class CsParameterComponent {
 
       if ((this.search.match(/\//g) || []).length==2&&this.search.replace(/\s/g, "").length>12) {
 
-        var newURL= encodeURI(window.localStorage.getItem('url') + "/ws/rest/v1/patient?identifier=" + this.search.replace(/\s/g, "") + "&v=custom:(uuid,display,identifiers:(uuid,location:(name)),person:(gender,age,dead,birthdate,addresses:(display,preferred,address1,address3,address5,address6),attributes:(display))");
+        var newURL= encodeURI(window.localStorage.getItem('url') + "/ws/rest/v1/patient?identifier=" + this.search.replace(/\s/g, "") + "&v=custom:(uuid,display,identifiers:(uuid,location:(name)),person:(gender,age,dead,birthdate,addresses:(display,preferred,address1,address3,address5,address6),attributes:(display,attributeType:(display)))");
 
         this.storage.set('search-criteria', this.search);
         this.http.get(
@@ -162,7 +162,7 @@ export class CsParameterComponent {
         this.patients = [];
         this.storage.remove('search-criteria');
 
-        var newURL= encodeURI(window.localStorage.getItem('url') + "/ws/rest/v1/patient?q=" + this.search + "&v=custom:(uuid,display,identifiers:(uuid,location:(name)),person:(gender,age,dead,birthdate,addresses:(display,preferred,address1,address3,address5,address6),attributes:(display))&limit=50&startIndex=" + this.index);
+        var newURL= encodeURI(window.localStorage.getItem('url') + "/ws/rest/v1/patient?q=" + this.search + "&v=custom:(uuid,display,identifiers:(uuid,location:(name)),person:(gender,age,dead,birthdate,addresses:(display,preferred,address1,address3,address5,address6),attributes:(display,attributeType:(display)))&limit=50&startIndex=" + this.index);
 
         this.http.get(
           newURL,             //URL
